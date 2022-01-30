@@ -1,21 +1,51 @@
 package com.qa.senpai.data.entities;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class User {
     // Fields
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    String position;
+
+    @NotNull
+    String position; // enum
+
+    @NotNull
+    @Length(min = 1, message = "Names cannot be empty")
     String forename;
+
+    @NotNull
+    @Length(min = 1, message = "Names cannot be empty")
     String surname;
+
+    @NotNull
     LocalDate dob;
+
+    @NotNull
+    // TODO: implement constraint for email format
     String email;
+
+    @NotNull
+    // TODO: implement constraint for phone numbers
     String phoneNum;
+
+    @NotNull
     int password;
-    List<LocalDate> availability;
-    List<Job> jobList;
+
+    // TODO: implement entity relations with Dates and Jobs
+    // TODO: create a entity/repo/service/controller suite for dates
+//    List<LocalDate> availability;
+//    List<Job> jobList;
 
     public User(Long id,
                 String position,
@@ -101,22 +131,6 @@ public class User {
         this.password = password;
     }
 
-    public List<LocalDate> getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(List<LocalDate> availability) {
-        this.availability = availability;
-    }
-
-    public List<Job> getJobList() {
-        return jobList;
-    }
-
-    public void setJobList(List<Job> jobList) {
-        this.jobList = jobList;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -129,9 +143,7 @@ public class User {
                 getSurname().equals(user.getSurname()) &&
                 getDob().equals(user.getDob()) &&
                 getEmail().equals(user.getEmail()) &&
-                getPhoneNum().equals(user.getPhoneNum()) &&
-                Objects.equals(getAvailability(), user.getAvailability()) &&
-                Objects.equals(getJobList(), user.getJobList());
+                getPhoneNum().equals(user.getPhoneNum());
     }
 
     @Override
@@ -143,9 +155,7 @@ public class User {
                 getDob(),
                 getEmail(),
                 getPhoneNum(),
-                getPassword(),
-                getAvailability(),
-                getJobList());
+                getPassword());
     }
 
     @Override
@@ -158,8 +168,6 @@ public class User {
                 ", dob=" + dob +
                 ", email='" + email + '\'' +
                 ", phoneNum='" + phoneNum + '\'' +
-                ", availability=" + availability +
-                ", jobList=" + jobList +
                 '}';
     }
 }

@@ -1,31 +1,44 @@
 package com.qa.senpai.data.entities;
 
-import java.time.LocalDate;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
+@Entity
 public class Job {
     // Fields
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    String title;
-    String description;
-    String location;
-    List<LocalDate> dates;
-    User user;
 
-    public Job(Long id, String title, String description, String location, List<LocalDate> dates) {
+    @NotNull
+    String title;
+
+    @NotNull
+    String description;
+
+    @NotNull
+    String location;
+
+    // TODO: implement entity relations with User and Dates
+    // TODO: create a entity/repo/service/controller suite for dates
+//    List<LocalDate> dates;
+//    User user;
+
+    public Job(Long id, String title, String description, String location) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
-        this.dates = dates;
     }
 
-    public Job(String title, String description, String location, List<LocalDate> dates) {
+    public Job(String title, String description, String location) {
         this.title = title;
         this.description = description;
         this.location = location;
-        this.dates = dates;
     }
 
     public Long getId() {
@@ -60,22 +73,6 @@ public class Job {
         this.location = location;
     }
 
-    public List<LocalDate> getDates() {
-        return dates;
-    }
-
-    public void setDates(List<LocalDate> dates) {
-        this.dates = dates;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -84,9 +81,7 @@ public class Job {
         return getId().equals(job.getId()) &&
                 getTitle().equals(job.getTitle()) &&
                 getDescription().equals(job.getDescription()) &&
-                getLocation().equals(job.getLocation()) &&
-                Objects.equals(getDates(), job.getDates()) &&
-                Objects.equals(getUser(), job.getUser());
+                getLocation().equals(job.getLocation());
     }
 
     @Override
@@ -94,9 +89,7 @@ public class Job {
         return Objects.hash(getId(),
                 getTitle(),
                 getDescription(),
-                getLocation(),
-                getDates(),
-                getUser());
+                getLocation());
     }
 
     @Override
@@ -106,8 +99,6 @@ public class Job {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", location='" + location + '\'' +
-                ", dates=" + dates +
-                ", user=" + user +
                 '}';
     }
 }
