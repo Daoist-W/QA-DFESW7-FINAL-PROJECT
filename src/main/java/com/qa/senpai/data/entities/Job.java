@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Job {
     // Fields
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
     @NotNull
