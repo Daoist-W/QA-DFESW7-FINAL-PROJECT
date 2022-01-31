@@ -11,44 +11,66 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
+@Table(name = "Users")
 public class User {
     // Fields
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    Position position_; // TODO: look into this implementation
+    private Position position_; // TODO: look into this implementation
 
     @NotNull
     @Length(min = 1, max = 50 ,message = "Names cannot be empty")
-    String forename;
+    private String forename;
 
     @NotNull
     @Length(min = 1, max = 50, message = "Names cannot be empty")
-    String surname;
+    private String surname;
 
     @NotNull
     @DateTimeFormat(pattern="yyyy-MM-dd")
     @JsonFormat(pattern="yyyy-MM-dd")
-    LocalDate dob;
+    private LocalDate dob;
 
     @NotNull
     // TODO: implement constraint for email format
-    String email;
+    private String email;
 
     @NotNull
     // TODO: implement constraint for phone numbers
-    String phoneNum;
+    private String phoneNum;
 
     @NotNull
-    int passcode;
+    private int passcode;
 
     // TODO: implement entity relations with Dates and Jobs
     // TODO: create a entity/repo/service/controller suite for dates
 //    List<LocalDate> availability;
 //    List<Job> jobList;
+
+    public User(){
+
+    }
+
+    public User(Position position_,
+                String forename,
+                String surname,
+                LocalDate dob,
+                String email,
+                String phoneNum,
+                String passcode) {
+        this.position_ = position_;
+        this.forename = forename;
+        this.surname = surname;
+        this.dob = dob;
+        this.email = email;
+        this.phoneNum = phoneNum;
+        // TODO: Review hash method, is there a better algorithm we can use?
+        this.passcode = passcode.hashCode();
+    }
 
     public User(Long id,
                 Position position_,
@@ -68,6 +90,8 @@ public class User {
         // TODO: Review hash method, is there a better algorithm we can use?
         this.passcode = passcode.hashCode();
     }
+
+
 
 
     public Long getId() {

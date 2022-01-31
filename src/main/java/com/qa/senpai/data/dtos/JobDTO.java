@@ -1,26 +1,20 @@
 package com.qa.senpai.data.dtos;
 
-import java.time.LocalDate;
-import java.util.List;
-
 public class JobDTO {
 
     Long id;
     String title;
     String description;
     String location;
-    List<LocalDate> dates;
 
     public JobDTO(Long id,
                   String title,
                   String description,
-                  String location,
-                  List<LocalDate> dates) {
+                  String location) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
-        this.dates = dates;
     }
 
     public Long getId() {
@@ -55,14 +49,6 @@ public class JobDTO {
         this.location = location;
     }
 
-    public List<LocalDate> getDates() {
-        return dates;
-    }
-
-    public void setDates(List<LocalDate> dates) {
-        this.dates = dates;
-    }
-
     @Override
     public String toString() {
         return "JobDTO{" +
@@ -70,7 +56,6 @@ public class JobDTO {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", location='" + location + '\'' +
-                ", dates=" + dates +
                 '}';
     }
 }
