@@ -28,7 +28,7 @@ public class JobController {
     //                  READ
     // ############################################
 
-    @GetMapping // using post so I can take advantage of the body
+    @GetMapping
     public List<ResponseEntity<JobDTO>> getAllJobs() {
         // TODO: implement me
         return null;
@@ -59,7 +59,7 @@ public class JobController {
     // ############################################
     //                  CREATE
     // ############################################
-    @PostMapping(path = "admin/create")
+    @PostMapping(path = "/admin/create")
     public ResponseEntity<JobDTO> createJob(@Valid @RequestBody Job job) {
         // TODO: implement access control
         // TODO: implement me
@@ -69,7 +69,7 @@ public class JobController {
     // ############################################
     //                  UPDATE
     // ############################################
-    @PutMapping(path = "admin/{id}")
+    @PutMapping(path = "/admin/{id}")
     public ResponseEntity<JobDTO> updateJobById(@PathVariable("id") Long id, @Valid @RequestBody Job job) {
         // TODO: implement access control
         // TODO: implement me
@@ -82,14 +82,14 @@ public class JobController {
     //                  DELETE
     // ############################################
 
-    @DeleteMapping(path = "admin/{id}")
+    @DeleteMapping(path = "/admin/{id}")
     public ResponseEntity<JobDTO> deleteJobById(@PathVariable("id") Long id) {
         // TODO: implement access control
         // TODO: implement me
         return null;
     }
 
-    @DeleteMapping(path = "staff/{id}")
+    @DeleteMapping(path = "/staff/{id}")
     public List<ResponseEntity<JobDTO>> deleteJobByTitle(@PathVariable("name") String title) {
         // TODO: implement access control
         // TODO: implement me

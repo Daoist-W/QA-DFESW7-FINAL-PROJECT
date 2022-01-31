@@ -11,3 +11,11 @@ class SenpaiApplicationTests {
 	}
 
 }
+
+ // join table
+
+// spring generated queries, JPQL, an abstract of sql
+// to implement search by availability
+// user and availability
+// one to many relationship
+
