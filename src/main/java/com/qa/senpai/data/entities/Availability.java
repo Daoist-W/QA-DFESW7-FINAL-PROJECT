@@ -16,7 +16,7 @@ public class Availability {
     // fields
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    private Long id;
 
     @NotNull
     @DateTimeFormat(pattern="yyyy-MM-dd")
@@ -30,6 +30,9 @@ public class Availability {
 
     // TODO: need to add many to many relationship for Users and Jobs
 
+
+    public Availability() {
+    }
 
     public Availability(LocalDate startDate, LocalDate endDate) {
         this.startDate = startDate;

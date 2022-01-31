@@ -4,6 +4,8 @@ import com.qa.senpai.data.dtos.UserDTO;
 import com.qa.senpai.data.entities.User;
 import com.qa.senpai.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,7 +64,10 @@ public class UserController {
     @PostMapping(path = "/create")
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody User user) {
         // TODO: implement me
-        return null;
+        UserDTO savedUser = userService.create(user);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/user/create/" + String.valueOf(savedUser.getId()));
+        return new ResponseEntity<>(savedUser, headers, HttpStatus.CREATED);
     }
 
     // ############################################

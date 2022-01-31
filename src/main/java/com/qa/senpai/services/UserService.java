@@ -56,7 +56,7 @@ public class UserService {
 
     public UserDTO create(User user) {
         // TODO: implement me
-        return null;
+        return mapToDTO(userRepository.save(user));
     }
 
 

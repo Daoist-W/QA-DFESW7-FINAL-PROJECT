@@ -12,21 +12,25 @@ public class Job {
     // Fields
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    private Long id;
 
     @NotNull
-    String title;
+    private String title;
 
     @NotNull
-    String description;
+    private String description;
 
     @NotNull
-    String location;
+    private String location;
 
     // TODO: implement entity relations with User and Dates
     // TODO: create a entity/repo/service/controller suite for dates
 //    List<LocalDate> dates;
 //    User user;
+
+
+    public Job() {
+    }
 
     public Job(Long id, String title, String description, String location) {
         this.id = id;
