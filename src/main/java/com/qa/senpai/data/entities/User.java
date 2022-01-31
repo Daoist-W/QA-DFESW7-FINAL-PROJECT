@@ -1,11 +1,11 @@
 package com.qa.senpai.data.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.qa.senpai.data.support.Position;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -14,21 +14,24 @@ import java.util.Objects;
 public class User {
     // Fields
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
     @NotNull
-    String position; // enum
+    @Enumerated(EnumType.STRING)
+    Position position_; // TODO: look into this implementation
 
     @NotNull
-    @Length(min = 1, message = "Names cannot be empty")
+    @Length(min = 1, max = 50 ,message = "Names cannot be empty")
     String forename;
 
     @NotNull
-    @Length(min = 1, message = "Names cannot be empty")
+    @Length(min = 1, max = 50, message = "Names cannot be empty")
     String surname;
 
     @NotNull
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     LocalDate dob;
 
     @NotNull
@@ -40,7 +43,7 @@ public class User {
     String phoneNum;
 
     @NotNull
-    int password;
+    int passcode;
 
     // TODO: implement entity relations with Dates and Jobs
     // TODO: create a entity/repo/service/controller suite for dates
@@ -48,22 +51,22 @@ public class User {
 //    List<Job> jobList;
 
     public User(Long id,
-                String position,
+                Position position_,
                 String forename,
                 String surname,
                 LocalDate dob,
                 String email,
                 String phoneNum,
-                String password) {
+                String passcode) {
         this.id = id;
-        this.position = position;
+        this.position_ = position_;
         this.forename = forename;
         this.surname = surname;
         this.dob = dob;
         this.email = email;
         this.phoneNum = phoneNum;
         // TODO: Review hash method, is there a better algorithm we can use?
-        this.password = password.hashCode();
+        this.passcode = passcode.hashCode();
     }
 
 
@@ -75,12 +78,12 @@ public class User {
         this.id = id;
     }
 
-    public String getPosition() {
-        return position;
+    public Position getPosition_() {
+        return position_;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
+    public void setPosition_(Position position_) {
+        this.position_ = position_;
     }
 
     public String getForename() {
@@ -123,12 +126,12 @@ public class User {
         this.phoneNum = phoneNum;
     }
 
-    public int getPassword() {
-        return password;
+    public int getPasscode() {
+        return passcode;
     }
 
-    public void setPassword(int password) {
-        this.password = password;
+    public void setPasscode(int passcode) {
+        this.passcode = passcode;
     }
 
     @Override
@@ -136,9 +139,9 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getPassword() == user.getPassword() &&
+        return getPasscode() == user.getPasscode() &&
                 getId().equals(user.getId()) &&
-                getPosition().equals(user.getPosition()) &&
+                getPosition_().equals(user.getPosition_()) &&
                 getForename().equals(user.getForename()) &&
                 getSurname().equals(user.getSurname()) &&
                 getDob().equals(user.getDob()) &&
@@ -149,20 +152,20 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(getId(),
-                getPosition(),
+                getPosition_(),
                 getForename(),
                 getSurname(),
                 getDob(),
                 getEmail(),
                 getPhoneNum(),
-                getPassword());
+                getPasscode());
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", position='" + position + '\'' +
+                ", position_='" + position_ + '\'' +
                 ", forename='" + forename + '\'' +
                 ", surname='" + surname + '\'' +
                 ", dob=" + dob +

@@ -28,7 +28,7 @@ public class UserController {
     //                  READ
     // ############################################
 
-    @GetMapping(path = "/admin") // using post so I can take advantage of the body
+    @GetMapping(path = "/admin")
     public List<ResponseEntity<UserDTO>> getAllUsers() {
         // TODO: implement access control
         // TODO: implement me
@@ -68,7 +68,7 @@ public class UserController {
     // ############################################
     //                  UPDATE
     // ############################################
-    @PutMapping(path = "admin/{id}")
+    @PutMapping(path = "/admin/{id}")
     public ResponseEntity<UserDTO> updateUserById(@PathVariable("id") Long id, @Valid @RequestBody User user) {
         // TODO: implement access control
         // TODO: implement me
@@ -76,7 +76,7 @@ public class UserController {
         return null;
     }
 
-    @PutMapping(path = "staff/{id}")
+    @PutMapping(path = "/staff/{id}")
     public ResponseEntity<UserDTO> updateAccount(@PathVariable("id") Long id, @Valid @RequestBody User user) {
         // TODO: implement me
         isAuthorised(0L, ""); // if authorised, proceed, otherwise handle decline
@@ -88,14 +88,14 @@ public class UserController {
     //                  DELETE
     // ############################################
 
-    @DeleteMapping(path = "admin/{id}")
+    @DeleteMapping(path = "/admin/{id}")
     public ResponseEntity<UserDTO> deleteUserById(@PathVariable("id") Long id) {
         // TODO: implement access control
         // TODO: implement me
         return null;
     }
 
-    @DeleteMapping(path = "staff/{id}")
+    @DeleteMapping(path = "/staff/{id}")
     public ResponseEntity<UserDTO> deleteAccount(@PathVariable("id") Long id, @RequestBody String password) {
         // TODO: implement me
         isAuthorised(0L, ""); // if authorised, proceed, otherwise handle decline
