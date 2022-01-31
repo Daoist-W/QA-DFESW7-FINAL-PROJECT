@@ -31,10 +31,10 @@ public class UserController {
     // ############################################
 
     @GetMapping(path = "/admin")
-    public List<ResponseEntity<UserDTO>> getAllUsers() {
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
         // TODO: implement access control
-        // TODO: implement me
-        return null;
+        List<UserDTO> users = userService.getAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping(path = "/admin/{id}")
@@ -44,14 +44,14 @@ public class UserController {
     }
 
     @GetMapping(path = "/admin/{name}")
-    public List<ResponseEntity<UserDTO>> getUsersByName(@PathVariable String name) {
+    public ResponseEntity<List<UserDTO>> getUsersByName(@PathVariable String name) {
         // TODO: implement access control
         // TODO: implement me
         return null;
     }
 
     @PostMapping(path = "/admin/available-users") // using post so I can take advantage of the body
-    public List<ResponseEntity<UserDTO>> getUsersByAvailability(@RequestBody List<LocalDate> dates) {
+    public ResponseEntity<List<UserDTO>> getUsersByAvailability(@RequestBody List<LocalDate> dates) {
         // try the ArrayList argument here, if it doesn't work switch to DateList
         // TODO: implement access control
         // TODO: implement me

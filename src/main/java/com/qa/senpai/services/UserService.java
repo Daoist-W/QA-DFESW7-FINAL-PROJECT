@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -34,8 +35,10 @@ public class UserService {
 
 
     public List<UserDTO> getAll() {
-        // TODO: implement me
-        return null;
+        return userRepository.findAll()
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     public UserDTO getById(Long id) {
