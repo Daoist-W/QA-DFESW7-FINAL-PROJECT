@@ -1,4 +1,4 @@
-package com.qa.senpai;
+package com.qa.senpai.configuration;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
