@@ -4,6 +4,7 @@ import com.qa.senpai.data.dtos.UserDTO;
 import com.qa.senpai.data.entities.User;
 import com.qa.senpai.data.repositories.UserRepository;
 import com.qa.senpai.data.support.Position;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,6 @@ class UserServiceIntegrationTest {
     private UserDTO expectedUserWithIdDTO;
     private UserDTO expectedUserSavedDTO;
     private Long nextNewElementsId;
-    User userToSave2;
 
 
 
@@ -97,13 +97,6 @@ class UserServiceIntegrationTest {
                 "Hercules@sonofgod.com", "+1", "123456789"
         );
 
-        userToSave2 = new User(
-                nextNewElementsId,
-                Position.staff, "Hercules", "Son of Zeus",
-                LocalDate.of(1000,2,15),
-                "Hercules@sonofgod.com", "+1", "123456789"
-        );
-
         expectedUserSavedDTO = new UserDTO(
                 nextNewElementsId, Position.staff, "Hercules", "Son of Zeus",
                 LocalDate.of(1000,2,15),
@@ -114,13 +107,13 @@ class UserServiceIntegrationTest {
 
     }
 
-//    @AfterEach
-//    void tearDown() { // runs after every test
-//        users.clear();
-//        usersInDatabase.clear();
-//        nextNewElementsId = 0L;
-//        userRepository.deleteAll();
-//    }
+    @AfterEach
+    void tearDown() { // runs after every test
+        users.clear();
+        usersInDatabase.clear();
+        nextNewElementsId = 0L;
+        userRepository.deleteAll();
+    }
 
     @Test
     void getAll() {
@@ -156,7 +149,7 @@ class UserServiceIntegrationTest {
     @Test
     void createUserTest() {
         assertThat(expectedUserSavedDTO)
-                .isEqualTo(userService.create(userToSave2));
+                .isEqualTo(userService.create(userToSave));
     }
 
     @Test
