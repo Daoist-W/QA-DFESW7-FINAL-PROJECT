@@ -19,7 +19,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> findByLocation(String location);
 
     // simplified scheduling for Job entity
-    @Query("SELECT a FROM Job a WHERE a.startDate = ?1 AND a.endDate = ?2")
+    @Query("SELECT a FROM Job a WHERE a.startDate >= ?1 AND a.endDate <= ?2")
     List<Job> findByDates(
             @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate startDate,
             @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate endDate

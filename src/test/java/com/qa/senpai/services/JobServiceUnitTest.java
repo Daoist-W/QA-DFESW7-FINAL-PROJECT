@@ -9,17 +9,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class JobServiceUnitTest {
     // Using mockito only for this unit test
 
@@ -205,25 +207,22 @@ class JobServiceUnitTest {
 
     @Test
     void getAll() {
-        // TODO: test me
-        // when()
         when(jobRepository.findAll()).thenReturn(allJobs);
-        when(allJobs
-                .stream()
-                .map(job -> jobMapper.map(job, JobDTO.class))
-                .collect(Collectors.toList())).thenReturn(allJobsDTO);
+        for(int i = 0; i < allJobs.size(); i++) {
+            when(jobMapper.map(allJobs.get(i), JobDTO.class))
+                    .thenReturn(allJobsDTO.get(i));
+        }
         // assertThat()
         assertThat(jobService.getAll()).isEqualTo(allJobsDTO);
         // verify()
         verify(jobRepository).findAll();
-        verify(jobMapper, times(allJobsDTO.size()));
+        for (Job allJob : allJobs) {
+            verify(jobMapper).map(allJob, JobDTO.class);
+        }
     }
 
     @Test
     void getById() {
-        // TODO: test me
-        // given
-        // when()
         when(jobRepository.existsById(jobId)).thenReturn(true);
         when(jobRepository.getById(jobId)).thenReturn(jobToBeFound);
         when(jobMapper.map(jobToBeFound, JobDTO.class)).thenReturn(jobToBeFoundDTO);
@@ -237,43 +236,44 @@ class JobServiceUnitTest {
 
     @Test
     void getByTitle() {
-        // TODO: test me
-        // given
-        // when()
-        when(jobRepository.findBytitle(jobToBeFound.getTitle())).thenReturn(jobFoundList);
-        when(jobFoundList
-                .stream()
-                .map(job -> jobMapper.map(job, JobDTO.class))
-                .collect(Collectors.toList())).thenReturn(jobFoundListDTO);
+        when(jobRepository.findBytitle(jobToBeFound.getTitle()))
+                .thenReturn(jobFoundList);
+
+        for(int i = 0; i < jobFoundList.size(); i++) {
+            when(jobMapper.map(jobFoundList.get(i), JobDTO.class))
+                    .thenReturn(jobFoundListDTO.get(i));
+        }
         // assertThat()
-        assertThat(jobService.getByTitle(jobToBeFound.getTitle())).isEqualTo(jobFoundListDTO);
+        assertThat(jobService.getByTitle(jobToBeFound.getTitle()))
+                .isEqualTo(jobFoundListDTO);
         // verify()
         verify(jobRepository).findBytitle(jobToBeFound.getTitle());
-        verify(jobMapper, times(jobFoundListDTO.size()));
+        for (Job job : jobFoundList) {
+            verify(jobMapper).map(job, JobDTO.class);
+        }
     }
 
     @Test
     void getByDates() {
-        // TODO: test me
-        // given
-        // when()
         when(jobRepository.findByDates(jobStartDate, jobEndDate))
                 .thenReturn(listOfJobsByDate);
-        when(listOfJobsByDate
-                .stream()
-                .map(job -> jobMapper.map(job, JobDTO.class))
-                .collect(Collectors.toList())).thenReturn(listOfJobsByDateDTO);
+
+        for(int i = 0; i < listOfJobsByDate.size(); i++) {
+            when(jobMapper.map(listOfJobsByDate.get(i), JobDTO.class))
+                    .thenReturn(listOfJobsByDateDTO.get(i));
+        }
         // assertThat()
         assertThat(jobService.getByDates(jobStartDate, jobEndDate)).isEqualTo(listOfJobsByDateDTO);
 
         // verify()
         verify(jobRepository).findByDates(jobStartDate, jobEndDate);
-        verify(jobMapper, times(listOfJobsByDateDTO.size()));
+        for (Job job : listOfJobsByDate) {
+            verify(jobMapper).map(job, JobDTO.class);
+        }
     }
 
     @Test
     void create() {
-        // TODO: test me
         when(jobRepository.save(jobToBeSaved)).thenReturn(savedJob);
         when(jobMapper.map(savedJob, JobDTO.class)).thenReturn(savedJobDTO);
         // assertThat()
@@ -284,32 +284,29 @@ class JobServiceUnitTest {
 
     @Test
     void update() {
-        // TODO: test me
-        // given
-        // when()
-        when(jobRepository.findById(jobId)).thenReturn(Optional.of(jobToUpdate));
-        when(jobRepository.save(updatedJob)).thenReturn(updatedJob);
+        when(jobRepository.existsById(jobId)).thenReturn(true);
+        when(jobRepository.getById(jobId)).thenReturn(jobToUpdate);
+        when(jobRepository.save(jobToUpdate)).thenReturn(updatedJob);
         when(jobMapper.map(updatedJob, JobDTO.class)).thenReturn(updatedJobDTO);
         // assertThat()
         assertThat(jobService.update(jobId, jobToUpdate)).isEqualTo(updatedJobDTO);
         // verify()
-        verify(jobRepository).findById(jobId);
-        verify(jobRepository).save(updatedJob);
+        verify(jobRepository).existsById(jobId);
+        verify(jobRepository).getById(jobId);
+        verify(jobRepository).save(jobToUpdate);
         verify(jobMapper).map(updatedJob, JobDTO.class);
     }
 
     @Test
     void delete() {
-        // TODO: test me
-        // given
-        // when()
         when(jobRepository.existsById(jobId)).thenReturn(true);
-        when(jobRepository.findById(jobId)).thenReturn(Optional.of(jobToDelete));
-        when(jobMapper.map(jobToDelete, JobDTO.class)).thenReturn(updatedJobDTO);
+        when(jobRepository.getById(jobId)).thenReturn(jobToDelete);
+        when(jobMapper.map(jobToDelete, JobDTO.class)).thenReturn(jobToDeleteDTO);
         // assertThat()
         assertThat(jobService.delete(jobId)).isEqualTo(jobToDeleteDTO);
         // verify()
         verify(jobRepository).existsById(jobId);
-        verify(jobRepository).findById(jobId);
+        verify(jobRepository).getById(jobId);
+        verify(jobRepository).deleteById(jobId);
     }
 }

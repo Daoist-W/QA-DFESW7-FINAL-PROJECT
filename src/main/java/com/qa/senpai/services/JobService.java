@@ -3,20 +3,22 @@ package com.qa.senpai.services;
 import com.qa.senpai.data.dtos.JobDTO;
 import com.qa.senpai.data.entities.Job;
 import com.qa.senpai.data.repositories.JobRepository;
+import com.qa.senpai.exceptions.JobNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class JobService {
 
     // Fields
-    private JobRepository jobRepository;
-    private ModelMapper mapper; // allows for mapping DTO's to Entities
+    private final JobRepository jobRepository;
+    private final ModelMapper mapper; // allows for mapping DTO's to Entities
 
     @Autowired
     public JobService(JobRepository jobRepository, ModelMapper modelMapper) {
@@ -30,12 +32,11 @@ public class JobService {
     // ##############################################
 
     private JobDTO mapToDTO(Job job) { // maps DTO to Job object
-        return this.mapper.map(job, JobDTO.class);
+        return mapper.map(job, JobDTO.class);
     }
 
 
     public List<JobDTO> getAll() {
-        // TODO: implement me
         return jobRepository
                 .findAll()
                 .stream()
@@ -44,41 +45,64 @@ public class JobService {
     }
 
     public JobDTO getById(Long id) {
-        // TODO: implement me
         if (jobRepository.existsById(id)) {
             return mapToDTO(jobRepository.getById(id));
         } else  {
-            throw new JobNotFoundException()
+            throw new JobNotFoundException("Job with id " + id + " not found");
         }
 
     }
 
     public List<JobDTO> getByTitle(String title) {
-        // TODO: implement me
-        return null;
+        return Optional.of(jobRepository
+                .findBytitle(title)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList()))
+                .orElseThrow(() -> new JobNotFoundException("Jobs with title " + title + " not found"));
     }
 
     public List<JobDTO> getByDates(LocalDate jobStartDate, LocalDate jobEndDate) {
-        // TODO: Implement me
-        return null;
+        return Optional.of(jobRepository
+                .findByDates(jobStartDate, jobEndDate)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList()))
+                .orElseThrow(() -> new JobNotFoundException("Jobs with dates between " +
+                        jobStartDate + " and " + jobEndDate + " not found"));
     }
 
 
     public JobDTO create(Job job) {
-        // TODO: implement me
-        return null;
+        return mapToDTO(jobRepository.save(job));
     }
 
 
     public JobDTO update(long id, Job job) {
-        // TODO: implement me
-        return null;
+        if(jobRepository.existsById(id)) {
+            Job toUpdate = jobRepository.getById(id);
+            toUpdate.setTitle(job.getTitle());
+            toUpdate.setDescription(job.getDescription());
+            toUpdate.setLocation(job.getLocation());
+            toUpdate.setStartDate(job.getStartDate());
+            toUpdate.setEndDate(job.getEndDate());
+            Job save = jobRepository.save(toUpdate);
+            return mapToDTO(save);
+        } else {
+            throw new JobNotFoundException("Job with id " + id + " not found");
+        }
     }
 
 
     public JobDTO delete(Long id) {
         // TODO: implement me
-        return null;
+        if(jobRepository.existsById(id)) {
+            Job toDelete = jobRepository.getById(id);
+            jobRepository.deleteById(id);
+            return mapToDTO(toDelete);
+        } else {
+            throw new JobNotFoundException("Job with id " + id + " not found");
+        }
     }
 
 
