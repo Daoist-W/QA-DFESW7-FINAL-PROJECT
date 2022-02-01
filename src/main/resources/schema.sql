@@ -11,9 +11,11 @@ CREATE TABLE availability (
 
 CREATE TABLE job (
     id BIGINT NOT NULL,
+	title VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,
     location VARCHAR(255) NOT NULL,
-    title VARCHAR(255) NOT NULL,
+    end_date DATE NOT NULL,
+    start_date DATE NOT NULL,
     PRIMARY KEY (id)
 );
 

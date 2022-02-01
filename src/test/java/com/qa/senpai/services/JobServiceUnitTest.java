@@ -3,7 +3,6 @@ package com.qa.senpai.services;
 import com.qa.senpai.data.dtos.JobDTO;
 import com.qa.senpai.data.entities.Job;
 import com.qa.senpai.data.repositories.JobRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,15 +33,13 @@ class JobServiceUnitTest {
     @InjectMocks
     private JobService jobService;
 
-    private List<Job> jobs;
-    private List<JobDTO> jobsDTO;
     private Job jobToBeSaved;
     private Job savedJob;
     private JobDTO savedJobDTO;
     private Job jobToUpdate;
     private Job updatedJob;
-    private Long jobId;
     private JobDTO updatedJobDTO;
+    private Long jobId;
     private Job jobToDelete;
     private JobDTO jobToDeleteDTO;
     private LocalDate jobStartDate;
@@ -60,14 +57,151 @@ class JobServiceUnitTest {
     @BeforeEach
     void setUp() { // runs before every test
         // TODO: implement me
+        // READ
+        allJobs = List.of(
+                new Job(1L,
+                        "topjob",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 3, 4),
+                        LocalDate.of(2022, 3, 4)
+                ),
+                new Job(2L,
+                        "topjob",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 3, 4),
+                        LocalDate.of(2022, 3, 4)
+                ),
+                new Job(3L,
+                        "topjob3",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 2, 4),
+                        LocalDate.of(2022, 2, 6)
+                ),
+                new Job(4L,
+                        "topjob4",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 2, 4),
+                        LocalDate.of(2022, 2, 12)
+                )
+        );
+
+        allJobsDTO = List.of(
+                new JobDTO(1L,
+                        "topjob",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 3, 4),
+                        LocalDate.of(2022, 3, 4)
+                ),
+                new JobDTO(2L,
+                        "topjob",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 3, 4),
+                        LocalDate.of(2022, 3, 4)
+                ),
+                new JobDTO(3L,
+                        "topjob3",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 2, 4),
+                        LocalDate.of(2022, 2, 6)
+                ),
+                new JobDTO(4L,
+                        "topjob4",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 2, 4),
+                        LocalDate.of(2022, 2, 12)
+                )
+        );
+
+        jobToBeFound = allJobs.get(2);
+        jobToBeFoundDTO = allJobsDTO.get(2);
+
+
+        // update
+        jobToUpdate = jobToBeFound;
+        updatedJob = new Job(3L,
+                "UPDATED",
+                "best job in the UNIVERSE",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 6)
+        );
+        updatedJobDTO = new JobDTO(3L,
+                "UPDATED",
+                "best job in the UNIVERSE",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 6)
+        );
+        jobId = 3L;
+
+        // DELETE
+        jobToDelete = jobToBeFound;
+        jobToDeleteDTO = new JobDTO(3L,
+                "UPDATED",
+                "best job in the UNIVERSE",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 6)
+        );
+
+        // CREATE
+        jobToBeSaved = new Job(
+                (allJobs.get(allJobs.size() - 1).getId() + 1), // find id of last element and add 1
+                "new top job",
+                "best job in the world",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 12)
+        );
+
+        savedJob = new Job(
+                5L,
+                "new top job",
+                "best job in the world",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 12)
+        );
+
+        savedJobDTO = new JobDTO(
+                5L,
+                "new top job",
+                "best job in the world",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 12)
+        );
+
+        // BY DATE
+
+        jobStartDate = LocalDate.of(2022, 2, 3);
+        jobEndDate = LocalDate.of(2022, 2, 13);
+
+        listOfJobsByDate = List.of(allJobs.get(0), allJobs.get(1));
+        listOfJobsByDateDTO = List.of(allJobsDTO.get(0), allJobsDTO.get(1));
+
+        // BY TITLE
+
+        jobFoundList = listOfJobsByDate;
+        jobFoundListDTO = listOfJobsByDateDTO;
+
+
+
+
+
+
+
 
     }
 
-    @AfterEach
-    void tearDown() { // runs after every test
-        // TODO: implement me
-
-    }
 
     @Test
     void getAll() {
