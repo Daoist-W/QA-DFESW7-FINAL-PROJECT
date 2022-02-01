@@ -48,8 +48,8 @@ public class JobService {
         return null;
     }
 
-    public List<JobDTO> getByDates(List<LocalDate> dates) {
-        // TODO: implement me
+    public List<JobDTO> getByDates(LocalDate jobStartDate, LocalDate jobEndDate) {
+        // TODO: Implement me
         return null;
     }
 
@@ -70,4 +70,6 @@ public class JobService {
         // TODO: implement me
         return null;
     }
+
+
 }

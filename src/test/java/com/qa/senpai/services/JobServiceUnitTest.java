@@ -12,9 +12,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class JobServiceUnitTest {
@@ -32,6 +36,25 @@ class JobServiceUnitTest {
 
     private List<Job> jobs;
     private List<JobDTO> jobsDTO;
+    private Job jobToBeSaved;
+    private Job savedJob;
+    private JobDTO savedJobDTO;
+    private Job jobToUpdate;
+    private Job updatedJob;
+    private Long jobId;
+    private JobDTO updatedJobDTO;
+    private Job jobToDelete;
+    private JobDTO jobToDeleteDTO;
+    private LocalDate jobStartDate;
+    private LocalDate jobEndDate;
+    private List<Job> listOfJobsByDate;
+    private List<JobDTO> listOfJobsByDateDTO;
+    private Job jobToBeFound;
+    private List<Job> jobFoundList;
+    private List<JobDTO> jobFoundListDTO;
+    private JobDTO jobToBeFoundDTO;
+    private List<Job> allJobs;
+    private List<JobDTO> allJobsDTO;
 
 
     @BeforeEach
@@ -50,9 +73,16 @@ class JobServiceUnitTest {
     void getAll() {
         // TODO: test me
         // when()
+        when(jobRepository.findAll()).thenReturn(allJobs);
+        when(allJobs
+                .stream()
+                .map(job -> jobMapper.map(job, JobDTO.class))
+                .collect(Collectors.toList())).thenReturn(allJobsDTO);
         // assertThat()
+        assertThat(jobService.getAll()).isEqualTo(allJobsDTO);
         // verify()
-        fail("Implement me");
+        verify(jobRepository).findAll();
+        verify(jobMapper, times(allJobsDTO.size()));
     }
 
     @Test
@@ -60,9 +90,15 @@ class JobServiceUnitTest {
         // TODO: test me
         // given
         // when()
+        when(jobRepository.existsById(jobId)).thenReturn(true);
+        when(jobRepository.getById(jobId)).thenReturn(jobToBeFound);
+        when(jobMapper.map(jobToBeFound, JobDTO.class)).thenReturn(jobToBeFoundDTO);
         // assertThat()
+        assertThat(jobService.getById(jobId)).isEqualTo(jobToBeFoundDTO);
         // verify()
-        fail("Implement me");
+        verify(jobRepository).existsById(jobId);
+        verify(jobRepository).getById(jobId);
+        verify(jobMapper).map(jobToBeFound, JobDTO.class);
     }
 
     @Test
@@ -70,9 +106,16 @@ class JobServiceUnitTest {
         // TODO: test me
         // given
         // when()
+        when(jobRepository.findBytitle(jobToBeFound.getTitle())).thenReturn(jobFoundList);
+        when(jobFoundList
+                .stream()
+                .map(job -> jobMapper.map(job, JobDTO.class))
+                .collect(Collectors.toList())).thenReturn(jobFoundListDTO);
         // assertThat()
+        assertThat(jobService.getByTitle(jobToBeFound.getTitle())).isEqualTo(jobFoundListDTO);
         // verify()
-        fail("Implement me");
+        verify(jobRepository).findBytitle(jobToBeFound.getTitle());
+        verify(jobMapper, times(jobFoundListDTO.size()));
     }
 
     @Test
@@ -80,19 +123,29 @@ class JobServiceUnitTest {
         // TODO: test me
         // given
         // when()
+        when(jobRepository.findByDates(jobStartDate, jobEndDate))
+                .thenReturn(listOfJobsByDate);
+        when(listOfJobsByDate
+                .stream()
+                .map(job -> jobMapper.map(job, JobDTO.class))
+                .collect(Collectors.toList())).thenReturn(listOfJobsByDateDTO);
         // assertThat()
+        assertThat(jobService.getByDates(jobStartDate, jobEndDate)).isEqualTo(listOfJobsByDateDTO);
+
         // verify()
-        fail("Implement me");
+        verify(jobRepository).findByDates(jobStartDate, jobEndDate);
+        verify(jobMapper, times(listOfJobsByDateDTO.size()));
     }
 
     @Test
     void create() {
         // TODO: test me
-        // given
-        // when()
+        when(jobRepository.save(jobToBeSaved)).thenReturn(savedJob);
+        when(jobMapper.map(savedJob, JobDTO.class)).thenReturn(savedJobDTO);
         // assertThat()
+        assertThat(jobService.create(jobToBeSaved)).isEqualTo(savedJobDTO);
         // verify()
-        fail("Implement me");
+        verify(jobRepository).save(jobToBeSaved);
     }
 
     @Test
@@ -100,9 +153,15 @@ class JobServiceUnitTest {
         // TODO: test me
         // given
         // when()
+        when(jobRepository.findById(jobId)).thenReturn(Optional.of(jobToUpdate));
+        when(jobRepository.save(updatedJob)).thenReturn(updatedJob);
+        when(jobMapper.map(updatedJob, JobDTO.class)).thenReturn(updatedJobDTO);
         // assertThat()
+        assertThat(jobService.update(jobId, jobToUpdate)).isEqualTo(updatedJobDTO);
         // verify()
-        fail("Implement me");
+        verify(jobRepository).findById(jobId);
+        verify(jobRepository).save(updatedJob);
+        verify(jobMapper).map(updatedJob, JobDTO.class);
     }
 
     @Test
@@ -110,8 +169,13 @@ class JobServiceUnitTest {
         // TODO: test me
         // given
         // when()
+        when(jobRepository.existsById(jobId)).thenReturn(true);
+        when(jobRepository.findById(jobId)).thenReturn(Optional.of(jobToDelete));
+        when(jobMapper.map(jobToDelete, JobDTO.class)).thenReturn(updatedJobDTO);
         // assertThat()
+        assertThat(jobService.delete(jobId)).isEqualTo(jobToDeleteDTO);
         // verify()
-        fail("Implement me");
+        verify(jobRepository).existsById(jobId);
+        verify(jobRepository).findById(jobId);
     }
 }
