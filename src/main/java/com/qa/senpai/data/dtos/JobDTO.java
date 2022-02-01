@@ -12,6 +12,10 @@ public class JobDTO {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    public JobDTO() {
+
+    }
+
     public JobDTO(Long id,
                   String title,
                   String description,

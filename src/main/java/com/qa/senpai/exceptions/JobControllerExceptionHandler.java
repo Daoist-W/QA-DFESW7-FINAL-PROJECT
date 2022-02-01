@@ -6,11 +6,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class ControllerExceptionHandler {
-
+public class JobControllerExceptionHandler {
 
     @ExceptionHandler(value = {UserNotFoundException.class})
-    public ResponseEntity<String> userNotFoundExceptions(UserNotFoundException unfe) {
-        return new ResponseEntity<>(unfe.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> jobNotFoundException(JobNotFoundException jnfe) {
+        return new ResponseEntity<>(jnfe.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

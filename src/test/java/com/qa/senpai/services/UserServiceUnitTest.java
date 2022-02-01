@@ -44,7 +44,7 @@ class UserServiceUnitTest {
 
 
     @BeforeEach
-    void setUp() { // runs before every test
+    public void init() { // runs before every test
         users = new ArrayList<>();
         users.addAll(List.of(
                 new User(
@@ -91,7 +91,7 @@ class UserServiceUnitTest {
     }
 
     @AfterEach
-    void tearDown() { // runs after every test
+    public void tearDown() { // runs after every test
         users.clear();
         expectedUserWithId = null;
         expectedUserWithIdDTO = null;
