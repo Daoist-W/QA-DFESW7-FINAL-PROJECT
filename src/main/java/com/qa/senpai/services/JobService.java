@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JobService {
@@ -35,12 +36,21 @@ public class JobService {
 
     public List<JobDTO> getAll() {
         // TODO: implement me
-        return null;
+        return jobRepository
+                .findAll()
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     public JobDTO getById(Long id) {
         // TODO: implement me
-        return null;
+        if (jobRepository.existsById(id)) {
+            return mapToDTO(jobRepository.getById(id));
+        } else  {
+            throw new JobNotFoundException()
+        }
+
     }
 
     public List<JobDTO> getByTitle(String title) {
@@ -48,8 +58,8 @@ public class JobService {
         return null;
     }
 
-    public List<JobDTO> getByDates(List<LocalDate> dates) {
-        // TODO: implement me
+    public List<JobDTO> getByDates(LocalDate jobStartDate, LocalDate jobEndDate) {
+        // TODO: Implement me
         return null;
     }
 
@@ -70,4 +80,6 @@ public class JobService {
         // TODO: implement me
         return null;
     }
+
+
 }

@@ -1,20 +1,29 @@
 package com.qa.senpai.data.dtos;
 
+import java.time.LocalDate;
+import java.util.Objects;
+
 public class JobDTO {
 
     Long id;
     String title;
     String description;
     String location;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     public JobDTO(Long id,
                   String title,
                   String description,
-                  String location) {
+                  String location,
+                  LocalDate startDate,
+                  LocalDate endDate) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public Long getId() {
@@ -49,6 +58,40 @@ public class JobDTO {
         this.location = location;
     }
 
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JobDTO jobDTO = (JobDTO) o;
+        return getId().equals(jobDTO.getId()) && getTitle().equals(jobDTO.getTitle()) && getDescription().equals(jobDTO.getDescription()) && getLocation().equals(jobDTO.getLocation()) && getStartDate().equals(jobDTO.getStartDate()) && getEndDate().equals(jobDTO.getEndDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(),
+                getTitle(),
+                getDescription(),
+                getLocation(),
+                getStartDate(),
+                getEndDate());
+    }
+
     @Override
     public String toString() {
         return "JobDTO{" +
@@ -56,6 +99,8 @@ public class JobDTO {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", location='" + location + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
                 '}';
     }
 }
