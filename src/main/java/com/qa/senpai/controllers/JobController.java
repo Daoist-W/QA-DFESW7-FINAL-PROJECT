@@ -1,24 +1,26 @@
 package com.qa.senpai.controllers;
 
 import com.qa.senpai.data.dtos.JobDTO;
+import com.qa.senpai.data.entities.Availability;
 import com.qa.senpai.data.entities.Job;
-import com.qa.senpai.data.support.DateList;
 import com.qa.senpai.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/job")
+@RequestMapping(path = "/jobs")
 public class JobController {
     // Fields
     private JobService jobService;
 
     @Autowired
-    // TODO: Review your understanding of autowired
     public JobController(JobService jobService) {
         this.jobService = jobService;
     }
@@ -29,31 +31,33 @@ public class JobController {
     // ############################################
 
     @GetMapping
-    public List<ResponseEntity<JobDTO>> getAllJobs() {
-        // TODO: implement me
-        return null;
+    public ResponseEntity<List<JobDTO>> getAllJobs() {
+        return ResponseEntity.ok(jobService.getAll());
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<JobDTO> getJobById(@PathVariable Long id) {
-        // TODO: implement me
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        JobDTO job = jobService.getById(id);
+        headers.add("Location", "/jobs/" + job.getId());
+        return new ResponseEntity<JobDTO>(job, headers, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{title}")
-    public List<ResponseEntity<JobDTO>> getJobsByTitle(@PathVariable String title) {
-        // TODO: implement me
-        return null;
+    @GetMapping(path = "/title/{title}")
+    public ResponseEntity<List<JobDTO>> getJobsByTitle(@PathVariable String title) {
+        List<JobDTO> jobs = jobService.getByTitle(title);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/jobs/title/" + title);
+        return new ResponseEntity<List<JobDTO>>(jobs, headers, HttpStatus.OK);
     }
 
 
-    @PostMapping(path = "/available-jobs") // using post so I can take advantage of the body
-    public List<ResponseEntity<JobDTO>> getJobsByDates(@RequestBody DateList dates) {
-        // DateList is a support class made to support reading dates from the
-        // request body, but first I will try it with ArrayList and see if it works
-        // TODO: implement access control
-        // TODO: implement me
-        return null;
+    @PostMapping(path = "/dates") // using post so I can take advantage of the body
+    public ResponseEntity<List<JobDTO>> getJobsByDates(@RequestBody Availability dates) {
+        LocalDate start = dates.getStartDate();
+        LocalDate end = dates.getEndDate();
+        List<JobDTO> jobs = jobService.getByDates(start, end);
+        return ResponseEntity.ok(jobs);
     }
 
     // ############################################
@@ -61,9 +65,9 @@ public class JobController {
     // ############################################
     @PostMapping(path = "/admin/create")
     public ResponseEntity<JobDTO> createJob(@Valid @RequestBody Job job) {
-        // TODO: implement access control
-        // TODO: implement me
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/admin/create/" + job.getId());
+        return new ResponseEntity<>(jobService.create(job), headers, HttpStatus.CREATED);
     }
 
     // ############################################
@@ -71,10 +75,9 @@ public class JobController {
     // ############################################
     @PutMapping(path = "/admin/{id}")
     public ResponseEntity<JobDTO> updateJobById(@PathVariable("id") Long id, @Valid @RequestBody Job job) {
-        // TODO: implement access control
-        // TODO: implement me
-        isAuthorised(0L, ""); // if authorised, proceed, otherwise handle decline
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/admin/" + job.getId());
+        return new ResponseEntity<>(jobService.update(id, job), headers, HttpStatus.OK);
     }
 
 
@@ -82,28 +85,18 @@ public class JobController {
     //                  DELETE
     // ############################################
 
-    @DeleteMapping(path = "/admin/{id}")
+    @DeleteMapping(path = "/admin/delete/{id}")
     public ResponseEntity<JobDTO> deleteJobById(@PathVariable("id") Long id) {
-        // TODO: implement access control
-        // TODO: implement me
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/admin/delete/" + id);
+        return new ResponseEntity<>(jobService.delete(id), headers, HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/staff/{id}")
-    public List<ResponseEntity<JobDTO>> deleteJobByTitle(@PathVariable("name") String title) {
-        // TODO: implement access control
-        // TODO: implement me
-        isAuthorised(0L, ""); // if authorised, proceed, otherwise handle decline
-        return null;
+    @DeleteMapping(path = "/admin/delete/name/{title}")
+    public ResponseEntity<List<JobDTO>> deleteJobByTitle(@PathVariable("title") String title) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/admin/delete/" + title);
+        return new ResponseEntity<>(jobService.deleteByTitle(title), headers, HttpStatus.OK);
     }
 
-    // ############################################
-    //             SUPPORTING METHODS
-    // ############################################
-
-    // this supporting method will be used to validate passwords
-    public boolean isAuthorised(Long id, String password) {
-        // TODO: implement me
-        return true;
-    }
 }

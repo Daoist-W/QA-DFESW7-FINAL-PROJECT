@@ -95,7 +95,6 @@ public class JobService {
 
 
     public JobDTO delete(Long id) {
-        // TODO: implement me
         if(jobRepository.existsById(id)) {
             Job toDelete = jobRepository.getById(id);
             jobRepository.deleteById(id);
@@ -103,6 +102,15 @@ public class JobService {
         } else {
             throw new JobNotFoundException("Job with id " + id + " not found");
         }
+    }
+
+    public List<JobDTO> deleteByTitle(String title) {
+        List<JobDTO> jobsToDelete = getByTitle(title);
+        return Optional.of(jobsToDelete
+                .stream()
+                .map(jobDTO -> delete(jobDTO.getId()))
+                .collect(Collectors.toList()))
+                .orElseThrow(() -> new JobNotFoundException("Job with title " + title + " not found"));
     }
 
 

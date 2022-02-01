@@ -1,5 +1,8 @@
 package com.qa.senpai.controllers;
 
+import com.qa.senpai.data.dtos.JobDTO;
+import com.qa.senpai.data.entities.Availability;
+import com.qa.senpai.data.entities.Job;
 import com.qa.senpai.services.JobService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,8 +10,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @WebMvcTest(JobController.class)
 class JobControllerWebIntegrationTest {
@@ -21,97 +31,238 @@ class JobControllerWebIntegrationTest {
 
     @MockBean
     private JobService jobService;
+    private List<Job> allJobs;
+    private List<JobDTO> jobsDTO;
 
-    // TODO: Add data for tests
+    private Job jobToBeSaved;
+    private JobDTO savedJobDTO;
+
+    private Job jobToUpdate;
+    private JobDTO updatedJobDTO;
+
+    private Long jobId;
+    private JobDTO foundJobDTO;
+    private JobDTO jobToDeleteDTO;
+
+    private LocalDate jobStartDate;
+    private LocalDate jobEndDate;
+
+    private List<JobDTO> listOfJobsFoundDTO;
+    private Availability dates;
+
 
     @BeforeEach
-    void setUp() { // this runs before every test
-        // TODO: implement me
-        fail("Implement me");
+    public void init() { // runs before every test
+        allJobs = List.of(
+                new Job(1L,
+                        "topjob",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 3, 4),
+                        LocalDate.of(2022, 3, 4)
+                ),
+                new Job(2L,
+                        "topjob",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 3, 4),
+                        LocalDate.of(2022, 3, 4)
+                ),
+                new Job(3L,
+                        "topjob3",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 2, 4),
+                        LocalDate.of(2022, 2, 6)
+                ),
+                new Job(4L,
+                        "topjob4",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 2, 4),
+                        LocalDate.of(2022, 2, 12)
+                )
+        );
+
+        jobsDTO = List.of(
+                new JobDTO(1L,
+                        "topjob",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 3, 4),
+                        LocalDate.of(2022, 3, 4)
+                ),
+                new JobDTO(2L,
+                        "topjob",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 3, 4),
+                        LocalDate.of(2022, 3, 4)
+                ),
+                new JobDTO(3L,
+                        "topjob3",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 2, 4),
+                        LocalDate.of(2022, 2, 6)
+                ),
+                new JobDTO(4L,
+                        "topjob4",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 2, 4),
+                        LocalDate.of(2022, 2, 12)
+                )
+        );
+
+        jobToBeSaved = new Job(
+                (allJobs.get(allJobs.size() - 1).getId() + 1), // find id of last element and add 1
+                "new top job",
+                "best job in the world",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 12)
+        );
+
+        savedJobDTO = new JobDTO(
+                5L,
+                "new top job",
+                "best job in the world",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 12)
+        );
+
+        jobId = 3L;
+
+        foundJobDTO = new JobDTO(3L,
+                "topjob3",
+                "best job in the world",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 6)
+        );
+
+        jobToUpdate = new Job(3L,
+                "UPDATED",
+                "best job in the UNIVERSE",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 6)
+        );
+
+        updatedJobDTO = new JobDTO(3L,
+                "UPDATED",
+                "best job in the UNIVERSE",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 6)
+        );
+
+        jobToDeleteDTO = foundJobDTO;
+
+
+        // BY DATE
+
+        jobStartDate = LocalDate.of(2022, 3, 3);
+        jobEndDate = LocalDate.of(2022, 3, 13);
+
+        dates = new Availability(jobStartDate, jobEndDate);
+
+        listOfJobsFoundDTO = List.of(jobsDTO.get(0), jobsDTO.get(1));
+
+
+
+
 
     }
 
     @AfterEach
-    void tearDown() { // this runs after every test
+    public void tearDown() { // runs after every test
         // TODO: implement me
-        // need a tear down to get around issue I was having
-        fail("Implement me");
-
     }
+
 
     @Test
     void getAllJobsTest() {
-        // expecting a list of Job objects
-        // TODO: test me
-        fail("Implement me");
-
+        when(jobService.getAll()).thenReturn(jobsDTO);
+        assertThat(jobController.getAllJobs())
+                .isEqualTo(ResponseEntity.ok(jobsDTO));
     }
 
     @Test
     void getJobByIdTest() {
-        // expecting a single object matching id submitted
-        // TODO: test me
-        fail("Implement me");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/jobs/" + jobId);
+        when(jobService.getById(jobId))
+                .thenReturn(foundJobDTO);
+        assertThat(jobController.getJobById(jobId))
+                .isEqualTo(new ResponseEntity<>(foundJobDTO, headers, HttpStatus.OK));
 
     }
 
     @Test
     void getJobsByTitleTest() {
-        // expecting one or more objects matching name submitted
-        // TODO: test me
-        fail("Implement me");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/jobs/" + "topjob");
+        when(jobService.getByTitle("topjob"))
+                .thenReturn(listOfJobsFoundDTO);
+        assertThat(jobController.getJobsByTitle("topjob"))
+                .isEqualTo(new ResponseEntity<>(listOfJobsFoundDTO, headers, HttpStatus.OK));
 
     }
 
     @Test
     void getJobsByDatesTest() {
-        // expecting one or more objects matching dates submitted
-        // TODO: test me
-        fail("Implement me");
-
+        when(jobService.getByDates(jobStartDate, jobEndDate))
+                .thenReturn(listOfJobsFoundDTO);
+        assertThat(jobController.getJobsByDates(dates))
+                .isEqualTo(ResponseEntity.ok(listOfJobsFoundDTO));
     }
 
     @Test
     void createJobTest() {
-        // expecting HTTP status 202 CREATED
-        // expecting an object reflecting submitted data for confirmation
-        // TODO: test me
-        fail("Implement me");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/admin/create/" + savedJobDTO.getId());
+        when(jobService.create(jobToBeSaved))
+                .thenReturn(savedJobDTO);
+        assertThat(jobController.createJob(jobToBeSaved))
+                .isEqualTo(new ResponseEntity<>(savedJobDTO, headers, HttpStatus.CREATED));
 
     }
 
     @Test
     void updateJobByIdTest() {
-        // expecting HTTP status 200 OK
-        // should return updated object for visual confirmation
-        // TODO: test me
-        fail("Implement me");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/admin/" + updatedJobDTO.getId());
+        when(jobService.update(jobId, jobToUpdate))
+                .thenReturn(updatedJobDTO);
+        assertThat(jobController.updateJobById(jobId, jobToUpdate))
+                .isEqualTo(new ResponseEntity<>(updatedJobDTO, headers, HttpStatus.OK));
 
     }
 
     @Test
     void deleteJobByIdTest() {
-        // expecting HTTP status 200 OK
-        // should return deleted object for visual confirmation
-        // TODO: test me
-        fail("Implement me");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/admin/delete/" + jobToDeleteDTO.getId());
+        when(jobService.delete(jobId))
+                .thenReturn(jobToDeleteDTO);
+        assertThat(jobController.deleteJobById(jobId))
+                .isEqualTo(new ResponseEntity<>(jobToDeleteDTO, headers, HttpStatus.OK));
 
     }
 
     @Test
     void deleteJobByTitleTest() {
-        // expecting HTTP status 200 OK
-        // should return list of deleted objects for visual confirmation
-        // TODO: test me
-        fail("Implement me");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/admin/delete/" + "topjob");
+        when(jobService.deleteByTitle("topjob"))
+                .thenReturn(listOfJobsFoundDTO);
+        assertThat(jobController.deleteJobByTitle("topjob"))
+                .isEqualTo(new ResponseEntity<>(listOfJobsFoundDTO, headers, HttpStatus.OK));
 
     }
 
-    @Test
-    void isAuthorisedTest() {
-        // should return true if submitted password matches current users password
-        // TODO: test me
-        fail("Implement me");
 
-    }
 }
