@@ -170,7 +170,6 @@ class UserServiceIntegrationTest {
 
     @Test
     void delete() {
-        System.out.println(userRepository.findAll());
         assertThat(userService.delete(userId)).isEqualTo(userToDeleteDTO);
     }
 }

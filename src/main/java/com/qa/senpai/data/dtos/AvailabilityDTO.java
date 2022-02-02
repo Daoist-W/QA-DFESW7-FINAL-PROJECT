@@ -1,6 +1,7 @@
 package com.qa.senpai.data.dtos;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class AvailabilityDTO {
 
@@ -41,5 +42,18 @@ public class AvailabilityDTO {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AvailabilityDTO that = (AvailabilityDTO) o;
+        return getId().equals(that.getId()) && getStartDate().equals(that.getStartDate()) && getEndDate().equals(that.getEndDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getStartDate(), getEndDate());
     }
 }

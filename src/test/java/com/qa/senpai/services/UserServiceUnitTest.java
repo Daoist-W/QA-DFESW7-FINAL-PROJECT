@@ -36,15 +36,19 @@ class UserServiceUnitTest {
 
     private List<User> allUsers;
     private List<UserDTO> allUsersDTO;
+
     private Long userId;
     private User expectedUserWithId;
     private User expectedUserWithoutId;
     private UserDTO expectedUserWithIdDTO;
+
     private List<User> userFoundList;
     private List<UserDTO> userFoundListDTO;
+
     private User userToUpdate;
     private User updatedUser;
     private UserDTO updatedUserDTO;
+
     private User userToDelete;
     private UserDTO userToDeleteDTO;
 

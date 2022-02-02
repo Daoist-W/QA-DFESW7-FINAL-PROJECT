@@ -1,18 +1,26 @@
 package com.qa.senpai.controllers;
 
+import com.qa.senpai.data.dtos.AvailabilityDTO;
+import com.qa.senpai.data.entities.Availability;
 import com.qa.senpai.services.AvailabilityService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @WebMvcTest(AvailabilityController.class)
 class AvailabilityControllerWebIntegrationTest {
-    // This test is restricting the application context to only
-    // the AvailabilityController, though some other components are initialised too
-    // we will use mockito to set up a mock up of the service class
 
     @Autowired // field injection
     private AvailabilityController availabilityController;
@@ -20,88 +28,201 @@ class AvailabilityControllerWebIntegrationTest {
     @MockBean
     private AvailabilityService availabilityService;
 
-    // TODO: Add data for tests
+    private List<Availability> availabilities;
+    private List<AvailabilityDTO> availabilitiesDTO;
+
+    private Long availabilityId;
+    private Availability expectedAvailabilityWithId;
+    private Availability expectedAvailabilityWithoutId;
+    private AvailabilityDTO expectedAvailabilityWithIdDTO;
+
+    private List<Availability> availabilityFoundList;
+    private List<AvailabilityDTO> availabilityFoundListDTO;
+
+    private Availability availabilityToUpdate;
+    private Availability updatedAvailability;
+    private AvailabilityDTO updatedAvailabilityDTO;
+
+    private Availability availabilityToDelete;
+    private AvailabilityDTO availabilityToDeleteDTO;
+
+    private LocalDate availabilityStartDate;
+    private LocalDate availabilityEndDate;
+    private Availability setDateRange;
+
+    private Availability availabilityToBeSaved;
+    private Availability savedAvailability;
+    private AvailabilityDTO savedAvailabilityDTO;
+
 
     @BeforeEach
-    void setUp() { // this runs before every test
+    void setUp() { // runs before every test
         // TODO: implement me
+        availabilities = new ArrayList<>();
+        availabilities.addAll(List.of(
+                new Availability(
+                        1L,
+                        LocalDate.of(2022, 1, 1),
+                        LocalDate.of(2022, 1, 7)
+                ),
+                new Availability(
+                        2L,
+                        LocalDate.of(2022, 1, 8),
+                        LocalDate.of(2022, 1, 14)
+                ),
+                new Availability(
+                        3L,
+                        LocalDate.of(2022, 1, 15),
+                        LocalDate.of(2022, 1, 21)
+                ),
+                new Availability(
+                        4L,
+                        LocalDate.of(2022, 1, 22),
+                        LocalDate.of(2022, 1, 28)
+                )
+        ));
 
+        availabilitiesDTO = new ArrayList<>();
+        availabilitiesDTO.addAll(List.of(
+                new AvailabilityDTO(
+                        1L,
+                        LocalDate.of(2022, 1, 1),
+                        LocalDate.of(2022, 1, 7)
+                ),
+                new AvailabilityDTO(
+                        2L,
+                        LocalDate.of(2022, 1, 8),
+                        LocalDate.of(2022, 1, 14)
+                ),
+                new AvailabilityDTO(
+                        3L,
+                        LocalDate.of(2022, 1, 15),
+                        LocalDate.of(2022, 1, 21)
+                ),
+                new AvailabilityDTO(
+                        4L,
+                        LocalDate.of(2022, 1, 22),
+                        LocalDate.of(2022, 1, 28)
+                )
+        ));
 
-    }
+        availabilityId = 3L;
 
-    @AfterEach
-    void tearDown() { // this runs after every test
-        // TODO: implement me
-        // need a tear down to get around issue I was having
+        expectedAvailabilityWithId = availabilities.get(2);
+        expectedAvailabilityWithIdDTO = availabilitiesDTO.get(2);
+        expectedAvailabilityWithoutId = new Availability(
+                LocalDate.of(2022, 1, 15),
+                LocalDate.of(2022, 1, 21)
+        );
+
+        availabilityFoundList = List.of(availabilities.get(1), availabilities.get(2));
+        availabilityFoundListDTO = List.of(availabilitiesDTO.get(1), availabilitiesDTO.get(2));
+
+        availabilityToUpdate = new Availability(
+                3L,
+                LocalDate.of(1111, 1, 15),
+                LocalDate.of(2222, 1, 21)
+        );
+        updatedAvailability = new Availability(
+                3L,
+                LocalDate.of(1111, 1, 15),
+                LocalDate.of(2222, 1, 21)
+        );
+        updatedAvailabilityDTO = new AvailabilityDTO(
+                3L,
+                LocalDate.of(1111, 1, 15),
+                LocalDate.of(2222, 1, 21)
+        );
+
+        // this is done for clarity
+        availabilityToDelete = expectedAvailabilityWithId;
+        availabilityToDeleteDTO = expectedAvailabilityWithIdDTO;
+
+        availabilityStartDate = LocalDate.of(2022, 1, 7);
+        availabilityEndDate = LocalDate.of(2022, 1, 22);
+
+        setDateRange = new Availability(
+                availabilityStartDate,
+                availabilityEndDate);
+
+        availabilityToBeSaved = new Availability(
+                LocalDate.of(3000, 1, 15),
+                LocalDate.of(3000, 1, 21)
+        );
+
+        savedAvailability = new Availability(
+                5L,
+                LocalDate.of(3000, 1, 15),
+                LocalDate.of(3000, 1, 21)
+        );
+
+        savedAvailabilityDTO = new AvailabilityDTO(
+                5L,
+                LocalDate.of(3000, 1, 15),
+                LocalDate.of(3000, 1, 21)
+        );
 
 
     }
 
     @Test
     void getAllAvailabilityTest() {
-        // expecting a list of Availability objects
-        // TODO: test me
-
-
+        when(availabilityService.getAll()).thenReturn(availabilitiesDTO);
+        assertThat(availabilityController.getAllAvailability())
+                .isEqualTo(ResponseEntity.ok(availabilitiesDTO));
     }
 
     @Test
     void getAvailabilityByIdTest() {
-        // expecting a single object matching id submitted
-        // TODO: test me
-
-
-    }
-
-    @Test
-    void getAvailabilityByTitleTest() {
-        // expecting one or more objects matching name submitted
-        // TODO: test me
-
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/availability/" + availabilityId);
+        when(availabilityService.getById(availabilityId))
+                .thenReturn(expectedAvailabilityWithIdDTO);
+        assertThat(availabilityController.getAvailabilityById(availabilityId))
+                .isEqualTo(new ResponseEntity<>(expectedAvailabilityWithIdDTO, headers, HttpStatus.OK));
 
     }
+
 
     @Test
     void getAvailabilityByDatesTest() {
-        // expecting one or more objects matching dates submitted
-        // TODO: test me
-
+        when(availabilityService.getByDates(availabilityStartDate, availabilityEndDate))
+                .thenReturn(availabilityFoundListDTO);
+        assertThat(availabilityController
+                .getAvailabilitiesByDates(setDateRange))
+                .isEqualTo(ResponseEntity.ok(availabilityFoundListDTO));
 
     }
 
     @Test
     void createAvailabilityTest() {
-        // expecting HTTP status 202 CREATED
-        // expecting an object reflecting submitted data for confirmation
-        // TODO: test me
-
-
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/availability/create/" + savedAvailabilityDTO.getId());
+        when(availabilityService.create(availabilityToBeSaved))
+                .thenReturn(savedAvailabilityDTO);
+        assertThat(availabilityController.createAvailability(availabilityToBeSaved))
+                .isEqualTo(new ResponseEntity<>(savedAvailabilityDTO, headers, HttpStatus.CREATED));
     }
 
     @Test
     void updateAvailabilityByIdTest() {
-        // expecting HTTP status 200 OK
-        // should return updated object for visual confirmation
-        // TODO: test me
-
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/update/" + updatedAvailabilityDTO.getId());
+        when(availabilityService.update(availabilityId, availabilityToUpdate))
+                .thenReturn(updatedAvailabilityDTO);
+        assertThat(availabilityController.updateAvailabilityById(availabilityId, availabilityToUpdate))
+                .isEqualTo(new ResponseEntity<>(updatedAvailabilityDTO, headers, HttpStatus.OK));
 
     }
 
     @Test
     void deleteAvailabilityByIdTest() {
-        // expecting HTTP status 200 OK
-        // should return deleted object for visual confirmation
-        // TODO: test me
-
-
-    }
-
-    @Test
-    void deleteAvailabilityByTitleTest() {
-        // expecting HTTP status 200 OK
-        // should return list of deleted objects for visual confirmation
-        // TODO: test me
-
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/admin/delete/" + availabilityToDeleteDTO.getId());
+        when(availabilityService.delete(availabilityId))
+                .thenReturn(availabilityToDeleteDTO);
+        assertThat(availabilityController.deleteAvailabilityById(availabilityId))
+                .isEqualTo(new ResponseEntity<>(availabilityToDeleteDTO, headers, HttpStatus.OK));
 
     }
 

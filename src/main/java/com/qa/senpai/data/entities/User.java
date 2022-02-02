@@ -20,7 +20,7 @@ public class User {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Position position_; // TODO: look into this implementation
+    private Position position_;
 
     @NotNull
     @Length(min = 1, max = 50 ,message = "Names cannot be empty")
@@ -68,7 +68,6 @@ public class User {
         this.dob = dob;
         this.email = email;
         this.phoneNum = phoneNum;
-        // TODO: Review hash method, is there a better algorithm we can use?
         this.passcode = passcode.hashCode();
     }
 

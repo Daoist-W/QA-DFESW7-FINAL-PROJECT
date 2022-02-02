@@ -20,7 +20,6 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    // TODO: Review your understanding of autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -32,7 +31,6 @@ public class UserController {
 
     @GetMapping(path = "/admin")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
-        // TODO: implement access control
         List<UserDTO> users = userService.getAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
@@ -64,7 +62,6 @@ public class UserController {
     // ############################################
     @PostMapping(path = "/create")
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody User user) {
-        // TODO: implement me
         UserDTO savedUser = userService.create(user);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/user/create/" + String.valueOf(savedUser.getId()));

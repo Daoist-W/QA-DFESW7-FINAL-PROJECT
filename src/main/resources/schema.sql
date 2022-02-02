@@ -4,8 +4,8 @@ drop table if exists user CASCADE;
 
 CREATE TABLE availability (
     id BIGINT NOT NULL,
-    end_date DATE NOT NULL,
-    start_date DATE NOT NULL,
+    endDate DATE NOT NULL,
+    startDate DATE NOT NULL,
     PRIMARY KEY (id)
 );
 
