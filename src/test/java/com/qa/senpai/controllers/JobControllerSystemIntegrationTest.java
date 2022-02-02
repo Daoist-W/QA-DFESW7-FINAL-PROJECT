@@ -41,10 +41,9 @@ class JobControllerSystemIntegrationTest {
     private JobRepository jobRepository;
 
     private List<Job> jobsInDatabase;
+    private List<JobDTO> jobsInDatabaseDTO;
     private Long newElementId; // this is for setUp implementation
 
-    private List<Job> jobsDatabase;
-    private List<JobDTO> jobsDTO;
 
     private Job jobToBeSaved;
     private JobDTO savedJobDTO;
@@ -52,7 +51,6 @@ class JobControllerSystemIntegrationTest {
     private Job jobToUpdate;
     private JobDTO updatedJobDTO;
 
-    private Long jobId;
     private JobDTO foundJobDTO;
     private JobDTO jobToDeleteDTO;
 
@@ -97,11 +95,11 @@ class JobControllerSystemIntegrationTest {
                 )
         );
 
-        jobsDatabase = jobRepository.saveAll(allJobs);
-        int size = jobsDatabase.size();
-        newElementId = jobsDatabase.get(size - 1).getId() + 1;
+        jobsInDatabase = jobRepository.saveAll(allJobs);
+        int size = jobsInDatabase.size();
+        newElementId = jobsInDatabase.get(size - 1).getId() + 1;
 
-        jobsDTO = List.of(
+        jobsInDatabaseDTO = List.of(
                 new JobDTO(1L,
                         "topjob",
                         "best job in the world",
@@ -149,7 +147,7 @@ class JobControllerSystemIntegrationTest {
                 LocalDate.of(2022, 2, 12)
         );
 
-        jobId = 3L;
+        Long jobId = 3L;
 
         foundJobDTO = new JobDTO(3L,
                 "topjob3",
@@ -183,7 +181,7 @@ class JobControllerSystemIntegrationTest {
         jobStartDate = LocalDate.of(2022, 3, 3);
         jobEndDate = LocalDate.of(2022, 3, 13);
 
-        listOfJobsByDateDTO = List.of(jobsDTO.get(0), jobsDTO.get(1));
+        listOfJobsByDateDTO = List.of(jobsInDatabaseDTO.get(0), jobsInDatabaseDTO.get(1));
 
         dates = new Availability(jobStartDate, jobEndDate);
 
@@ -201,7 +199,7 @@ class JobControllerSystemIntegrationTest {
         mockRequest.accept(MediaType.APPLICATION_JSON);
 
         // expected JSON results
-        String jobs = objectMapper.writeValueAsString(jobsDTO);
+        String jobs = objectMapper.writeValueAsString(jobsInDatabaseDTO);
 
         ResultMatcher statusMatcher = MockMvcResultMatchers.status().isOk();
         ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(jobs);

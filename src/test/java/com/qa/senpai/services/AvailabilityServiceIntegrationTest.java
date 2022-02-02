@@ -14,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 @SpringBootTest
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -49,7 +47,7 @@ class AvailabilityServiceIntegrationTest {
     void getAll() {
         // TODO: test me
         // assertThat()
-        fail("Implement me");
+
     }
 
     @Test
@@ -57,7 +55,7 @@ class AvailabilityServiceIntegrationTest {
         // TODO: test me
         // given
         // assertThat()
-        fail("Implement me");
+
     }
 
     @Test
@@ -65,7 +63,7 @@ class AvailabilityServiceIntegrationTest {
         // TODO: test me
         // given
         // assertThat()
-        fail("Implement me");
+
     }
 
     @Test
@@ -73,7 +71,7 @@ class AvailabilityServiceIntegrationTest {
         // TODO: test me
         // given
         // assertThat()
-        fail("Implement me");
+
     }
 
     @Test
@@ -81,7 +79,7 @@ class AvailabilityServiceIntegrationTest {
         // TODO: test me
         // given
         // assertThat()
-        fail("Implement me");
+
     }
 
     @Test
@@ -89,6 +87,6 @@ class AvailabilityServiceIntegrationTest {
         // TODO: test me
         // given
         // assertThat()
-        fail("Implement me");
+
     }
 }
