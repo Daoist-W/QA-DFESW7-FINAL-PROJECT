@@ -45,12 +45,11 @@ public class UserService {
 
     public UserDTO getById(Long id) {
         // TODO: implement me
-        return Optional.of(userRepository.findById(id)
-                .stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList())
-                .get(0)).orElseThrow(() -> new UserNotFoundException(
-                "User with id: " + id + " does not exist"));
+        if(userRepository.existsById(id)) {
+            return mapToDTO(userRepository.getById(id));
+        } else {
+            throw new UserNotFoundException("User with id: " + id + " does not exist");
+        }
     }
 
     public List<UserDTO> getByName(String forename, String surname) {
@@ -87,8 +86,8 @@ public class UserService {
             userToUpdate.setPhoneNum(user.getPhoneNum());
             userToUpdate.setEmail(user.getEmail());
             userToUpdate.setDob(user.getDob());
-
-            return mapToDTO(userToUpdate); // updated user
+            User save = userRepository.save(userToUpdate);
+            return mapToDTO(save); // updated user
         } else {
             throw new UserNotFoundException("User with id: " + id + " does not exist");
         }

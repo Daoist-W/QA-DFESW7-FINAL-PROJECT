@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping(path = "/user")
 public class UserController {
     // Fields
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     // TODO: Review your understanding of autowired
@@ -39,21 +39,22 @@ public class UserController {
 
     @GetMapping(path = "/admin/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
-        // TODO: implement me
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        UserDTO user = userService.getById(id);
+        headers.add("Location", "/user/admin/" + id);
+        return new ResponseEntity<UserDTO>(user, headers, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/admin/{name}")
-    public ResponseEntity<List<UserDTO>> getUsersByName(@PathVariable String name) {
-        // TODO: implement access control
-        // TODO: implement me
-        return null;
+    @GetMapping(path = "/admin/{forename}/{surname}")
+    public ResponseEntity<List<UserDTO>> getUsersByName(@PathVariable String forename, @PathVariable String surname) {
+        List<UserDTO> users = userService.getByName(forename, surname);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/user/admin/" + forename + "/" + surname);
+        return new ResponseEntity<>(users, headers, HttpStatus.OK);
     }
 
     @PostMapping(path = "/admin/available-users") // using post so I can take advantage of the body
     public ResponseEntity<List<UserDTO>> getUsersByAvailability(@RequestBody List<LocalDate> dates) {
-        // try the ArrayList argument here, if it doesn't work switch to DateList
-        // TODO: implement access control
         // TODO: implement me
         return null;
     }
@@ -73,21 +74,12 @@ public class UserController {
     // ############################################
     //                  UPDATE
     // ############################################
-    @PutMapping(path = "/admin/{id}")
+    @PutMapping(path = "/update/{id}")
     public ResponseEntity<UserDTO> updateUserById(@PathVariable("id") Long id, @Valid @RequestBody User user) {
-        // TODO: implement access control
-        // TODO: implement me
-        isAuthorised(0L, ""); // if authorised, proceed, otherwise handle decline
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/update/" + user.getId());
+        return new ResponseEntity<>(userService.update(id, user), headers, HttpStatus.OK);
     }
-
-    @PutMapping(path = "/staff/{id}")
-    public ResponseEntity<UserDTO> updateAccount(@PathVariable("id") Long id, @Valid @RequestBody User user) {
-        // TODO: implement me
-        isAuthorised(0L, ""); // if authorised, proceed, otherwise handle decline
-        return null;
-    }
-
 
     // ############################################
     //                  DELETE
@@ -95,27 +87,12 @@ public class UserController {
 
     @DeleteMapping(path = "/admin/{id}")
     public ResponseEntity<UserDTO> deleteUserById(@PathVariable("id") Long id) {
-        // TODO: implement access control
-        // TODO: implement me
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/admin/delete/" + id);
+        return new ResponseEntity<>(userService.delete(id), headers, HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/staff/{id}")
-    public ResponseEntity<UserDTO> deleteAccount(@PathVariable("id") Long id, @RequestBody String password) {
-        // TODO: implement me
-        isAuthorised(0L, ""); // if authorised, proceed, otherwise handle decline
-        return null;
-    }
 
-    // ############################################
-    //             SUPPORTING METHODS
-    // ############################################
-
-    // this supporting method will be used to validate passwords
-    public boolean isAuthorised(Long id, String password) {
-        // TODO: implement me
-        return true;
-    }
 
 
 }

@@ -4,7 +4,6 @@ import com.qa.senpai.data.dtos.UserDTO;
 import com.qa.senpai.data.entities.User;
 import com.qa.senpai.data.repositories.UserRepository;
 import com.qa.senpai.data.support.Position;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,65 +29,91 @@ class UserServiceIntegrationTest {
     @Autowired
     private UserService userService;
 
-    private List<User> users;
-    private List<User> usersInDatabase;
-    private List<UserDTO> usersDTO;
-    private User expectedUserWithId;
+    private List<UserDTO> allUsersDTO;
+
     private User userToSave;
-    private User expectedUserWithoutId;
     private UserDTO expectedUserWithIdDTO;
     private UserDTO expectedUserSavedDTO;
-    private Long nextNewElementsId;
-
+    private List<UserDTO> userFoundListDTO;
+    private UserDTO userToDeleteDTO;
+    private UserDTO updatedUserDTO;
+    private Long userId;
+    private User updatedUser;
+    private User userToUpdate;
 
 
     @BeforeEach
     void setUp() { // runs before every test
         // TODO: implement me
-        users = new ArrayList<>();
-        users.addAll(List.of(
+        List<User> allUsers = new ArrayList<>(List.of(
                 new User(
                         1L, Position.staff, "don", "brand",
-                        LocalDate.of(1991,9,15),
+                        LocalDate.of(1991, 9, 15),
                         "don@youmail.com", "+4475649589", "132156654"),
                 new User(
-                        2L, Position.staff, "harry", "lerrt",
-                        LocalDate.of(1991,9,15),
+                        2L, Position.staff, "don", "brand",
+                        LocalDate.of(1991, 9, 15),
                         "harry@youmail.com", "+4475649589", "123465"),
 
                 new User(
                         3L, Position.staff, "paris", "lorem",
-                        LocalDate.of(1991,7,21),
+                        LocalDate.of(1991, 7, 21),
                         "paris@youmail.com", "+4475649589", "79846545"),
 
                 new User(
                         4L, Position.admin, "don", "isiko",
-                        LocalDate.of(1991,9,15),
+                        LocalDate.of(1991, 9, 15),
                         "don@youmail.com", "+4475649589", "654821658")
 
         ));
 
-        usersInDatabase = new ArrayList<>();
-        usersInDatabase.addAll(userRepository.saveAll(users));
-        int size = usersInDatabase.size();
-        nextNewElementsId = usersInDatabase.get(size - 1).getId() + 1;
+        allUsersDTO = new ArrayList<>();
+        allUsersDTO.addAll(List.of(
+                new UserDTO(
+                        1L, Position.staff, "don", "brand",
+                        LocalDate.of(1991,9,15),
+                        "don@youmail.com", "+4475649589"),
+                new UserDTO(
+                        2L, Position.staff, "don", "brand",
+                        LocalDate.of(1991,9,15),
+                        "harry@youmail.com", "+4475649589"),
 
-        expectedUserWithId = new User(
-                3L, Position.staff, "paris", "lorem",
-                LocalDate.of(1991,9,15),
-                "paris@youmail.com", "+4475649589", "79846545"
+                new UserDTO(
+                        3L, Position.staff, "paris", "lorem",
+                        LocalDate.of(1991,7,21),
+                        "paris@youmail.com", "+4475649589"),
+
+                new UserDTO(
+                        4L, Position.admin, "don", "isiko",
+                        LocalDate.of(1991,9,15),
+                        "don@youmail.com", "+4475649589")
+
+        ));
+
+        List<User> usersInDatabase = new ArrayList<>();
+        usersInDatabase.addAll(userRepository.saveAll(allUsers));
+        int size = usersInDatabase.size();
+        Long nextNewElementsId = usersInDatabase.get(size - 1).getId() + 1;
+
+        userId = 3L;
+
+
+        userToUpdate = new User(
+                3L, Position.staff, "PARIS", "UPDATED",
+                LocalDate.of(1991,9,18),
+                "paris@youmail.com", "+4475649589", "11111"
+        );
+
+        updatedUserDTO = new UserDTO(
+                3L, Position.staff, "PARIS", "UPDATED",
+                LocalDate.of(1991,9,18),
+                "paris@youmail.com", "+4475649589"
         );
 
         expectedUserWithIdDTO = new UserDTO(
                 3L, Position.staff, "paris", "lorem",
                 LocalDate.of(1991,7,21),
                 "paris@youmail.com", "+4475649589"
-        );
-
-        expectedUserWithoutId = new User(
-                Position.staff, "paris", "lorem",
-                LocalDate.of(1991,9,15),
-                "paris@youmail.com", "+4475649589", "79846545"
         );
 
         userToSave = new User(
@@ -103,46 +128,34 @@ class UserServiceIntegrationTest {
                 "Hercules@sonofgod.com", "+1"
         );
 
+        userFoundListDTO = List.of(allUsersDTO.get(0), allUsersDTO.get(1));
+
+        userToDeleteDTO =  expectedUserWithIdDTO;
+
 
 
     }
 
-    @AfterEach
-    void tearDown() { // runs after every test
-        users.clear();
-        usersInDatabase.clear();
-        nextNewElementsId = 0L;
-        userRepository.deleteAll();
-    }
 
     @Test
     void getAll() {
-        // TODO: test me
-        // assertThat()
-        fail("Implement me");
+        assertThat(userService.getAll()).isEqualTo(allUsersDTO);
     }
 
     @Test
     void getById() {
-        // TODO: test me
-        // given
-        // assertThat()
-        fail("Implement me");
+        assertThat(userService.getById(userId)).isEqualTo(expectedUserWithIdDTO);
     }
 
     @Test
     void getByName() {
-        // TODO: test me
-        // given
-        // assertThat()
-        fail("Implement me");
+        assertThat(userService.getByName("don", "brand"))
+                .isEqualTo(userFoundListDTO);
     }
 
     @Test
     void getByDates() {
         // TODO: test me
-        // given
-        // assertThat()
         fail("Implement me");
     }
 
@@ -154,17 +167,12 @@ class UserServiceIntegrationTest {
 
     @Test
     void update() {
-        // TODO: test me
-        // given
-        // assertThat()
-        fail("Implement me");
+        assertThat(userService.update(userId, userToUpdate)).isEqualTo(updatedUserDTO);
     }
 
     @Test
     void delete() {
-        // TODO: test me
-        // given
-        // assertThat()
-        fail("Implement me");
+        System.out.println(userRepository.findAll());
+        assertThat(userService.delete(userId)).isEqualTo(userToDeleteDTO);
     }
 }

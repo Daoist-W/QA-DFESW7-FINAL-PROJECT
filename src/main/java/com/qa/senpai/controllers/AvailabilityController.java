@@ -4,6 +4,8 @@ import com.qa.senpai.data.dtos.AvailabilityDTO;
 import com.qa.senpai.data.entities.Availability;
 import com.qa.senpai.services.AvailabilityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +16,7 @@ import java.util.List;
 @RequestMapping(path = "/availability")
 public class AvailabilityController {
     // Fields
-    private AvailabilityService availabilityService;
+    private final AvailabilityService availabilityService;
 
     @Autowired
     public AvailabilityController(AvailabilityService availabilityService) {
@@ -27,28 +29,19 @@ public class AvailabilityController {
     // ############################################
 
     @GetMapping
-    public List<ResponseEntity<AvailabilityDTO>> getAllAvailability() {
-        // TODO: implement me
-        return null;
+    public ResponseEntity<List<AvailabilityDTO>> getAllAvailability() {
+        return ResponseEntity.ok(availabilityService.getAll());
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<AvailabilityDTO> getAvailabilityById(@PathVariable Long id) {
-        // TODO: implement me
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        AvailabilityDTO availability = availabilityService.getById(id);
+        headers.add("Location", "/availability/" + availability.getId());
+        return new ResponseEntity<AvailabilityDTO>(availability, headers, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{title}")
-    public List<ResponseEntity<AvailabilityDTO>> getAvailabilityByTitle(@PathVariable String title) {
-        // TODO: implement me
-        return null;
-    }
 
-    @GetMapping(path = "/{name}")
-    public List<ResponseEntity<AvailabilityDTO>> getAvailabilityByName(@PathVariable String name) {
-        // TODO: implement me
-        return null;
-    }
 
 
     // ############################################
