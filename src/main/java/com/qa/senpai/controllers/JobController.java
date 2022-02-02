@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping(path = "/jobs")
 public class JobController {
     // Fields
-    private JobService jobService;
+    private final JobService jobService;
 
     @Autowired
     public JobController(JobService jobService) {

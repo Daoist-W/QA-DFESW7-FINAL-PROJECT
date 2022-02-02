@@ -4,7 +4,6 @@ import com.qa.senpai.data.dtos.UserDTO;
 import com.qa.senpai.data.entities.User;
 import com.qa.senpai.data.support.Position;
 import com.qa.senpai.services.UserService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,23 +32,32 @@ class UserControllerWebIntegrationTest {
 
     @MockBean
     private UserService userService;
+    private List<User> allUsers;
+    private List<UserDTO> allUsersDTO;
 
-    // TODO: Add data for tests
-    // we need some data for our tests
-    // set up a private list of users
-    private List<User> users;
-    private User validUser;
-    private User userToSave;
-    private UserDTO expectedUserSavedDTO;
     private User expectedUserWithId;
     private User expectedUserWithoutId;
+    private List<UserDTO> userFoundListDTO;
+
+    private User userToSave;
     private UserDTO expectedUserWithIdDTO;
+    private UserDTO expectedUserSavedDTO;
+
+    private User userToUpdate;
+    private UserDTO updatedUserDTO;
+
+    private Long userId;
+    private UserDTO foundUserDTO;
+    private UserDTO userToDeleteDTO;
+
+
+
 
     @BeforeEach
     void setUp() { // runs before every test
         // TODO: implement me
-        users = new ArrayList<>();
-        users.addAll(List.of(
+        allUsers = new ArrayList<>();
+        allUsers.addAll(List.of(
                 new User(
                         1L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
@@ -71,6 +79,43 @@ class UserControllerWebIntegrationTest {
 
         ));
 
+        allUsersDTO = new ArrayList<>();
+        allUsersDTO.addAll(List.of(
+                new UserDTO(
+                        1L, Position.staff, "don", "brand",
+                        LocalDate.of(1991,9,15),
+                        "don@youmail.com", "+4475649589"),
+                new UserDTO(
+                        2L, Position.staff, "don", "brand",
+                        LocalDate.of(1991,9,15),
+                        "harry@youmail.com", "+4475649589"),
+
+                new UserDTO(
+                        3L, Position.staff, "paris", "lorem",
+                        LocalDate.of(1991,7,21),
+                        "paris@youmail.com", "+4475649589"),
+
+                new UserDTO(
+                        4L, Position.admin, "don", "isiko",
+                        LocalDate.of(1991,9,15),
+                        "don@youmail.com", "+4475649589")
+
+        ));
+
+        userId = 3L;
+
+
+        userToUpdate = new User(
+                3L, Position.staff, "PARIS", "UPDATED",
+                LocalDate.of(1991,9,18),
+                "paris@youmail.com", "+4475649589", "11111"
+        );
+
+        updatedUserDTO = new UserDTO(
+                3L, Position.staff, "PARIS", "UPDATED",
+                LocalDate.of(1991,9,18),
+                "paris@youmail.com", "+4475649589"
+        );
 
         expectedUserWithId = new User(
                 3L, Position.staff, "paris", "lorem",
@@ -102,36 +147,39 @@ class UserControllerWebIntegrationTest {
                 "Hercules@sonofgod.com", "+1"
         );
 
+        userFoundListDTO = List.of(allUsersDTO.get(0), allUsersDTO.get(1));
 
+        userToDeleteDTO =  expectedUserWithIdDTO;
 
     }
 
-    @AfterEach
-    void tearDown() { // runs after every test
-        users.clear();
-    }
 
     @Test
     void getAllUsersTest() {
-        // expecting a list of User objects
-        // TODO: test me
-        fail("Implement me");
+        when(userService.getAll()).thenReturn(allUsersDTO);
+        assertThat(userController.getAllUsers())
+                .isEqualTo(ResponseEntity.ok(allUsersDTO));
 
     }
 
     @Test
     void getUserByIdTest() {
-        // expecting a single object matching id submitted
-        // TODO: test me
-        fail("Implement me");
-
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/user/admin/" + userId);
+        when(userService.getById(userId))
+                .thenReturn(foundUserDTO);
+        assertThat(userController.getUserById(userId))
+                .isEqualTo(new ResponseEntity<>(foundUserDTO, headers, HttpStatus.OK));
     }
 
     @Test
-    void getUsersByTitleTest() {
-        // expecting one or more objects matching name submitted
-        // TODO: test me
-        fail("Implement me");
+    void getUsersByNameTest() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/user/admin/" + "don" + "/brand");
+        when(userService.getByName("don", "brand"))
+                .thenReturn(userFoundListDTO);
+        assertThat(userController.getUsersByName("don", "brand"))
+                .isEqualTo(new ResponseEntity<>(userFoundListDTO, headers, HttpStatus.OK));
 
     }
 
@@ -166,36 +214,25 @@ class UserControllerWebIntegrationTest {
 
     @Test
     void updateUserByIdTest() {
-        // expecting HTTP status 200 OK
-        // should return updated object for visual confirmation
-        // TODO: test me
-        fail("Implement me");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/update/" + updatedUserDTO.getId());
+        when(userService.update(userId, userToUpdate))
+                .thenReturn(updatedUserDTO);
+        assertThat(userController.updateUserById(userId, userToUpdate))
+                .isEqualTo(new ResponseEntity<>(updatedUserDTO, headers, HttpStatus.OK));
 
     }
 
     @Test
     void deleteUserByIdTest() {
-        // expecting HTTP status 200 OK
-        // should return deleted object for visual confirmation
-        // TODO: test me
-        fail("Implement me");
-
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/admin/delete/" + userToDeleteDTO.getId());
+        when(userService.delete(userId))
+                .thenReturn(userToDeleteDTO);
+        assertThat(userController.deleteUserById(userId))
+                .isEqualTo(new ResponseEntity<>(userToDeleteDTO, headers, HttpStatus.OK));
     }
 
-    @Test
-    void deleteUserByTitleTest() {
-        // expecting HTTP status 200 OK
-        // should return list of deleted objects for visual confirmation
-        // TODO: test me
-        fail("Implement me");
 
-    }
 
-    @Test
-    void isAuthorisedTest() {
-        // should return true if submitted password matches current users password
-        // TODO: test me
-        fail("Implement me");
-
-    }
 }
