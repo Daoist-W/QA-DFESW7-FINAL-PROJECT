@@ -1,7 +1,7 @@
 package com.qa.senpai.data.dtos;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Objects;
 
 public class JobDTO {
 
@@ -9,18 +9,25 @@ public class JobDTO {
     String title;
     String description;
     String location;
-    List<LocalDate> dates;
+    private LocalDate startDate;
+    private LocalDate endDate;
+
+    public JobDTO() {
+
+    }
 
     public JobDTO(Long id,
                   String title,
                   String description,
                   String location,
-                  List<LocalDate> dates) {
+                  LocalDate startDate,
+                  LocalDate endDate) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
-        this.dates = dates;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public Long getId() {
@@ -55,12 +62,38 @@ public class JobDTO {
         this.location = location;
     }
 
-    public List<LocalDate> getDates() {
-        return dates;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setDates(List<LocalDate> dates) {
-        this.dates = dates;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JobDTO jobDTO = (JobDTO) o;
+        return getId().equals(jobDTO.getId()) && getTitle().equals(jobDTO.getTitle()) && getDescription().equals(jobDTO.getDescription()) && getLocation().equals(jobDTO.getLocation()) && getStartDate().equals(jobDTO.getStartDate()) && getEndDate().equals(jobDTO.getEndDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(),
+                getTitle(),
+                getDescription(),
+                getLocation(),
+                getStartDate(),
+                getEndDate());
     }
 
     @Override
@@ -70,7 +103,8 @@ public class JobDTO {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", location='" + location + '\'' +
-                ", dates=" + dates +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
                 '}';
     }
 }

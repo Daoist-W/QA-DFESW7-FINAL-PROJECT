@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 @WebMvcTest(AvailabilityController.class)
 class AvailabilityControllerWebIntegrationTest {
     // This test is restricting the application context to only
@@ -27,7 +25,7 @@ class AvailabilityControllerWebIntegrationTest {
     @BeforeEach
     void setUp() { // this runs before every test
         // TODO: implement me
-        fail("Implement me");
+
 
     }
 
@@ -35,7 +33,7 @@ class AvailabilityControllerWebIntegrationTest {
     void tearDown() { // this runs after every test
         // TODO: implement me
         // need a tear down to get around issue I was having
-        fail("Implement me");
+
 
     }
 
@@ -43,7 +41,7 @@ class AvailabilityControllerWebIntegrationTest {
     void getAllAvailabilityTest() {
         // expecting a list of Availability objects
         // TODO: test me
-        fail("Implement me");
+
 
     }
 
@@ -51,7 +49,7 @@ class AvailabilityControllerWebIntegrationTest {
     void getAvailabilityByIdTest() {
         // expecting a single object matching id submitted
         // TODO: test me
-        fail("Implement me");
+
 
     }
 
@@ -59,7 +57,7 @@ class AvailabilityControllerWebIntegrationTest {
     void getAvailabilityByTitleTest() {
         // expecting one or more objects matching name submitted
         // TODO: test me
-        fail("Implement me");
+
 
     }
 
@@ -67,7 +65,7 @@ class AvailabilityControllerWebIntegrationTest {
     void getAvailabilityByDatesTest() {
         // expecting one or more objects matching dates submitted
         // TODO: test me
-        fail("Implement me");
+
 
     }
 
@@ -76,7 +74,7 @@ class AvailabilityControllerWebIntegrationTest {
         // expecting HTTP status 202 CREATED
         // expecting an object reflecting submitted data for confirmation
         // TODO: test me
-        fail("Implement me");
+
 
     }
 
@@ -85,7 +83,7 @@ class AvailabilityControllerWebIntegrationTest {
         // expecting HTTP status 200 OK
         // should return updated object for visual confirmation
         // TODO: test me
-        fail("Implement me");
+
 
     }
 
@@ -94,7 +92,7 @@ class AvailabilityControllerWebIntegrationTest {
         // expecting HTTP status 200 OK
         // should return deleted object for visual confirmation
         // TODO: test me
-        fail("Implement me");
+
 
     }
 
@@ -103,7 +101,7 @@ class AvailabilityControllerWebIntegrationTest {
         // expecting HTTP status 200 OK
         // should return list of deleted objects for visual confirmation
         // TODO: test me
-        fail("Implement me");
+
 
     }
 

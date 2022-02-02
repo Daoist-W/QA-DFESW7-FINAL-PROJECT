@@ -6,17 +6,19 @@ import com.qa.senpai.data.repositories.JobRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class JobServiceIntegrationTest {
     // Using mockito only for this unit test
 
@@ -24,77 +26,201 @@ class JobServiceIntegrationTest {
     @Autowired
     private JobRepository jobRepository;
 
-    @InjectMocks
+    @Autowired
     private JobService jobService;
 
-    private List<Job> jobsInDatabase;
+    private List<Job> jobsDatabase;
     private List<JobDTO> jobsDTO;
+
+    private Job jobToBeSaved;
+    private JobDTO savedJobDTO;
+
+    private Job jobToUpdate;
+    private JobDTO updatedJobDTO;
+
+    private Long jobId;
+    private JobDTO foundJobDTO;
+    private JobDTO jobToDeleteDTO;
+
+    private LocalDate jobStartDate;
+    private LocalDate jobEndDate;
+
+    private List<JobDTO> listOfJobsByDateDTO;
 
 
     @BeforeEach
-    void setUp() { // runs before every test
-        // TODO: implement me
+    public void init() { // runs before every test
+        List<Job> allJobs = List.of(
+                new Job(1L,
+                        "topjob",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 3, 4),
+                        LocalDate.of(2022, 3, 4)
+                ),
+                new Job(2L,
+                        "topjob",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 3, 4),
+                        LocalDate.of(2022, 3, 4)
+                ),
+                new Job(3L,
+                        "topjob3",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 2, 4),
+                        LocalDate.of(2022, 2, 6)
+                ),
+                new Job(4L,
+                        "topjob4",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 2, 4),
+                        LocalDate.of(2022, 2, 12)
+                )
+        );
+        jobsDatabase = jobRepository.saveAll(allJobs);
+
+        jobsDTO = List.of(
+                new JobDTO(1L,
+                        "topjob",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 3, 4),
+                        LocalDate.of(2022, 3, 4)
+                ),
+                new JobDTO(2L,
+                        "topjob",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 3, 4),
+                        LocalDate.of(2022, 3, 4)
+                ),
+                new JobDTO(3L,
+                        "topjob3",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 2, 4),
+                        LocalDate.of(2022, 2, 6)
+                ),
+                new JobDTO(4L,
+                        "topjob4",
+                        "best job in the world",
+                        "London",
+                        LocalDate.of(2022, 2, 4),
+                        LocalDate.of(2022, 2, 12)
+                )
+        );
+
+        jobToBeSaved = new Job(
+                (allJobs.get(allJobs.size() - 1).getId() + 1), // find id of last element and add 1
+                "new top job",
+                "best job in the world",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 12)
+        );
+
+        savedJobDTO = new JobDTO(
+                5L,
+                "new top job",
+                "best job in the world",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 12)
+        );
+
+        jobId = 3L;
+
+        foundJobDTO = new JobDTO(3L,
+                "topjob3",
+                "best job in the world",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 6)
+        );
+
+        jobToUpdate = new Job(3L,
+                "UPDATED",
+                "best job in the UNIVERSE",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 6)
+        );
+
+        updatedJobDTO = new JobDTO(3L,
+                "UPDATED",
+                "best job in the UNIVERSE",
+                "London",
+                LocalDate.of(2022, 2, 4),
+                LocalDate.of(2022, 2, 6)
+        );
+
+        jobToDeleteDTO = foundJobDTO;
+
+
+        // BY DATE
+
+        jobStartDate = LocalDate.of(2022, 3, 3);
+        jobEndDate = LocalDate.of(2022, 3, 13);
+
+        listOfJobsByDateDTO = List.of(jobsDTO.get(0), jobsDTO.get(1));
+
+
+
+
 
     }
 
     @AfterEach
-    void tearDown() { // runs after every test
-        // TODO: implement me
+    public void tearDown() { // runs after every test
+        jobsDatabase.clear();
+        jobRepository.deleteAll();
+
 
     }
 
     @Test
     void getAll() {
-        // TODO: test me
-        // assertThat()
-        fail("Implement me");
+        assertThat(jobService.getAll()).isEqualTo(jobsDTO);
     }
 
     @Test
     void getById() {
-        // TODO: test me
-        // given
-        // assertThat()
-        fail("Implement me");
+        assertThat(jobService.getById(jobId)).isEqualTo(foundJobDTO);
     }
 
     @Test
     void getByTitle() {
-        // TODO: test me
-        // given
-        // assertThat()
-        fail("Implement me");
+        assertThat(jobService.getByTitle("topjob"))
+                .isEqualTo(listOfJobsByDateDTO);
     }
 
     @Test
     void getByDates() {
-        // TODO: test me
-        // given
-        // assertThat()
-        fail("Implement me");
+        assertThat(jobService.getByDates(jobStartDate, jobEndDate))
+                .isEqualTo(listOfJobsByDateDTO);
     }
 
     @Test
     void create() {
-        // TODO: test me
-        // given
-        // assertThat()
-        fail("Implement me");
+        assertThat(jobService.create(jobToBeSaved)).isEqualTo(savedJobDTO);
     }
 
     @Test
     void update() {
-        // TODO: test me
-        // given
-        // assertThat()
-        fail("Implement me");
+        assertThat(jobService.update(jobId, jobToUpdate)).isEqualTo(updatedJobDTO);
     }
 
     @Test
     void delete() {
-        // TODO: test me
-        // given
-        // assertThat()
-        fail("Implement me");
+        System.out.println(jobRepository.findAll());
+        assertThat(jobService.delete(jobId)).isEqualTo(jobToDeleteDTO);
+    }
+
+    @Test
+    void deleteByTitle() {
+        assertThat(jobService.deleteByTitle("topjob")).isEqualTo(listOfJobsByDateDTO);
     }
 }

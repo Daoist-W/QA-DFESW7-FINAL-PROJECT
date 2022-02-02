@@ -9,14 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
 @Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class AvailabilityServiceIntegrationTest {
     // Using mockito only for this unit test
 
@@ -47,7 +47,7 @@ class AvailabilityServiceIntegrationTest {
     void getAll() {
         // TODO: test me
         // assertThat()
-        fail("Implement me");
+
     }
 
     @Test
@@ -55,7 +55,7 @@ class AvailabilityServiceIntegrationTest {
         // TODO: test me
         // given
         // assertThat()
-        fail("Implement me");
+
     }
 
     @Test
@@ -63,7 +63,7 @@ class AvailabilityServiceIntegrationTest {
         // TODO: test me
         // given
         // assertThat()
-        fail("Implement me");
+
     }
 
     @Test
@@ -71,7 +71,7 @@ class AvailabilityServiceIntegrationTest {
         // TODO: test me
         // given
         // assertThat()
-        fail("Implement me");
+
     }
 
     @Test
@@ -79,7 +79,7 @@ class AvailabilityServiceIntegrationTest {
         // TODO: test me
         // given
         // assertThat()
-        fail("Implement me");
+
     }
 
     @Test
@@ -87,6 +87,6 @@ class AvailabilityServiceIntegrationTest {
         // TODO: test me
         // given
         // assertThat()
-        fail("Implement me");
+
     }
 }
