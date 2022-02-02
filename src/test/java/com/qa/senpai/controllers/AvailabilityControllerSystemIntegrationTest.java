@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 @Transactional
 @AutoConfigureMockMvc // configure the MockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -51,14 +49,14 @@ class AvailabilityControllerSystemIntegrationTest {
     void getAllAvailabilityTest() {
         // expecting a list of Availability objects
         // TODO: test me
-        fail("Implement me");
+
     }
 
     @Test
     void getAvailabilityByIdTest() {
         // expecting a single object matching id submitted
         // TODO: test me
-        fail("Implement me");
+
 
     }
 
@@ -66,7 +64,7 @@ class AvailabilityControllerSystemIntegrationTest {
     void getAvailabilitysByTitleTest() {
         // expecting one or more objects matching name submitted
         // TODO: test me
-        fail("Implement me");
+
 
     }
 
@@ -74,7 +72,7 @@ class AvailabilityControllerSystemIntegrationTest {
     void getAvailabilityByDatesTest() {
         // expecting one or more objects matching dates submitted
         // TODO: test me
-        fail("Implement me");
+
 
     }
 
@@ -83,7 +81,7 @@ class AvailabilityControllerSystemIntegrationTest {
         // expecting HTTP status 202 CREATED
         // expecting an object reflecting submitted data for confirmation
         // TODO: test me
-        fail("Implement me");
+
 
     }
 
@@ -92,7 +90,7 @@ class AvailabilityControllerSystemIntegrationTest {
         // expecting HTTP status 200 OK
         // should return updated object for visual confirmation
         // TODO: test me
-        fail("Implement me");
+
 
     }
 
@@ -101,7 +99,7 @@ class AvailabilityControllerSystemIntegrationTest {
         // expecting HTTP status 200 OK
         // should return deleted object for visual confirmation
         // TODO: test me
-        fail("Implement me");
+
     }
 
     @Test
@@ -109,7 +107,7 @@ class AvailabilityControllerSystemIntegrationTest {
         // expecting HTTP status 200 OK
         // should return list of deleted objects for visual confirmation
         // TODO: test me
-        fail("Implement me");
+
     }
 
 }

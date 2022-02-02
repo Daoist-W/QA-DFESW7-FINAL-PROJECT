@@ -85,7 +85,7 @@ public class UserController {
     //                  DELETE
     // ############################################
 
-    @DeleteMapping(path = "/admin/{id}")
+    @DeleteMapping(path = "/admin/delete/{id}")
     public ResponseEntity<UserDTO> deleteUserById(@PathVariable("id") Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/admin/delete/" + id);

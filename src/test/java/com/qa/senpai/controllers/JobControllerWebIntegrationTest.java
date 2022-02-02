@@ -4,7 +4,6 @@ import com.qa.senpai.data.dtos.JobDTO;
 import com.qa.senpai.data.entities.Availability;
 import com.qa.senpai.data.entities.Job;
 import com.qa.senpai.services.JobService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,11 +176,6 @@ class JobControllerWebIntegrationTest {
 
     }
 
-    @AfterEach
-    public void tearDown() { // runs after every test
-        // TODO: implement me
-    }
-
 
     @Test
     void getAllJobsTest() {
@@ -204,7 +198,7 @@ class JobControllerWebIntegrationTest {
     @Test
     void getJobsByTitleTest() {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/jobs/" + "topjob");
+        headers.add("Location", "/jobs/title/" + "topjob");
         when(jobService.getByTitle("topjob"))
                 .thenReturn(listOfJobsFoundDTO);
         assertThat(jobController.getJobsByTitle("topjob"))

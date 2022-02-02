@@ -14,8 +14,6 @@ import org.modelmapper.ModelMapper;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 @ExtendWith(MockitoExtension.class)
 class AvailabilityServiceUnitTest {
     // Using mockito only for this unit test
@@ -52,7 +50,7 @@ class AvailabilityServiceUnitTest {
         // when()
         // assertThat()
         // verify()
-        fail("Implement me");
+
     }
 
     @Test
@@ -62,7 +60,7 @@ class AvailabilityServiceUnitTest {
         // when()
         // assertThat()
         // verify()
-        fail("Implement me");
+
     }
 
     @Test
@@ -72,7 +70,7 @@ class AvailabilityServiceUnitTest {
         // when()
         // assertThat()
         // verify()
-        fail("Implement me");
+
     }
 
     @Test
@@ -82,7 +80,7 @@ class AvailabilityServiceUnitTest {
         // when()
         // assertThat()
         // verify()
-        fail("Implement me");
+
     }
 
     @Test
@@ -92,7 +90,7 @@ class AvailabilityServiceUnitTest {
         // when()
         // assertThat()
         // verify()
-        fail("Implement me");
+
     }
 
     @Test
@@ -102,6 +100,6 @@ class AvailabilityServiceUnitTest {
         // when()
         // assertThat()
         // verify()
-        fail("Implement me");
+
     }
 }

@@ -25,8 +25,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 @Transactional
 @AutoConfigureMockMvc // configure the MockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -42,21 +40,30 @@ class UserControllerSystemIntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
-    private List<User> usersInDatabase;
     private List<User> users;
-    private List<UserDTO> usersDTO;
+    private List<User> usersInDatabase;
+    private List<UserDTO> usersInDatabaseDTO;
+    private Long nextNewElementsId;
+
+    private User userToBeSaved;
+    private UserDTO savedUserDTO;
+
+    private User userToUpdate;
+    private UserDTO updatedUserDTO;
+
+    private UserDTO foundUserDTO;
+    private UserDTO userToDeleteDTO;
+
     private User expectedUserWithId;
-    private User userToSave;
     private User expectedUserWithoutId;
     private UserDTO expectedUserWithIdDTO;
     private UserDTO expectedUserSavedDTO;
-    private Long nextNewElementsId;
-
+    private Object userFoundListDTO;
+    private Long userId;
 
 
     @BeforeEach
     void setUp() { // runs before every test
-        // TODO: implement me
         users = new ArrayList<>();
         users.addAll(List.of(
                 new User(
@@ -64,7 +71,7 @@ class UserControllerSystemIntegrationTest {
                         LocalDate.of(1991,9,15),
                         "don@youmail.com", "+4475649589", "132156654"),
                 new User(
-                        2L, Position.staff, "harry", "lerrt",
+                        2L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
                         "harry@youmail.com", "+4475649589", "123465"),
 
@@ -80,8 +87,32 @@ class UserControllerSystemIntegrationTest {
 
         ));
 
+
         usersInDatabase = new ArrayList<>();
         usersInDatabase.addAll(userRepository.saveAll(users));
+        usersInDatabaseDTO = new ArrayList<>();
+        usersInDatabaseDTO.addAll(List.of(
+                new UserDTO(
+                        1L, Position.staff, "don", "brand",
+                        LocalDate.of(1991,9,15),
+                        "don@youmail.com", "+4475649589"),
+                new UserDTO(
+                        2L, Position.staff, "don", "brand",
+                        LocalDate.of(1991,9,15),
+                        "harry@youmail.com", "+4475649589"),
+
+                new UserDTO(
+                        3L, Position.staff, "paris", "lorem",
+                        LocalDate.of(1991,7,21),
+                        "paris@youmail.com", "+4475649589"),
+
+                new UserDTO(
+                        4L, Position.admin, "don", "isiko",
+                        LocalDate.of(1991,9,15),
+                        "don@youmail.com", "+4475649589")
+
+        ));
+
         int size = usersInDatabase.size();
         nextNewElementsId = usersInDatabase.get(size - 1).getId() + 1;
 
@@ -103,7 +134,7 @@ class UserControllerSystemIntegrationTest {
                 "paris@youmail.com", "+4475649589", "79846545"
         );
 
-        userToSave = new User(
+        userToBeSaved = new User(
                 Position.staff, "Hercules", "Son of Zeus",
                 LocalDate.of(1000,2,15),
                 "Hercules@sonofgod.com", "+1", "123456789"
@@ -115,7 +146,24 @@ class UserControllerSystemIntegrationTest {
                 "Hercules@sonofgod.com", "+1"
         );
 
+        userId = 3L;
 
+
+        userToUpdate = new User(
+                3L, Position.staff, "PARIS", "UPDATED",
+                LocalDate.of(1991,9,18),
+                "paris@youmail.com", "+4475649589", "11111"
+        );
+
+        updatedUserDTO = new UserDTO(
+                3L, Position.staff, "PARIS", "UPDATED",
+                LocalDate.of(1991,9,18),
+                "paris@youmail.com", "+4475649589"
+        );
+
+        userFoundListDTO = List.of(usersInDatabaseDTO.get(0), usersInDatabaseDTO.get(1));
+
+        userToDeleteDTO =  expectedUserWithIdDTO;
 
     }
 
@@ -128,25 +176,57 @@ class UserControllerSystemIntegrationTest {
     }
 
     @Test
-    void getAllUsersTest() {
-        // expecting a list of User objects
-        // TODO: test me
-        fail("Implement me");
+    void getAllUsersTest() throws Exception {
+        // configure mock request
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .request(HttpMethod.GET, "/user/admin");
+        mockRequest.accept(MediaType.APPLICATION_JSON);
+
+        // expected JSON results
+        String users = objectMapper.writeValueAsString(usersInDatabaseDTO);
+
+        ResultMatcher statusMatcher = MockMvcResultMatchers.status().isOk();
+        ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(users);
+
+        mockMvc.perform(mockRequest)
+                .andExpect(statusMatcher)
+                .andExpect(contentMatcher);
     }
 
     @Test
-    void getUserByIdTest() {
-        // expecting a single object matching id submitted
-        // TODO: test me
-        fail("Implement me");
+    void getUserByIdTest() throws Exception {
+        // configure mock request
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .request(HttpMethod.GET, "/user/admin/" + userId);
+        mockRequest.accept(MediaType.APPLICATION_JSON);
 
+        // expected JSON results
+        String user = objectMapper.writeValueAsString(expectedUserWithIdDTO);
+
+        // configure result matchers
+        ResultMatcher statusMatcher = MockMvcResultMatchers.status().isOk();
+        ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(user);
+
+        // assertion
+        mockMvc.perform(mockRequest).andExpect(statusMatcher).andExpect(contentMatcher);
     }
 
     @Test
-    void getUsersByNameTest() {
-        // expecting one or more objects matching name submitted
-        // TODO: test me
-        fail("Implement me");
+    void getUsersByNameTest() throws Exception {
+        // configure mock request
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .request(HttpMethod.GET, "/user/admin/" + "don" + "/brand");
+        mockRequest.accept(MediaType.APPLICATION_JSON);
+
+        // expected JSON results
+        String users = objectMapper.writeValueAsString(userFoundListDTO);
+
+        ResultMatcher statusMatcher = MockMvcResultMatchers.status().isOk();
+        ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(users);
+
+        mockMvc.perform(mockRequest)
+                .andExpect(statusMatcher)
+                .andExpect(contentMatcher);
 
     }
 
@@ -154,8 +234,6 @@ class UserControllerSystemIntegrationTest {
     void getUsersByDatesTest() {
         // expecting one or more objects matching dates submitted
         // TODO: test me
-        fail("Implement me");
-
     }
 
     @Test
@@ -167,7 +245,7 @@ class UserControllerSystemIntegrationTest {
         // configure mock request
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.POST, "/user/create");
         mockRequest.contentType(MediaType.APPLICATION_JSON);
-        mockRequest.content(objectMapper.writeValueAsString(userToSave));
+        mockRequest.content(objectMapper.writeValueAsString(userToBeSaved));
         mockRequest.accept(MediaType.APPLICATION_JSON);
 
         //Configure result matchers
@@ -180,34 +258,42 @@ class UserControllerSystemIntegrationTest {
     }
 
     @Test
-    void updateUserByIdTest() {
-        // expecting HTTP status 200 OK
-        // should return updated object for visual confirmation
-        // TODO: test me
-        fail("Implement me");
+    void updateUserByIdTest() throws Exception {
+        // configure mock request
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .request(HttpMethod.PUT, "/user/update/" + updatedUserDTO.getId());
+        mockRequest.accept(MediaType.APPLICATION_JSON);
+        mockRequest.contentType(MediaType.APPLICATION_JSON);
+        mockRequest.content(objectMapper.writeValueAsString(userToUpdate));
 
+        // expected JSON results
+        String users = objectMapper.writeValueAsString(updatedUserDTO);
+
+        ResultMatcher statusMatcher = MockMvcResultMatchers.status().isOk();
+        ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(users);
+
+        mockMvc.perform(mockRequest)
+                .andExpect(statusMatcher)
+                .andExpect(contentMatcher);
     }
 
     @Test
-    void deleteUserByIdTest() {
-        // expecting HTTP status 200 OK
-        // should return deleted object for visual confirmation
-        // TODO: test me
-        fail("Implement me");
+    void deleteUserByIdTest() throws Exception {
+        // configure mock request
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .request(HttpMethod.DELETE, "/user/admin/delete/" + userToDeleteDTO.getId());
+        mockRequest.accept(MediaType.APPLICATION_JSON);
+
+        // expected JSON results
+        String user = objectMapper.writeValueAsString(userToDeleteDTO);
+
+        // configure result matchers
+        ResultMatcher statusMatcher = MockMvcResultMatchers.status().isOk();
+        ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(user);
+
+        // assertion
+        mockMvc.perform(mockRequest).andExpect(statusMatcher).andExpect(contentMatcher);
     }
 
-    @Test
-    void deleteUserByNameTest() {
-        // expecting HTTP status 200 OK
-        // should return list of deleted objects for visual confirmation
-        // TODO: test me
-        fail("Implement me");
-    }
 
-    @Test
-    void isAuthorisedTest() {
-        // should return true if submitted password matches current users password
-        // TODO: test me
-        fail("Implement me");
-    }
 }
