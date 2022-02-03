@@ -33,7 +33,7 @@ class UserServiceIntegrationTest {
     @Autowired
     private UserService userService;
 
-    private List<UserDTO> allUsersDTO;
+    private List<UserDTO> usersInDatabaseDTO;
 
     private User userToSave;
     private UserDTO expectedUserWithIdDTO;
@@ -50,33 +50,21 @@ class UserServiceIntegrationTest {
     @Sql(scripts = { "classpath:schema.sql",
             "classpath:data.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void setUp() { // runs before every test
-        // TODO: implement me
+        List<User> usersInDatabase = new ArrayList<>(userRepository.findAll());
 
-        allUsersDTO = new ArrayList<>();
-        allUsersDTO.addAll(List.of(
-                new UserDTO(
-                        1L, Position.staff, "don", "brand",
-                        LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589"),
-                new UserDTO(
-                        2L, Position.staff, "don", "brand",
-                        LocalDate.of(1991,9,15),
-                        "harry@youmail.com", "+4475649589"),
+        usersInDatabaseDTO = new ArrayList<>();
+        for(User user : usersInDatabase) {
+            usersInDatabaseDTO.add(new UserDTO(
+                    user.getId(),
+                    user.getPosition_(),
+                    user.getForename(),
+                    user.getSurname(),
+                    user.getDob(),
+                    user.getEmail(),
+                    user.getPhoneNum()
+            ));
+        }
 
-                new UserDTO(
-                        3L, Position.staff, "paris", "lorem",
-                        LocalDate.of(1991,7,21),
-                        "paris@youmail.com", "+4475649589"),
-
-                new UserDTO(
-                        4L, Position.admin, "don", "isiko",
-                        LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589")
-
-        ));
-
-        List<User> usersInDatabase = new ArrayList<>();
-        usersInDatabase.addAll(userRepository.findAll());
         int size = usersInDatabase.size();
         Long nextNewElementsId = usersInDatabase.get(size - 1).getId() + 1;
 
@@ -113,7 +101,7 @@ class UserServiceIntegrationTest {
                 "Hercules@sonofgod.com", "+1"
         );
 
-        userFoundListDTO = List.of(allUsersDTO.get(0), allUsersDTO.get(1));
+        userFoundListDTO = List.of(this.usersInDatabaseDTO.get(0), this.usersInDatabaseDTO.get(1));
 
         userToDeleteDTO =  expectedUserWithIdDTO;
 
@@ -124,7 +112,7 @@ class UserServiceIntegrationTest {
 
     @Test
     void getAll() {
-        assertThat(userService.getAll()).isEqualTo(allUsersDTO);
+        assertThat(userService.getAll()).isEqualTo(usersInDatabaseDTO);
     }
 
     @Test
