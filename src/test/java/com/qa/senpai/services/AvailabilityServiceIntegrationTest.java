@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -18,9 +18,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Sql(scripts = { "classpath:schema.sql",
+        "classpath:data.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class AvailabilityServiceIntegrationTest {
-    // Using mockito only for this unit test
+    // Using springBootTest for unit integration testing
+    // we need the Repository layer to be in the application context
+    // and fully functional
 
     // Fields
     @Autowired
@@ -32,7 +35,6 @@ class AvailabilityServiceIntegrationTest {
     private List<Availability> availabilitiesInDatabase;
     private List<AvailabilityDTO> availabilitiesInDatabaseDTO;
 
-    private List<Availability> availabilities;
     private List<AvailabilityDTO> availabilitiesDTO;
 
     private Long availabilityId;
@@ -56,48 +58,14 @@ class AvailabilityServiceIntegrationTest {
     private Availability availabilityToBeSaved;
     private Availability savedAvailability;
     private AvailabilityDTO savedAvailabilityDTO;
+    private Long nextNewElementsId;
 
 
     @BeforeEach
     void setUp() { // runs before every test
-        // TODO: implement me
-        availabilities = new ArrayList<>();
-        availabilities.addAll(List.of(
-                new Availability(
-                        1L,
-                        LocalDate.of(2022, 1, 1),
-                        LocalDate.of(2022, 1, 7)
-                ),
-                new Availability(
-                        2L,
-                        LocalDate.of(2022, 1, 8),
-                        LocalDate.of(2022, 1, 14)
-                ),
-                new Availability(
-                        3L,
-                        LocalDate.of(2022, 1, 15),
-                        LocalDate.of(2022, 1, 21)
-                ),
-                new Availability(
-                        4L,
-                        LocalDate.of(2022, 1, 22),
-                        LocalDate.of(2022, 1, 28)
-                )
-        ));
-
-        availabilitiesDTO = new ArrayList<>();
-        for(Availability availability : availabilities) {
-            availabilitiesDTO.add(
-                    new AvailabilityDTO(
-                            availability.getId(),
-                            availability.getStartDate(),
-                            availability.getEndDate()
-                    )
-            );
-        }
 
         availabilitiesInDatabase = new ArrayList<>();
-        availabilitiesInDatabase.addAll(availabilityRepository.saveAll(availabilities));
+        availabilitiesInDatabase.addAll(availabilityRepository.findAll());
 
         availabilitiesInDatabaseDTO = new ArrayList<>();
         for(Availability availability : availabilitiesInDatabase) {
@@ -111,19 +79,19 @@ class AvailabilityServiceIntegrationTest {
         }
 
         int size = availabilitiesInDatabase.size();
-        Long nextNewElementsId = availabilitiesInDatabase.get(size - 1).getId() + 1;
+        nextNewElementsId = availabilitiesInDatabase.get(size - 1).getId() + 1;
 
         availabilityId = 3L;
 
-        expectedAvailabilityWithId = availabilities.get(2);
-        expectedAvailabilityWithIdDTO = availabilitiesDTO.get(2);
+        expectedAvailabilityWithId = availabilitiesInDatabase.get(2);
+        expectedAvailabilityWithIdDTO = availabilitiesInDatabaseDTO.get(2);
         expectedAvailabilityWithoutId = new Availability(
                 LocalDate.of(2022, 1, 15),
                 LocalDate.of(2022, 1, 21)
         );
 
-        availabilityFoundList = List.of(availabilities.get(1), availabilities.get(2));
-        availabilityFoundListDTO = List.of(availabilitiesDTO.get(1), availabilitiesDTO.get(2));
+        availabilityFoundList = List.of(availabilitiesInDatabase.get(1), availabilitiesInDatabase.get(2));
+        availabilityFoundListDTO = List.of(availabilitiesInDatabaseDTO.get(1), availabilitiesInDatabaseDTO.get(2));
 
         availabilityToUpdate = new Availability(
                 3L,
@@ -148,13 +116,12 @@ class AvailabilityServiceIntegrationTest {
         availabilityStartDate = LocalDate.of(2022, 1, 7);
         availabilityEndDate = LocalDate.of(2022, 1, 22);
 
-        availabilityToBeSaved = new Availability(
-                LocalDate.of(3000, 1, 15),
-                LocalDate.of(3000, 1, 21)
-        );
+//        availabilityToBeSaved = new Availability(
+//                LocalDate.of(3000, 1, 15),
+//                LocalDate.of(3000, 1, 21)
+//        );
 
         savedAvailability = new Availability(
-                nextNewElementsId,
                 LocalDate.of(3000, 1, 15),
                 LocalDate.of(3000, 1, 21)
         );
@@ -190,8 +157,8 @@ class AvailabilityServiceIntegrationTest {
 
     @Test
     void create() {
-        assertThat(savedAvailabilityDTO)
-                .isEqualTo(availabilityService.create(availabilityToBeSaved));
+        assertThat(availabilityService.create(savedAvailability))
+                .isEqualTo(savedAvailabilityDTO);
     }
 
     @Test
@@ -205,3 +172,4 @@ class AvailabilityServiceIntegrationTest {
         assertThat(availabilityService.delete(availabilityId)).isEqualTo(availabilityToDeleteDTO);
     }
 }
+

@@ -28,6 +28,7 @@ class AvailabilityControllerWebIntegrationTest {
     @MockBean
     private AvailabilityService availabilityService;
 
+    // Test variables set up
     private List<Availability> availabilities;
     private List<AvailabilityDTO> availabilitiesDTO;
 

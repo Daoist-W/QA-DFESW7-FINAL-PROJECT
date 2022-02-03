@@ -22,6 +22,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class AvailabilityServiceUnitTest {
     // Using mockito only for this unit test
+    // there is no need for generating application contexts
+    // and so Mockito is a suitable testing choice
 
     // Fields
     @Mock
@@ -31,6 +33,8 @@ class AvailabilityServiceUnitTest {
     private ModelMapper availabilityMapper;
 
     @InjectMocks
+    // this creates an instance of the Service class and
+    // injects the ModelMapper and Repository mock instances
     private AvailabilityService availabilityService;
 
     private List<Availability> availabilities;

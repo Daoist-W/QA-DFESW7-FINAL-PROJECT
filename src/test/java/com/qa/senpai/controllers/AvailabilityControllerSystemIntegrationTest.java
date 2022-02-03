@@ -11,22 +11,24 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Transactional
+// @Transactional disabled due to configuration issues, replaced with DirtiesContext
 @AutoConfigureMockMvc // configure the MockMvc
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Sql(scripts = { "classpath:schema.sql",
+        "classpath:data.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class AvailabilityControllerSystemIntegrationTest {
 
     // Fields
@@ -39,11 +41,9 @@ class AvailabilityControllerSystemIntegrationTest {
     @Autowired
     private AvailabilityRepository availabilityRepository;
 
+    // Test variables set up
     private List<Availability> availabilitiesInDatabase;
     private List<AvailabilityDTO> availabilitiesInDatabaseDTO;
-
-    private List<Availability> availabilities;
-    private List<AvailabilityDTO> availabilitiesDTO;
 
     private Long availabilityId;
     private Availability expectedAvailabilityWithId;
@@ -71,43 +71,10 @@ class AvailabilityControllerSystemIntegrationTest {
 
     @BeforeEach
     void setUp() { // runs before every test
-        availabilities = new ArrayList<>();
-        availabilities.addAll(List.of(
-                new Availability(
-                        1L,
-                        LocalDate.of(2022, 1, 1),
-                        LocalDate.of(2022, 1, 7)
-                ),
-                new Availability(
-                        2L,
-                        LocalDate.of(2022, 1, 8),
-                        LocalDate.of(2022, 1, 14)
-                ),
-                new Availability(
-                        3L,
-                        LocalDate.of(2022, 1, 15),
-                        LocalDate.of(2022, 1, 21)
-                ),
-                new Availability(
-                        4L,
-                        LocalDate.of(2022, 1, 22),
-                        LocalDate.of(2022, 1, 28)
-                )
-        ));
 
-        availabilitiesDTO = new ArrayList<>();
-        for(Availability availability : availabilities) {
-            availabilitiesDTO.add(
-                    new AvailabilityDTO(
-                            availability.getId(),
-                            availability.getStartDate(),
-                            availability.getEndDate()
-                    )
-            );
-        }
 
         availabilitiesInDatabase = new ArrayList<>();
-        availabilitiesInDatabase.addAll(availabilityRepository.saveAll(availabilities));
+        availabilitiesInDatabase.addAll(availabilityRepository.findAll());
 
         availabilitiesInDatabaseDTO = new ArrayList<>();
         for(Availability availability : availabilitiesInDatabase) {
@@ -125,15 +92,15 @@ class AvailabilityControllerSystemIntegrationTest {
 
         availabilityId = 3L;
 
-        expectedAvailabilityWithId = availabilities.get(2);
-        expectedAvailabilityWithIdDTO = availabilitiesDTO.get(2);
+        expectedAvailabilityWithId = availabilitiesInDatabase.get(2);
+        expectedAvailabilityWithIdDTO = availabilitiesInDatabaseDTO.get(2);
         expectedAvailabilityWithoutId = new Availability(
                 LocalDate.of(2022, 1, 15),
                 LocalDate.of(2022, 1, 21)
         );
 
-        availabilityFoundList = List.of(availabilities.get(1), availabilities.get(2));
-        availabilityFoundListDTO = List.of(availabilitiesDTO.get(1), availabilitiesDTO.get(2));
+        availabilityFoundList = List.of(availabilitiesInDatabase.get(1), availabilitiesInDatabase.get(2));
+        availabilityFoundListDTO = List.of(availabilitiesInDatabaseDTO.get(1), availabilitiesInDatabaseDTO.get(2));
 
         availabilityToUpdate = new Availability(
                 3L,

@@ -1,27 +1,27 @@
 drop table if exists availability CASCADE;
-drop table if exists job CASCADE;
-drop table if exists user CASCADE;
+drop table if exists jobs CASCADE;
+drop table if exists users CASCADE;
 
 CREATE TABLE availability (
-    id BIGINT NOT NULL,
-    endDate DATE NOT NULL,
-    startDate DATE NOT NULL,
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE job (
-    id BIGINT NOT NULL,
-	title VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL,
-    location VARCHAR(255) NOT NULL,
-    end_date DATE NOT NULL,
+    id BIGINT NOT NULL AUTO_INCREMENT,
     start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE jobs (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+	title VARCHAR(255) NOT NULL,
+    description_ VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
     PRIMARY KEY (id)
 );
 
 
-CREATE TABLE user (
-    id BIGINT NOT NULL,
+CREATE TABLE users (
+    id BIGINT NOT NULL AUTO_INCREMENT,
     dob DATE NOT NULL,
     email VARCHAR(255) NOT NULL,
     forename VARCHAR(50) NOT NULL,

@@ -23,6 +23,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class UserServiceUnitTest {
     // Using mockito only for this unit test
+    // there is no need for generating application contexts
+    // and so Mockito is a suitable testing choice
 
     // Fields
     @Mock
@@ -32,8 +34,11 @@ class UserServiceUnitTest {
     private ModelMapper userMapper;
 
     @InjectMocks
+    // this creates an instance of the Service class and
+    // injects the ModelMapper and Repository mock instances
     private UserService userService;
 
+    // test variables set up
     private List<User> allUsers;
     private List<UserDTO> allUsersDTO;
 
