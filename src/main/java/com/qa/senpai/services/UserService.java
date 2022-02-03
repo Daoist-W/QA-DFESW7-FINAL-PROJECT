@@ -65,7 +65,7 @@ public class UserService {
                                 "does not exist"));
     }
 
-    public List<UserDTO> getByDates(List<LocalDate> dates) {
+    public List<UserDTO> getByDates(LocalDate availabilityStartDate, LocalDate availabilityEndDate) {
         // TODO: implement me
         return null;
     }
@@ -77,7 +77,6 @@ public class UserService {
 
 
     public UserDTO update(long id, User user) {
-        // TODO: test me
         if(userRepository.existsById(id)) {
             User userToUpdate = userRepository.getById(id);
             userToUpdate.setForename(user.getForename());
@@ -96,7 +95,6 @@ public class UserService {
 
 
     public UserDTO delete(Long id) {
-        // TODO: test me
         if(userRepository.existsById(id)) {
             UserDTO deletedUser = mapToDTO(userRepository.getById(id));
             userRepository.deleteById(id);

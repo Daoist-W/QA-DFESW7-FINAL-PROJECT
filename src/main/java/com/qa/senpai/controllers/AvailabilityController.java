@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -41,6 +42,13 @@ public class AvailabilityController {
         return new ResponseEntity<AvailabilityDTO>(availability, headers, HttpStatus.OK);
     }
 
+    @PostMapping(path = "/dates") // using post so I can take advantage of the body
+    public ResponseEntity<List<AvailabilityDTO>> getAvailabilitiesByDates(@RequestBody Availability dates) {
+        LocalDate start = dates.getStartDate();
+        LocalDate end = dates.getEndDate();
+        List<AvailabilityDTO> availabilities = availabilityService.getByDates(start, end);
+        return ResponseEntity.ok(availabilities);
+    }
 
 
 
@@ -49,19 +57,20 @@ public class AvailabilityController {
     // ############################################
     @PostMapping(path = "/create")
     public ResponseEntity<AvailabilityDTO> createAvailability(@Valid @RequestBody Availability availability) {
-        // TODO: implement access control
-        // TODO: implement me
-        return null;
+        AvailabilityDTO savedAvailability = availabilityService.create(availability);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/availability/create/" + String.valueOf(savedAvailability.getId()));
+        return new ResponseEntity<>(savedAvailability, headers, HttpStatus.CREATED);
     }
 
     // ############################################
     //                  UPDATE
     // ############################################
-    @PutMapping(path = "/{id}")
+    @PutMapping(path = "/update/{id}")
     public ResponseEntity<AvailabilityDTO> updateAvailabilityById(@PathVariable("id") Long id, @Valid @RequestBody Availability availability) {
-        // TODO: implement access control
-        // TODO: implement me
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/update/" + availability.getId());
+        return new ResponseEntity<>(availabilityService.update(id, availability), headers, HttpStatus.OK);
     }
 
 
@@ -69,15 +78,12 @@ public class AvailabilityController {
     //                  DELETE
     // ############################################
 
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(path = "/admin/delete/{id}")
     public ResponseEntity<AvailabilityDTO> deleteAvailabilityById(@PathVariable("id") Long id) {
-        // TODO: implement access control
-        // TODO: implement me
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/admin/delete/" + id);
+        return new ResponseEntity<>(availabilityService.delete(id), headers, HttpStatus.OK);
     }
 
-    // ############################################
-    //             SUPPORTING METHODS
-    // ############################################
 
 }

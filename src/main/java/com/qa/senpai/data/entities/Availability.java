@@ -9,13 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 public class Availability {
 
     // fields
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
@@ -28,7 +29,7 @@ public class Availability {
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate endDate;
 
-    // TODO: need to add many to many relationship for Users and Jobs
+    // TODO: need to add one to many relationship for Users
 
 
     public Availability() {
@@ -67,5 +68,27 @@ public class Availability {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Availability that = (Availability) o;
+        return getId().equals(that.getId()) && getStartDate().equals(that.getStartDate()) && getEndDate().equals(that.getEndDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getStartDate(), getEndDate());
+    }
+
+    @Override
+    public String toString() {
+        return "Availability{" +
+                "id=" + id +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                '}';
     }
 }

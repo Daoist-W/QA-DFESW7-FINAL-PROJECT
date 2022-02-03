@@ -9,8 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
@@ -21,18 +19,21 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class JobServiceUnitTest {
     // Using mockito only for this unit test
+    // there is no need for generating application contexts
+    // and so Mockito is a suitable testing choice
 
     // Fields
-    @Mock
+    @Mock // mock instance of Repository
     private JobRepository jobRepository;
 
-    @Mock
+    @Mock // mock instance of ModelMapper
     private ModelMapper jobMapper;
 
     @InjectMocks
+    // this creates an instance of the Service class and
+    // injects the ModelMapper and Repository mock instances
     private JobService jobService;
 
     private Job jobToBeSaved;
@@ -58,7 +59,6 @@ class JobServiceUnitTest {
 
     @BeforeEach
     void setUp() { // runs before every test
-        // TODO: implement me
         // READ
         allJobs = List.of(
                 new Job(1L,

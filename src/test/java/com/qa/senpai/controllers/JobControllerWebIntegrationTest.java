@@ -30,6 +30,8 @@ class JobControllerWebIntegrationTest {
 
     @MockBean
     private JobService jobService;
+
+    // Test variable set up
     private List<Job> allJobs;
     private List<JobDTO> jobsDTO;
 

@@ -3,15 +3,13 @@ package com.qa.senpai.data.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
+@Table(name = "Jobs")
 public class Job {
     // Fields
     @Id
@@ -22,7 +20,7 @@ public class Job {
     private String title;
 
     @NotNull
-    private String description;
+    private String description_;
 
     @NotNull
     private String location;
@@ -46,25 +44,25 @@ public class Job {
 
     public Job(Long id,
                String title,
-               String description,
+               String description_,
                String location,
                LocalDate startDate,
                LocalDate endDate) {
         this.id = id;
         this.title = title;
-        this.description = description;
+        this.description_ = description_;
         this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
     public Job(String title,
-               String description,
+               String description_,
                String location,
                LocalDate startDate,
                LocalDate endDate) {
         this.title = title;
-        this.description = description;
+        this.description_ = description_;
         this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -86,12 +84,12 @@ public class Job {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescription_() {
+        return description_;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription_(String description_) {
+        this.description_ = description_;
     }
 
     public String getLocation() {
@@ -125,7 +123,7 @@ public class Job {
         Job job = (Job) o;
         return getId().equals(job.getId()) &&
                 getTitle().equals(job.getTitle()) &&
-                getDescription().equals(job.getDescription()) &&
+                getDescription_().equals(job.getDescription_()) &&
                 getLocation().equals(job.getLocation()) &&
                 getStartDate().equals(job.getStartDate()) &&
                 getEndDate().equals(job.getEndDate());
@@ -135,7 +133,7 @@ public class Job {
     public int hashCode() {
         return Objects.hash(getId(),
                 getTitle(),
-                getDescription(),
+                getDescription_(),
                 getLocation(),
                 getStartDate(),
                 getEndDate());
@@ -146,7 +144,7 @@ public class Job {
         return "Job{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
+                ", description_='" + description_ + '\'' +
                 ", location='" + location + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +

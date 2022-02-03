@@ -82,7 +82,7 @@ public class JobService {
         if(jobRepository.existsById(id)) {
             Job toUpdate = jobRepository.getById(id);
             toUpdate.setTitle(job.getTitle());
-            toUpdate.setDescription(job.getDescription());
+            toUpdate.setDescription_(job.getDescription_());
             toUpdate.setLocation(job.getLocation());
             toUpdate.setStartDate(job.getStartDate());
             toUpdate.setEndDate(job.getEndDate());
