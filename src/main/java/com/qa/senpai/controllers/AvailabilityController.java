@@ -29,7 +29,7 @@ public class AvailabilityController {
     //                  READ
     // ############################################
 
-    @GetMapping
+    @GetMapping(path = "/all")
     public ResponseEntity<List<AvailabilityDTO>> getAllAvailability() {
         return ResponseEntity.ok(availabilityService.getAll());
     }
@@ -39,7 +39,15 @@ public class AvailabilityController {
         HttpHeaders headers = new HttpHeaders();
         AvailabilityDTO availability = availabilityService.getById(id);
         headers.add("Location", "/availability/" + availability.getId());
-        return new ResponseEntity<AvailabilityDTO>(availability, headers, HttpStatus.OK);
+        return new ResponseEntity<>(availability, headers, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/userid/{id}")
+    public ResponseEntity<List<AvailabilityDTO>> getAvailabilityByUserId(@PathVariable Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        List<AvailabilityDTO> availability = availabilityService.getByUserId(id);
+        headers.add("Location", "/availability/userid/" + id);
+        return new ResponseEntity<>(availability, headers, HttpStatus.OK);
     }
 
     @PostMapping(path = "/dates") // using post so I can take advantage of the body
@@ -59,7 +67,7 @@ public class AvailabilityController {
     public ResponseEntity<AvailabilityDTO> createAvailability(@Valid @RequestBody Availability availability) {
         AvailabilityDTO savedAvailability = availabilityService.create(availability);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/availability/create/" + String.valueOf(savedAvailability.getId()));
+        headers.add("Location", "/availability/create/" + savedAvailability.getId());
         return new ResponseEntity<>(savedAvailability, headers, HttpStatus.CREATED);
     }
 

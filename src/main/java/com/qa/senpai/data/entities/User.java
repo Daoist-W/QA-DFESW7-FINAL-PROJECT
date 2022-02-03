@@ -57,10 +57,17 @@ public class User {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Job> jobs;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Availability> availabilities;
+
     public User(){
 
     }
 
+    public User(Long id) {
+        this.id = id;
+    }
 
     public User(Long id,
                 Position position_,

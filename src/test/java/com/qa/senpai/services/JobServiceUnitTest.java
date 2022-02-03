@@ -2,6 +2,7 @@ package com.qa.senpai.services;
 
 import com.qa.senpai.data.dtos.JobDTO;
 import com.qa.senpai.data.entities.Job;
+import com.qa.senpai.data.entities.User;
 import com.qa.senpai.data.repositories.JobRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,6 +56,7 @@ class JobServiceUnitTest {
     private JobDTO jobToBeFoundDTO;
     private List<Job> allJobs;
     private List<JobDTO> allJobsDTO;
+    private Long userId;
 
 
     @BeforeEach
@@ -75,7 +77,7 @@ class JobServiceUnitTest {
                         "London",
                         LocalDate.of(2022, 3, 4),
                         LocalDate.of(2022, 3, 4),
-                        null
+                        new User(1L)
                 ),
                 new Job(3L,
                         "topjob3",
@@ -83,7 +85,7 @@ class JobServiceUnitTest {
                         "London",
                         LocalDate.of(2022, 2, 4),
                         LocalDate.of(2022, 2, 6),
-                        null
+                        new User(1L)
                 ),
                 new Job(4L,
                         "topjob4",
@@ -101,32 +103,28 @@ class JobServiceUnitTest {
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 3, 4),
-                        LocalDate.of(2022, 3, 4),
-                        null
+                        LocalDate.of(2022, 3, 4)
                 ),
                 new JobDTO(2L,
                         "topjob",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 3, 4),
-                        LocalDate.of(2022, 3, 4),
-                        null
+                        LocalDate.of(2022, 3, 4)
                 ),
                 new JobDTO(3L,
                         "topjob3",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 2, 4),
-                        LocalDate.of(2022, 2, 6),
-                        null
+                        LocalDate.of(2022, 2, 6)
                 ),
                 new JobDTO(4L,
                         "topjob4",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 2, 4),
-                        LocalDate.of(2022, 2, 12),
-                        null
+                        LocalDate.of(2022, 2, 12)
                 )
         );
 
@@ -149,10 +147,10 @@ class JobServiceUnitTest {
                 "best job in the UNIVERSE",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 6),
-                null
+                LocalDate.of(2022, 2, 6)
         );
         jobId = 3L;
+        userId = 1L;
 
         // DELETE
         jobToDelete = jobToBeFound;
@@ -161,8 +159,7 @@ class JobServiceUnitTest {
                 "best job in the UNIVERSE",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 6),
-                null
+                LocalDate.of(2022, 2, 6)
         );
 
         // CREATE
@@ -192,8 +189,7 @@ class JobServiceUnitTest {
                 "best job in the world",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 12),
-                null
+                LocalDate.of(2022, 2, 12)
         );
 
         // BY DATE
@@ -282,6 +278,22 @@ class JobServiceUnitTest {
         // verify()
         verify(jobRepository).findByDates(jobStartDate, jobEndDate);
         for (Job job : listOfJobsByDate) {
+            verify(jobMapper).map(job, JobDTO.class);
+        }
+    }
+
+    @Test
+    void getByUserIdTest() {
+        when(jobRepository.findByUserId(userId)).thenReturn(jobFoundList);
+        for(int i = 0; i < jobFoundList.size(); i++) {
+            when(jobMapper.map(jobFoundList.get(i), JobDTO.class))
+                    .thenReturn(jobFoundListDTO.get(i));
+        }
+        // assertThat()
+        assertThat(jobService.getByUserId(userId)).isEqualTo(jobFoundListDTO);
+        // verify()
+        verify(jobRepository).findByUserId(userId);
+        for (Job job : jobFoundList) {
             verify(jobMapper).map(job, JobDTO.class);
         }
     }

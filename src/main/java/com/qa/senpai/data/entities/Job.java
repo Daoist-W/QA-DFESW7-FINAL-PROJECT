@@ -36,12 +36,12 @@ public class Job {
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate endDate;
 
-    // TODO: implement entity relations with User
-    // many to one
+    // ENTITY RELATIONS
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")// this isa JPA implementation suitable for Hibernate
     @JsonBackReference // avoids recursive output
     private User user;
+
 
 
     public Job() {
@@ -168,7 +168,6 @@ public class Job {
                 ", location='" + location + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", user=" + user +
                 '}';
     }
 }

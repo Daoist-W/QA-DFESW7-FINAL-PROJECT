@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 import java.time.LocalDate;
 import java.util.List;
 
-@Profile("dev")
+@Profile("devsql")
 @Configuration
 public class UserApplicationStartupListener implements ApplicationListener<ApplicationReadyEvent> {
 

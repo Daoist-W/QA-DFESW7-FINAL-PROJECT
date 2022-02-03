@@ -59,6 +59,7 @@ class AvailabilityServiceIntegrationTest {
     private Availability savedAvailability;
     private AvailabilityDTO savedAvailabilityDTO;
     private Long nextNewElementsId;
+    private Long userId;
 
 
     @BeforeEach
@@ -82,12 +83,14 @@ class AvailabilityServiceIntegrationTest {
         nextNewElementsId = availabilitiesInDatabase.get(size - 1).getId() + 1;
 
         availabilityId = 3L;
+        userId = 1L;
 
         expectedAvailabilityWithId = availabilitiesInDatabase.get(2);
         expectedAvailabilityWithIdDTO = availabilitiesInDatabaseDTO.get(2);
         expectedAvailabilityWithoutId = new Availability(
                 LocalDate.of(2022, 1, 15),
-                LocalDate.of(2022, 1, 21)
+                LocalDate.of(2022, 1, 21),
+                null
         );
 
         availabilityFoundList = List.of(availabilitiesInDatabase.get(1), availabilitiesInDatabase.get(2));
@@ -96,12 +99,14 @@ class AvailabilityServiceIntegrationTest {
         availabilityToUpdate = new Availability(
                 3L,
                 LocalDate.of(1111, 1, 15),
-                LocalDate.of(2222, 1, 21)
+                LocalDate.of(2222, 1, 21),
+                null
         );
         updatedAvailability = new Availability(
                 3L,
                 LocalDate.of(1111, 1, 15),
-                LocalDate.of(2222, 1, 21)
+                LocalDate.of(2222, 1, 21),
+                null
         );
         updatedAvailabilityDTO = new AvailabilityDTO(
                 3L,
@@ -116,14 +121,10 @@ class AvailabilityServiceIntegrationTest {
         availabilityStartDate = LocalDate.of(2022, 1, 7);
         availabilityEndDate = LocalDate.of(2022, 1, 22);
 
-//        availabilityToBeSaved = new Availability(
-//                LocalDate.of(3000, 1, 15),
-//                LocalDate.of(3000, 1, 21)
-//        );
-
         savedAvailability = new Availability(
                 LocalDate.of(3000, 1, 15),
-                LocalDate.of(3000, 1, 21)
+                LocalDate.of(3000, 1, 21),
+                null
         );
 
         savedAvailabilityDTO = new AvailabilityDTO(
@@ -136,39 +137,46 @@ class AvailabilityServiceIntegrationTest {
     }
 
     @Test
-    void getAll() {
+    void getAllTest() {
         assertThat(availabilityService.getAll())
                 .isEqualTo(availabilitiesInDatabaseDTO);
     }
 
     @Test
-    void getById() {
+    void getByIdTest() {
         assertThat(availabilityService
                 .getById(availabilityId))
                 .isEqualTo(expectedAvailabilityWithIdDTO);
     }
 
     @Test
-    void getByDates() {
+    void getByUserIdTest() {
+        assertThat(availabilityService
+                .getByUserId(userId))
+                .isEqualTo(availabilityFoundListDTO);
+    }
+
+    @Test
+    void getByDatesTest() {
         assertThat(availabilityService
                 .getByDates(availabilityStartDate, availabilityEndDate))
                 .isEqualTo(availabilityFoundListDTO);
     }
 
     @Test
-    void create() {
+    void createTest() {
         assertThat(availabilityService.create(savedAvailability))
                 .isEqualTo(savedAvailabilityDTO);
     }
 
     @Test
-    void update() {
+    void updateTest() {
         assertThat(availabilityService.update(availabilityId, availabilityToUpdate))
                 .isEqualTo(updatedAvailabilityDTO);
     }
 
     @Test
-    void delete() {
+    void deleteTest() {
         assertThat(availabilityService.delete(availabilityId)).isEqualTo(availabilityToDeleteDTO);
     }
 }

@@ -63,7 +63,7 @@ class JobControllerSystemIntegrationTest {
     private Availability dates;
 
     private List<JobDTO> listOfJobsByDateDTO;
-
+    private Long userId;
 
 
     @BeforeEach
@@ -99,19 +99,18 @@ class JobControllerSystemIntegrationTest {
                 "best job in the world",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 12),
-                null
+                LocalDate.of(2022, 2, 12)
         );
 
         Long jobId = 3L;
+        userId = 1L;
 
         foundJobDTO = new JobDTO(3L,
                 "topjob3",
                 "best job in the world",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 6),
-                null
+                LocalDate.of(2022, 2, 6)
         );
 
         jobToUpdate = new Job(3L,
@@ -128,8 +127,7 @@ class JobControllerSystemIntegrationTest {
                 "best job in the UNIVERSE",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 6),
-                null
+                LocalDate.of(2022, 2, 6)
         );
 
         jobToDeleteDTO = foundJobDTO;
@@ -142,7 +140,7 @@ class JobControllerSystemIntegrationTest {
 
         listOfJobsByDateDTO = List.of(jobsInDatabaseDTO.get(0), jobsInDatabaseDTO.get(1));
 
-        dates = new Availability(jobStartDate, jobEndDate);
+        dates = new Availability(jobStartDate, jobEndDate, null );
 
 
 
@@ -291,6 +289,24 @@ class JobControllerSystemIntegrationTest {
         // configure mock request
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .request(HttpMethod.DELETE, "/jobs/admin/delete/name/" + "topjob");
+        mockRequest.accept(MediaType.APPLICATION_JSON);
+
+        // expected JSON results
+        String job = objectMapper.writeValueAsString(listOfJobsByDateDTO);
+
+        // configure result matchers
+        ResultMatcher statusMatcher = MockMvcResultMatchers.status().isOk();
+        ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(job);
+
+        // assertion
+        mockMvc.perform(mockRequest).andExpect(statusMatcher).andExpect(contentMatcher);
+    }
+
+    @Test
+    void getJobsByUserIdTest() throws Exception {
+        // configure mock request
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .request(HttpMethod.GET, "/jobs/userid/" + userId);
         mockRequest.accept(MediaType.APPLICATION_JSON);
 
         // expected JSON results

@@ -2,6 +2,7 @@ package com.qa.senpai.controllers;
 
 import com.qa.senpai.data.dtos.AvailabilityDTO;
 import com.qa.senpai.data.entities.Availability;
+import com.qa.senpai.data.entities.User;
 import com.qa.senpai.services.AvailabilityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,22 +65,26 @@ class AvailabilityControllerWebIntegrationTest {
                 new Availability(
                         1L,
                         LocalDate.of(2022, 1, 1),
-                        LocalDate.of(2022, 1, 7)
+                        LocalDate.of(2022, 1, 7),
+                        null
                 ),
                 new Availability(
                         2L,
                         LocalDate.of(2022, 1, 8),
-                        LocalDate.of(2022, 1, 14)
+                        LocalDate.of(2022, 1, 14),
+                        new User(1L)
                 ),
                 new Availability(
                         3L,
                         LocalDate.of(2022, 1, 15),
-                        LocalDate.of(2022, 1, 21)
+                        LocalDate.of(2022, 1, 21),
+                        new User(1L)
                 ),
                 new Availability(
                         4L,
                         LocalDate.of(2022, 1, 22),
-                        LocalDate.of(2022, 1, 28)
+                        LocalDate.of(2022, 1, 28),
+                        null
                 )
         ));
 
@@ -113,7 +118,8 @@ class AvailabilityControllerWebIntegrationTest {
         expectedAvailabilityWithIdDTO = availabilitiesDTO.get(2);
         expectedAvailabilityWithoutId = new Availability(
                 LocalDate.of(2022, 1, 15),
-                LocalDate.of(2022, 1, 21)
+                LocalDate.of(2022, 1, 21),
+                null
         );
 
         availabilityFoundList = List.of(availabilities.get(1), availabilities.get(2));
@@ -122,12 +128,14 @@ class AvailabilityControllerWebIntegrationTest {
         availabilityToUpdate = new Availability(
                 3L,
                 LocalDate.of(1111, 1, 15),
-                LocalDate.of(2222, 1, 21)
+                LocalDate.of(2222, 1, 21),
+                null
         );
         updatedAvailability = new Availability(
                 3L,
                 LocalDate.of(1111, 1, 15),
-                LocalDate.of(2222, 1, 21)
+                LocalDate.of(2222, 1, 21),
+                null
         );
         updatedAvailabilityDTO = new AvailabilityDTO(
                 3L,
@@ -144,17 +152,20 @@ class AvailabilityControllerWebIntegrationTest {
 
         setDateRange = new Availability(
                 availabilityStartDate,
-                availabilityEndDate);
+                availabilityEndDate,
+                null);
 
         availabilityToBeSaved = new Availability(
                 LocalDate.of(3000, 1, 15),
-                LocalDate.of(3000, 1, 21)
+                LocalDate.of(3000, 1, 21),
+                null
         );
 
         savedAvailability = new Availability(
                 5L,
                 LocalDate.of(3000, 1, 15),
-                LocalDate.of(3000, 1, 21)
+                LocalDate.of(3000, 1, 21),
+                null
         );
 
         savedAvailabilityDTO = new AvailabilityDTO(
@@ -224,6 +235,17 @@ class AvailabilityControllerWebIntegrationTest {
                 .thenReturn(availabilityToDeleteDTO);
         assertThat(availabilityController.deleteAvailabilityById(availabilityId))
                 .isEqualTo(new ResponseEntity<>(availabilityToDeleteDTO, headers, HttpStatus.OK));
+
+    }
+
+    @Test
+    void getAvailabilityByUserIdTest() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/availability/userid/" + availabilityId);
+        when(availabilityService.getByUserId(availabilityId))
+                .thenReturn(availabilityFoundListDTO);
+        assertThat(availabilityController.getAvailabilityByUserId(availabilityId))
+                .isEqualTo(new ResponseEntity<>(availabilityFoundListDTO, headers, HttpStatus.OK));
 
     }
 

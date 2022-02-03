@@ -1,6 +1,7 @@
 package com.qa.senpai.services;
 
 import com.qa.senpai.data.dtos.UserDTO;
+import com.qa.senpai.data.entities.Job;
 import com.qa.senpai.data.entities.User;
 import com.qa.senpai.data.repositories.UserRepository;
 import com.qa.senpai.data.support.Position;
@@ -62,7 +63,7 @@ class UserServiceIntegrationTest {
                     user.getDob(),
                     user.getEmail(),
                     user.getPhoneNum(),
-                    null
+                    user.getJobs()
             ));
         }
 
@@ -75,31 +76,31 @@ class UserServiceIntegrationTest {
         userToUpdate = new User(
                 3L, Position.staff, "PARIS", "UPDATED",
                 LocalDate.of(1991,9,18),
-                "paris@youmail.com", "+4475649589", 11111, null
+                "paris@youmail.com", "+4475649589", 11111, new ArrayList<Job>()
         );
 
         updatedUserDTO = new UserDTO(
                 3L, Position.staff, "PARIS", "UPDATED",
                 LocalDate.of(1991,9,18),
-                "paris@youmail.com", "+4475649589", null
+                "paris@youmail.com", "+4475649589", new ArrayList<Job>()
         );
 
         expectedUserWithIdDTO = new UserDTO(
                 3L, Position.staff, "paris", "lorem",
                 LocalDate.of(1991,7,21),
-                "paris@youmail.com", "+4475649589", null
+                "paris@youmail.com", "+4475649589", new ArrayList<Job>()
         );
 
         userToSave = new User(
                 Position.staff, "Hercules", "Son of Zeus",
                 LocalDate.of(1000,2,15),
-                "Hercules@sonofgod.com", "+1", 123456789, null
+                "Hercules@sonofgod.com", "+1", 123456789, new ArrayList<Job>()
         );
 
         expectedUserSavedDTO = new UserDTO(
                 nextNewElementsId, Position.staff, "Hercules", "Son of Zeus",
                 LocalDate.of(1000,2,15),
-                "Hercules@sonofgod.com", "+1", null
+                "Hercules@sonofgod.com", "+1", new ArrayList<Job>()
         );
 
         userFoundListDTO = List.of(this.usersInDatabaseDTO.get(0), this.usersInDatabaseDTO.get(1));

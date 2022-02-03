@@ -1,7 +1,7 @@
+
 drop table if exists availability CASCADE;
 drop table if exists jobs CASCADE;
 drop table if exists users CASCADE;
-
 
 
 CREATE TABLE users (
@@ -32,5 +32,7 @@ CREATE TABLE availability (
     id BIGINT NOT NULL AUTO_INCREMENT,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    PRIMARY KEY (id)
+    user_id BIGINT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );

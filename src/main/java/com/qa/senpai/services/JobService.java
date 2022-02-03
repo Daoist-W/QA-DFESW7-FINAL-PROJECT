@@ -19,11 +19,11 @@ public class JobService {
     // Fields
     private final JobRepository jobRepository;
     private final ModelMapper mapper; // allows for mapping DTO's to Entities
-
     @Autowired
     public JobService(JobRepository jobRepository, ModelMapper modelMapper) {
         this.jobRepository = jobRepository;
         this.mapper = modelMapper;
+
     }
 
 

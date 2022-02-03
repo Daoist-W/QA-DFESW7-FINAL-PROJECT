@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,7 +43,6 @@ public class UserService {
     }
 
     public UserDTO getById(Long id) {
-        // TODO: implement me
         if(userRepository.existsById(id)) {
             return mapToDTO(userRepository.getById(id));
         } else {
@@ -53,7 +51,6 @@ public class UserService {
     }
 
     public List<UserDTO> getByName(String forename, String surname) {
-        // TODO: test me
 
         return Optional.of(userRepository
                 .findByFullName(forename, surname)
@@ -63,11 +60,6 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(
                         "User with name: " + forename + ", " + surname +
                                 "does not exist"));
-    }
-
-    public List<UserDTO> getByDates(LocalDate availabilityStartDate, LocalDate availabilityEndDate) {
-        // TODO: implement me
-        return null;
     }
 
 

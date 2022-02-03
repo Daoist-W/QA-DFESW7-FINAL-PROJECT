@@ -12,7 +12,7 @@
     <artifactId>senpai</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>senpai</name>
-    <description_>Final Project for QA DFESW7 Cohort</description_>
+    <description>Final Project for QA DFESW7 Cohort</description>
     <properties>
         <java.version>11</java.version>
     </properties>
