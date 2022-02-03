@@ -3,6 +3,7 @@ package com.qa.senpai.controllers;
 import com.qa.senpai.data.dtos.JobDTO;
 import com.qa.senpai.data.entities.Availability;
 import com.qa.senpai.data.entities.Job;
+import com.qa.senpai.data.entities.User;
 import com.qa.senpai.services.JobService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,8 @@ class JobControllerWebIntegrationTest {
 
     @MockBean
     private JobService jobService;
+
+    // Test variable set up
     private List<Job> allJobs;
     private List<JobDTO> jobsDTO;
 
@@ -58,28 +61,32 @@ class JobControllerWebIntegrationTest {
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 3, 4),
-                        LocalDate.of(2022, 3, 4)
+                        LocalDate.of(2022, 3, 4),
+                        null
                 ),
                 new Job(2L,
                         "topjob",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 3, 4),
-                        LocalDate.of(2022, 3, 4)
+                        LocalDate.of(2022, 3, 4),
+                        new User(1L)
                 ),
                 new Job(3L,
                         "topjob3",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 2, 4),
-                        LocalDate.of(2022, 2, 6)
+                        LocalDate.of(2022, 2, 6),
+                        new User(1L)
                 ),
                 new Job(4L,
                         "topjob4",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 2, 4),
-                        LocalDate.of(2022, 2, 12)
+                        LocalDate.of(2022, 2, 12),
+                        null
                 )
         );
 
@@ -120,7 +127,8 @@ class JobControllerWebIntegrationTest {
                 "best job in the world",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 12)
+                LocalDate.of(2022, 2, 12),
+                null
         );
 
         savedJobDTO = new JobDTO(
@@ -147,7 +155,8 @@ class JobControllerWebIntegrationTest {
                 "best job in the UNIVERSE",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 6)
+                LocalDate.of(2022, 2, 6),
+                null
         );
 
         updatedJobDTO = new JobDTO(3L,
@@ -166,7 +175,7 @@ class JobControllerWebIntegrationTest {
         jobStartDate = LocalDate.of(2022, 3, 3);
         jobEndDate = LocalDate.of(2022, 3, 13);
 
-        dates = new Availability(jobStartDate, jobEndDate);
+        dates = new Availability(jobStartDate, jobEndDate, null);
 
         listOfJobsFoundDTO = List.of(jobsDTO.get(0), jobsDTO.get(1));
 
@@ -257,6 +266,21 @@ class JobControllerWebIntegrationTest {
                 .isEqualTo(new ResponseEntity<>(listOfJobsFoundDTO, headers, HttpStatus.OK));
 
     }
+
+    @Test
+    void getJobsByUserIdTest() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/jobs/userid/" + jobId);
+        when(jobService.getByUserId(jobId))
+                .thenReturn(listOfJobsFoundDTO);
+        assertThat(jobController.getJobsByUserId(jobId))
+                .isEqualTo(new ResponseEntity<>(listOfJobsFoundDTO, headers, HttpStatus.OK));
+
+
+    }
+
+
+
 
 
 }

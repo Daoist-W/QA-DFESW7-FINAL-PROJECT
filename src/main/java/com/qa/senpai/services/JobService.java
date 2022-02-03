@@ -19,11 +19,11 @@ public class JobService {
     // Fields
     private final JobRepository jobRepository;
     private final ModelMapper mapper; // allows for mapping DTO's to Entities
-
     @Autowired
     public JobService(JobRepository jobRepository, ModelMapper modelMapper) {
         this.jobRepository = jobRepository;
         this.mapper = modelMapper;
+
     }
 
 
@@ -51,6 +51,15 @@ public class JobService {
             throw new JobNotFoundException("Job with id " + id + " not found");
         }
 
+    }
+
+    public List<JobDTO> getByUserId(Long id) {
+        return Optional.of(jobRepository
+                .findByUserId(id)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList()))
+                .orElseThrow(() -> new JobNotFoundException("Jobs with title " + id + " not found"));
     }
 
     public List<JobDTO> getByTitle(String title) {
@@ -82,7 +91,7 @@ public class JobService {
         if(jobRepository.existsById(id)) {
             Job toUpdate = jobRepository.getById(id);
             toUpdate.setTitle(job.getTitle());
-            toUpdate.setDescription(job.getDescription());
+            toUpdate.setDescription_(job.getDescription_());
             toUpdate.setLocation(job.getLocation());
             toUpdate.setStartDate(job.getStartDate());
             toUpdate.setEndDate(job.getEndDate());

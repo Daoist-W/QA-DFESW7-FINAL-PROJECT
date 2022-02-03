@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 public class AvailabilityService {
 
     // Fields
-    private AvailabilityRepository availabilityRepository;
-    private ModelMapper mapper; // allows for mapping DTO's to Entities
+    private final AvailabilityRepository availabilityRepository;
+    private final ModelMapper mapper; // allows for mapping DTO's to Entities
 
     @Autowired
     public AvailabilityService(AvailabilityRepository availabilityRepository, ModelMapper modelMapper) {
@@ -37,13 +37,27 @@ public class AvailabilityService {
 
 
     public List<AvailabilityDTO> getAll() {
-        // TODO: implement me
-        return null;
+        return availabilityRepository.findAll()
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     public AvailabilityDTO getById(Long id) {
-        // TODO: implement me
-        return null;
+        if(availabilityRepository.existsById(id)) {
+            return mapToDTO(availabilityRepository.getById(id));
+        } else {
+            throw new AvailabilityNotFoundException("Availability with id: " + id + " does not exist");
+        }
+    }
+
+    public List<AvailabilityDTO> getByUserId(Long id) {
+        return Optional.of(availabilityRepository
+                .findByUserId(id)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList()))
+                .orElseThrow(() -> new AvailabilityNotFoundException("Availabilitys with user id " + id + " not found"));
     }
 
     public List<AvailabilityDTO> getByDates(LocalDate availabilityStartDate, LocalDate availabilityEndDate) {
@@ -58,19 +72,30 @@ public class AvailabilityService {
 
 
     public AvailabilityDTO create(Availability availability) {
-        // TODO: implement me
-        return null;
+        return mapToDTO(availabilityRepository.save(availability));
     }
 
 
     public AvailabilityDTO update(long id, Availability availability) {
-        // TODO: implement me
-        return null;
+        if(availabilityRepository.existsById(id)) {
+            Availability availabilityToUpdate = availabilityRepository.getById(id);
+            availabilityToUpdate.setStartDate(availability.getStartDate());
+            availabilityToUpdate.setEndDate(availability.getEndDate());
+            Availability save = availabilityRepository.save(availabilityToUpdate);
+            return mapToDTO(save); // updated availability
+        } else {
+            throw new AvailabilityNotFoundException("Availability with id: " + id + " does not exist");
+        }
     }
 
 
     public AvailabilityDTO delete(Long id) {
-        // TODO: implement me
-        return null;
+        if(availabilityRepository.existsById(id)) {
+            AvailabilityDTO deletedAvailability = mapToDTO(availabilityRepository.getById(id));
+            availabilityRepository.deleteById(id);
+            return deletedAvailability;
+        } else {
+            throw new AvailabilityNotFoundException("Availability with id: " + id + " does not exist");
+        }
     }
 }

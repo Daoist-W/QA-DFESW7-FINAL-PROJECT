@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -20,7 +19,6 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    // TODO: Review your understanding of autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -32,7 +30,6 @@ public class UserController {
 
     @GetMapping(path = "/admin")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
-        // TODO: implement access control
         List<UserDTO> users = userService.getAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
@@ -42,7 +39,7 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         UserDTO user = userService.getById(id);
         headers.add("Location", "/user/admin/" + id);
-        return new ResponseEntity<UserDTO>(user, headers, HttpStatus.OK);
+        return new ResponseEntity<>(user, headers, HttpStatus.OK);
     }
 
     @GetMapping(path = "/admin/{forename}/{surname}")
@@ -53,21 +50,15 @@ public class UserController {
         return new ResponseEntity<>(users, headers, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/admin/available-users") // using post so I can take advantage of the body
-    public ResponseEntity<List<UserDTO>> getUsersByAvailability(@RequestBody List<LocalDate> dates) {
-        // TODO: implement me
-        return null;
-    }
 
     // ############################################
     //                  CREATE
     // ############################################
     @PostMapping(path = "/create")
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody User user) {
-        // TODO: implement me
         UserDTO savedUser = userService.create(user);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/user/create/" + String.valueOf(savedUser.getId()));
+        headers.add("Location", "/user/create/" + savedUser.getId());
         return new ResponseEntity<>(savedUser, headers, HttpStatus.CREATED);
     }
 

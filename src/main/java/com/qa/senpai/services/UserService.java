@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,7 +43,6 @@ public class UserService {
     }
 
     public UserDTO getById(Long id) {
-        // TODO: implement me
         if(userRepository.existsById(id)) {
             return mapToDTO(userRepository.getById(id));
         } else {
@@ -53,7 +51,6 @@ public class UserService {
     }
 
     public List<UserDTO> getByName(String forename, String surname) {
-        // TODO: test me
 
         return Optional.of(userRepository
                 .findByFullName(forename, surname)
@@ -65,11 +62,6 @@ public class UserService {
                                 "does not exist"));
     }
 
-    public List<UserDTO> getByDates(List<LocalDate> dates) {
-        // TODO: implement me
-        return null;
-    }
-
 
     public UserDTO create(User user) {
         return mapToDTO(userRepository.save(user));
@@ -77,7 +69,6 @@ public class UserService {
 
 
     public UserDTO update(long id, User user) {
-        // TODO: test me
         if(userRepository.existsById(id)) {
             User userToUpdate = userRepository.getById(id);
             userToUpdate.setForename(user.getForename());
@@ -96,7 +87,6 @@ public class UserService {
 
 
     public UserDTO delete(Long id) {
-        // TODO: test me
         if(userRepository.existsById(id)) {
             UserDTO deletedUser = mapToDTO(userRepository.getById(id));
             userRepository.deleteById(id);

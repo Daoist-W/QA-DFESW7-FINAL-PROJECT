@@ -2,6 +2,7 @@ package com.qa.senpai.services;
 
 import com.qa.senpai.data.dtos.JobDTO;
 import com.qa.senpai.data.entities.Job;
+import com.qa.senpai.data.entities.User;
 import com.qa.senpai.data.repositories.JobRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,8 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
@@ -21,18 +20,21 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class JobServiceUnitTest {
     // Using mockito only for this unit test
+    // there is no need for generating application contexts
+    // and so Mockito is a suitable testing choice
 
     // Fields
-    @Mock
+    @Mock // mock instance of Repository
     private JobRepository jobRepository;
 
-    @Mock
+    @Mock // mock instance of ModelMapper
     private ModelMapper jobMapper;
 
     @InjectMocks
+    // this creates an instance of the Service class and
+    // injects the ModelMapper and Repository mock instances
     private JobService jobService;
 
     private Job jobToBeSaved;
@@ -54,11 +56,11 @@ class JobServiceUnitTest {
     private JobDTO jobToBeFoundDTO;
     private List<Job> allJobs;
     private List<JobDTO> allJobsDTO;
+    private Long userId;
 
 
     @BeforeEach
     void setUp() { // runs before every test
-        // TODO: implement me
         // READ
         allJobs = List.of(
                 new Job(1L,
@@ -66,28 +68,32 @@ class JobServiceUnitTest {
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 3, 4),
-                        LocalDate.of(2022, 3, 4)
+                        LocalDate.of(2022, 3, 4),
+                        null
                 ),
                 new Job(2L,
                         "topjob",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 3, 4),
-                        LocalDate.of(2022, 3, 4)
+                        LocalDate.of(2022, 3, 4),
+                        new User(1L)
                 ),
                 new Job(3L,
                         "topjob3",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 2, 4),
-                        LocalDate.of(2022, 2, 6)
+                        LocalDate.of(2022, 2, 6),
+                        new User(1L)
                 ),
                 new Job(4L,
                         "topjob4",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 2, 4),
-                        LocalDate.of(2022, 2, 12)
+                        LocalDate.of(2022, 2, 12),
+                        null
                 )
         );
 
@@ -133,7 +139,8 @@ class JobServiceUnitTest {
                 "best job in the UNIVERSE",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 6)
+                LocalDate.of(2022, 2, 6),
+                null
         );
         updatedJobDTO = new JobDTO(3L,
                 "UPDATED",
@@ -143,6 +150,7 @@ class JobServiceUnitTest {
                 LocalDate.of(2022, 2, 6)
         );
         jobId = 3L;
+        userId = 1L;
 
         // DELETE
         jobToDelete = jobToBeFound;
@@ -161,7 +169,8 @@ class JobServiceUnitTest {
                 "best job in the world",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 12)
+                LocalDate.of(2022, 2, 12),
+                null
         );
 
         savedJob = new Job(
@@ -170,7 +179,8 @@ class JobServiceUnitTest {
                 "best job in the world",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 12)
+                LocalDate.of(2022, 2, 12),
+                null
         );
 
         savedJobDTO = new JobDTO(
@@ -268,6 +278,22 @@ class JobServiceUnitTest {
         // verify()
         verify(jobRepository).findByDates(jobStartDate, jobEndDate);
         for (Job job : listOfJobsByDate) {
+            verify(jobMapper).map(job, JobDTO.class);
+        }
+    }
+
+    @Test
+    void getByUserIdTest() {
+        when(jobRepository.findByUserId(userId)).thenReturn(jobFoundList);
+        for(int i = 0; i < jobFoundList.size(); i++) {
+            when(jobMapper.map(jobFoundList.get(i), JobDTO.class))
+                    .thenReturn(jobFoundListDTO.get(i));
+        }
+        // assertThat()
+        assertThat(jobService.getByUserId(userId)).isEqualTo(jobFoundListDTO);
+        // verify()
+        verify(jobRepository).findByUserId(userId);
+        for (Job job : jobFoundList) {
             verify(jobMapper).map(job, JobDTO.class);
         }
     }

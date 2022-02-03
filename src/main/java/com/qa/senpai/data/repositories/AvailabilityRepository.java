@@ -19,4 +19,7 @@ public interface AvailabilityRepository extends JpaRepository<Availability, Long
             @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate startDate,
             @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate endDate
     );
+
+    // we are looking at ta field in the class
+    public List<Availability> findByUserId(Long userId);
 }

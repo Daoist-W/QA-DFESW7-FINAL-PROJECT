@@ -12,21 +12,24 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-@Transactional
+// @Transactional disabled due to configuration issues, replaced with DirtiesContext
 @AutoConfigureMockMvc // configure the MockMvc
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Sql(scripts = { "classpath:schema.sql",
+        "classpath:data.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class JobControllerSystemIntegrationTest {
     // TODO: https://zetcode.com/spring/mockmvc/#:~:text=MockMvc%20is%20defined%20as%20a,between%20unit%20and%20integration%20tests.
 
@@ -40,6 +43,7 @@ class JobControllerSystemIntegrationTest {
     @Autowired
     private JobRepository jobRepository;
 
+    // Test variables set up
     private List<Job> jobsInDatabase;
     private List<JobDTO> jobsInDatabaseDTO;
     private Long newElementId; // this is for setUp implementation
@@ -59,83 +63,34 @@ class JobControllerSystemIntegrationTest {
     private Availability dates;
 
     private List<JobDTO> listOfJobsByDateDTO;
-
+    private Long userId;
 
 
     @BeforeEach
     public void init() { // runs before every test
-        List<Job> allJobs = List.of(
-                new Job(1L,
-                        "topjob",
-                        "best job in the world",
-                        "London",
-                        LocalDate.of(2022, 3, 4),
-                        LocalDate.of(2022, 3, 4)
-                ),
-                new Job(2L,
-                        "topjob",
-                        "best job in the world",
-                        "London",
-                        LocalDate.of(2022, 3, 4),
-                        LocalDate.of(2022, 3, 4)
-                ),
-                new Job(3L,
-                        "topjob3",
-                        "best job in the world",
-                        "London",
-                        LocalDate.of(2022, 2, 4),
-                        LocalDate.of(2022, 2, 6)
-                ),
-                new Job(4L,
-                        "topjob4",
-                        "best job in the world",
-                        "London",
-                        LocalDate.of(2022, 2, 4),
-                        LocalDate.of(2022, 2, 12)
-                )
-        );
 
-        jobsInDatabase = jobRepository.saveAll(allJobs);
+        jobsInDatabase = jobRepository.findAll();
         int size = jobsInDatabase.size();
         newElementId = jobsInDatabase.get(size - 1).getId() + 1;
-
-        jobsInDatabaseDTO = List.of(
-                new JobDTO(1L,
-                        "topjob",
-                        "best job in the world",
-                        "London",
-                        LocalDate.of(2022, 3, 4),
-                        LocalDate.of(2022, 3, 4)
-                ),
-                new JobDTO(2L,
-                        "topjob",
-                        "best job in the world",
-                        "London",
-                        LocalDate.of(2022, 3, 4),
-                        LocalDate.of(2022, 3, 4)
-                ),
-                new JobDTO(3L,
-                        "topjob3",
-                        "best job in the world",
-                        "London",
-                        LocalDate.of(2022, 2, 4),
-                        LocalDate.of(2022, 2, 6)
-                ),
-                new JobDTO(4L,
-                        "topjob4",
-                        "best job in the world",
-                        "London",
-                        LocalDate.of(2022, 2, 4),
-                        LocalDate.of(2022, 2, 12)
-                )
-        );
+        jobsInDatabaseDTO = new ArrayList<>();
+        for(Job job : jobsInDatabase) {
+            jobsInDatabaseDTO.add(new JobDTO(
+                    job.getId(),
+                    job.getTitle(),
+                    job.getDescription_(),
+                    job.getLocation(),
+                    job.getStartDate(),
+                    job.getEndDate()
+            ));
+        }
 
         jobToBeSaved = new Job(
                 "new top job",
                 "best job in the world",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 12)
+                LocalDate.of(2022, 2, 12),
+                null
         );
 
         savedJobDTO = new JobDTO(
@@ -148,6 +103,7 @@ class JobControllerSystemIntegrationTest {
         );
 
         Long jobId = 3L;
+        userId = 1L;
 
         foundJobDTO = new JobDTO(3L,
                 "topjob3",
@@ -162,7 +118,8 @@ class JobControllerSystemIntegrationTest {
                 "best job in the UNIVERSE",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 6)
+                LocalDate.of(2022, 2, 6),
+                null
         );
 
         updatedJobDTO = new JobDTO(3L,
@@ -183,7 +140,7 @@ class JobControllerSystemIntegrationTest {
 
         listOfJobsByDateDTO = List.of(jobsInDatabaseDTO.get(0), jobsInDatabaseDTO.get(1));
 
-        dates = new Availability(jobStartDate, jobEndDate);
+        dates = new Availability(jobStartDate, jobEndDate, null );
 
 
 
@@ -332,6 +289,24 @@ class JobControllerSystemIntegrationTest {
         // configure mock request
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .request(HttpMethod.DELETE, "/jobs/admin/delete/name/" + "topjob");
+        mockRequest.accept(MediaType.APPLICATION_JSON);
+
+        // expected JSON results
+        String job = objectMapper.writeValueAsString(listOfJobsByDateDTO);
+
+        // configure result matchers
+        ResultMatcher statusMatcher = MockMvcResultMatchers.status().isOk();
+        ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(job);
+
+        // assertion
+        mockMvc.perform(mockRequest).andExpect(statusMatcher).andExpect(contentMatcher);
+    }
+
+    @Test
+    void getJobsByUserIdTest() throws Exception {
+        // configure mock request
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .request(HttpMethod.GET, "/jobs/userid/" + userId);
         mockRequest.accept(MediaType.APPLICATION_JSON);
 
         // expected JSON results

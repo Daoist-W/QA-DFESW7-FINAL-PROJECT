@@ -40,7 +40,7 @@ public class JobController {
         HttpHeaders headers = new HttpHeaders();
         JobDTO job = jobService.getById(id);
         headers.add("Location", "/jobs/" + job.getId());
-        return new ResponseEntity<JobDTO>(job, headers, HttpStatus.OK);
+        return new ResponseEntity<>(job, headers, HttpStatus.OK);
     }
 
     @GetMapping(path = "/title/{title}")
@@ -48,7 +48,15 @@ public class JobController {
         List<JobDTO> jobs = jobService.getByTitle(title);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/jobs/title/" + title);
-        return new ResponseEntity<List<JobDTO>>(jobs, headers, HttpStatus.OK);
+        return new ResponseEntity<>(jobs, headers, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/userid/{id}")
+    public ResponseEntity<List<JobDTO>> getJobsByUserId(@PathVariable Long id) {
+        List<JobDTO> jobs = jobService.getByUserId(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/jobs/userid/" + id);
+        return new ResponseEntity<>(jobs, headers, HttpStatus.OK);
     }
 
 
