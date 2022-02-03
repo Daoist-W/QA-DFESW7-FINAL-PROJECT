@@ -67,6 +67,7 @@ class AvailabilityControllerSystemIntegrationTest {
     private Availability savedAvailability;
     private AvailabilityDTO savedAvailabilityDTO;
     private Availability setDateRange;
+    private Long userId;
 
 
     @BeforeEach
@@ -91,12 +92,14 @@ class AvailabilityControllerSystemIntegrationTest {
         Long nextNewElementsId = availabilitiesInDatabase.get(size - 1).getId() + 1;
 
         availabilityId = 3L;
+        userId = 1L;
 
         expectedAvailabilityWithId = availabilitiesInDatabase.get(2);
         expectedAvailabilityWithIdDTO = availabilitiesInDatabaseDTO.get(2);
         expectedAvailabilityWithoutId = new Availability(
                 LocalDate.of(2022, 1, 15),
-                LocalDate.of(2022, 1, 21)
+                LocalDate.of(2022, 1, 21),
+                null
         );
 
         availabilityFoundList = List.of(availabilitiesInDatabase.get(1), availabilitiesInDatabase.get(2));
@@ -105,12 +108,14 @@ class AvailabilityControllerSystemIntegrationTest {
         availabilityToUpdate = new Availability(
                 3L,
                 LocalDate.of(1111, 1, 15),
-                LocalDate.of(2222, 1, 21)
+                LocalDate.of(2222, 1, 21),
+                null
         );
         updatedAvailability = new Availability(
                 3L,
                 LocalDate.of(1111, 1, 15),
-                LocalDate.of(2222, 1, 21)
+                LocalDate.of(2222, 1, 21),
+                null
         );
         updatedAvailabilityDTO = new AvailabilityDTO(
                 3L,
@@ -127,17 +132,20 @@ class AvailabilityControllerSystemIntegrationTest {
 
         setDateRange = new Availability(
                 availabilityStartDate,
-                availabilityEndDate);
+                availabilityEndDate,
+                null);
 
         availabilityToBeSaved = new Availability(
                 LocalDate.of(3000, 1, 15),
-                LocalDate.of(3000, 1, 21)
+                LocalDate.of(3000, 1, 21),
+                null
         );
 
         savedAvailability = new Availability(
                 nextNewElementsId,
                 LocalDate.of(3000, 1, 15),
-                LocalDate.of(3000, 1, 21)
+                LocalDate.of(3000, 1, 21),
+                null
         );
 
         savedAvailabilityDTO = new AvailabilityDTO(
@@ -153,7 +161,7 @@ class AvailabilityControllerSystemIntegrationTest {
     void getAllAvailabilityTest() throws Exception {
         // configure mock request
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .request(HttpMethod.GET, "/availability");
+                .request(HttpMethod.GET, "/availability/all");
         mockRequest.accept(MediaType.APPLICATION_JSON);
 
         // expected JSON results
@@ -264,5 +272,22 @@ class AvailabilityControllerSystemIntegrationTest {
         mockMvc.perform(mockRequest).andExpect(statusMatcher).andExpect(contentMatcher);
     }
 
+    @Test
+    void getAvailabilityByUserIdTest() throws Exception {
+        // configure mock request
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .request(HttpMethod.GET, "/availability/userid/" + userId);
+        mockRequest.accept(MediaType.APPLICATION_JSON);
+
+        // expected JSON results
+        String availability = objectMapper.writeValueAsString(availabilityFoundListDTO);
+
+        // configure result matchers
+        ResultMatcher statusMatcher = MockMvcResultMatchers.status().isOk();
+        ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(availability);
+
+        // assertion
+        mockMvc.perform(mockRequest).andExpect(statusMatcher).andExpect(contentMatcher);
+    }
 
 }

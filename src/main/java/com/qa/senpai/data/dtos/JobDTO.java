@@ -88,12 +88,7 @@ public class JobDTO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(),
-                getTitle(),
-                getDescription(),
-                getLocation(),
-                getStartDate(),
-                getEndDate());
+        return Objects.hash(getId(), getTitle(), getDescription(), getLocation(), getStartDate(), getEndDate());
     }
 
     @Override

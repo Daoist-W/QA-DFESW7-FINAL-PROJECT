@@ -1,6 +1,7 @@
 package com.qa.senpai.controllers;
 
 import com.qa.senpai.data.dtos.UserDTO;
+import com.qa.senpai.data.entities.Job;
 import com.qa.senpai.data.entities.User;
 import com.qa.senpai.data.support.Position;
 import com.qa.senpai.services.UserService;
@@ -61,27 +62,27 @@ class UserControllerWebIntegrationTest {
 
     @BeforeEach
     void setUp() { // runs before every test
-        // TODO: implement me
+
         allUsers = new ArrayList<>();
         allUsers.addAll(List.of(
                 new User(
                         1L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589", "132156654"),
+                        "don@youmail.com", "+4475649589", 132156654, new ArrayList<Job>()),
                 new User(
                         2L, Position.staff, "done", "brand",
                         LocalDate.of(1991,9,15),
-                        "bob@youmail.com", "+4475649589", "123465"),
+                        "bob@youmail.com", "+4475649589", 123465, new ArrayList<Job>()),
 
                 new User(
                         3L, Position.staff, "paris", "lorem",
                         LocalDate.of(1991,7,21),
-                        "paris@youmail.com", "+4475649589", "79846545"),
+                        "paris@youmail.com", "+4475649589", 79846545, new ArrayList<Job>()),
 
                 new User(
                         4L, Position.admin, "don", "isiko",
                         LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589", "654821658")
+                        "don@youmail.com", "+4475649589", 654821658, new ArrayList<Job>())
 
         ));
 
@@ -90,21 +91,21 @@ class UserControllerWebIntegrationTest {
                 new UserDTO(
                         1L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589"),
+                        "don@youmail.com", "+4475649589", new ArrayList<Job>()),
                 new UserDTO(
                         2L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
-                        "harry@youmail.com", "+4475649589"),
+                        "harry@youmail.com", "+4475649589", new ArrayList<Job>()),
 
                 new UserDTO(
                         3L, Position.staff, "paris", "lorem",
                         LocalDate.of(1991,7,21),
-                        "paris@youmail.com", "+4475649589"),
+                        "paris@youmail.com", "+4475649589", new ArrayList<Job>()),
 
                 new UserDTO(
                         4L, Position.admin, "don", "isiko",
                         LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589")
+                        "don@youmail.com", "+4475649589", new ArrayList<Job>())
 
         ));
 
@@ -114,43 +115,43 @@ class UserControllerWebIntegrationTest {
         userToUpdate = new User(
                 3L, Position.staff, "PARIS", "UPDATED",
                 LocalDate.of(1991,9,18),
-                "paris@youmail.com", "+4475649589", "11111"
+                "paris@youmail.com", "+4475649589", 11111, new ArrayList<Job>()
         );
 
         updatedUserDTO = new UserDTO(
                 3L, Position.staff, "PARIS", "UPDATED",
                 LocalDate.of(1991,9,18),
-                "paris@youmail.com", "+4475649589"
+                "paris@youmail.com", "+4475649589", new ArrayList<Job>()
         );
 
         expectedUserWithId = new User(
                 3L, Position.staff, "paris", "lorem",
                 LocalDate.of(1991,9,15),
-                "paris@youmail.com", "+4475649589", "79846545"
+                "paris@youmail.com", "+4475649589", 79846545, new ArrayList<Job>()
         );
 
         expectedUserWithIdDTO = new UserDTO(
                 3L, Position.staff, "paris", "lorem",
                 LocalDate.of(1991,7,21),
-                "paris@youmail.com", "+4475649589"
+                "paris@youmail.com", "+4475649589", new ArrayList<Job>()
         );
 
         expectedUserWithoutId = new User(
                 Position.staff, "paris", "lorem",
                 LocalDate.of(1991,9,15),
-                "paris@youmail.com", "+4475649589", "79846545"
+                "paris@youmail.com", "+4475649589", 79846545, new ArrayList<Job>()
         );
 
         userToSave = new User(
                 Position.staff, "Hercules", "Son of Zeus",
                 LocalDate.of(1000,2,15),
-                "Hercules@sonofgod.com", "+1", "123456789"
+                "Hercules@sonofgod.com", "+1", 123456789, new ArrayList<Job>()
         );
 
         expectedUserSavedDTO = new UserDTO(
                 5L, Position.staff, "Hercules", "Son of Zeus",
                 LocalDate.of(1000,2,15),
-                "Hercules@sonofgod.com", "+1"
+                "Hercules@sonofgod.com", "+1", new ArrayList<Job>()
         );
 
         userFoundListDTO = List.of(allUsersDTO.get(0), allUsersDTO.get(1));

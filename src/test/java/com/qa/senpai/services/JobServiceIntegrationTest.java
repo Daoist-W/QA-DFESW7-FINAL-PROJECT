@@ -50,6 +50,7 @@ class JobServiceIntegrationTest {
     private LocalDate jobEndDate;
 
     private List<JobDTO> listOfJobsByDateDTO;
+    private Long userId;
 
 
     @BeforeEach
@@ -74,7 +75,8 @@ class JobServiceIntegrationTest {
                 "best job in the world",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 12)
+                LocalDate.of(2022, 2, 12),
+                null
         );
 
         savedJobDTO = new JobDTO(
@@ -87,6 +89,7 @@ class JobServiceIntegrationTest {
         );
 
         jobId = 3L;
+        userId = 1L;
 
         foundJobDTO = new JobDTO(3L,
                 "topjob3",
@@ -101,7 +104,8 @@ class JobServiceIntegrationTest {
                 "best job in the UNIVERSE",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 6)
+                LocalDate.of(2022, 2, 6),
+                null
         );
 
         updatedJobDTO = new JobDTO(3L,
@@ -137,45 +141,50 @@ class JobServiceIntegrationTest {
     }
 
     @Test
-    void getAll() {
+    void getAllTest() {
         assertThat(jobService.getAll()).isEqualTo(jobsDTO);
     }
 
     @Test
-    void getById() {
+    void getByIdTest() {
         assertThat(jobService.getById(jobId)).isEqualTo(foundJobDTO);
     }
 
     @Test
-    void getByTitle() {
+    void getByUserIdTest() {
+        assertThat(jobService.getByUserId(userId)).isEqualTo(listOfJobsByDateDTO);
+    }
+
+    @Test
+    void getByTitleTest() {
         assertThat(jobService.getByTitle("topjob"))
                 .isEqualTo(listOfJobsByDateDTO);
     }
 
     @Test
-    void getByDates() {
+    void getByDatesTest() {
         assertThat(jobService.getByDates(jobStartDate, jobEndDate))
                 .isEqualTo(listOfJobsByDateDTO);
     }
 
     @Test
-    void create() {
+    void createTest() {
         assertThat(jobService.create(jobToBeSaved)).isEqualTo(savedJobDTO);
     }
 
     @Test
-    void update() {
+    void updateTest() {
         assertThat(jobService.update(jobId, jobToUpdate)).isEqualTo(updatedJobDTO);
     }
 
     @Test
-    void delete() {
+    void deleteTest() {
         System.out.println(jobRepository.findAll());
         assertThat(jobService.delete(jobId)).isEqualTo(jobToDeleteDTO);
     }
 
     @Test
-    void deleteByTitle() {
+    void deleteByTitleTest() {
         assertThat(jobService.deleteByTitle("topjob")).isEqualTo(listOfJobsByDateDTO);
     }
 }

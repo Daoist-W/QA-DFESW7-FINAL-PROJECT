@@ -1,12 +1,10 @@
 package com.qa.senpai.data.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -29,21 +27,27 @@ public class Availability {
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate endDate;
 
-    // TODO: need to add one to many relationship for Users
+    // ENTITY RELATIONS
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")// this isa JPA implementation suitable for Hibernate
+    @JsonBackReference // avoids recursive output
+    private User user;
 
 
     public Availability() {
     }
 
-    public Availability(LocalDate startDate, LocalDate endDate) {
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
-
-    public Availability(Long id, LocalDate startDate, LocalDate endDate) {
+    public Availability(Long id, LocalDate startDate, LocalDate endDate, User user) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.user = user;
+    }
+
+    public Availability(LocalDate startDate, LocalDate endDate, User user) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.user = user;
     }
 
     public Long getId() {
@@ -70,17 +74,25 @@ public class Availability {
         this.endDate = endDate;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Availability that = (Availability) o;
-        return getId().equals(that.getId()) && getStartDate().equals(that.getStartDate()) && getEndDate().equals(that.getEndDate());
+        return getId().equals(that.getId()) && getStartDate().equals(that.getStartDate()) && getEndDate().equals(that.getEndDate()) && Objects.equals(getUser(), that.getUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getStartDate(), getEndDate());
+        return Objects.hash(getId(), getStartDate(), getEndDate(), getUser());
     }
 
     @Override
@@ -89,6 +101,7 @@ public class Availability {
                 "id=" + id +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", user=" + user +
                 '}';
     }
 }

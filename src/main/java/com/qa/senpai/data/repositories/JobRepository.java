@@ -12,10 +12,10 @@ import java.util.List;
 @Repository
 public interface JobRepository extends JpaRepository<Job, Long> {
 
-    @Query("FROM Job WHERE title = ?1")
+//    @Query("FROM Job WHERE title = ?1")
     List<Job> findBytitle(String title);
 
-    @Query("FROM Job WHERE location = ?1")
+//    @Query("FROM Job WHERE location = ?1")
     List<Job> findByLocation(String location);
 
     // simplified scheduling for Job entity
@@ -24,4 +24,8 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate startDate,
             @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate endDate
     );
+
+    // we are looking at ta field in the class
+    public List<Job> findByUserId(Long userId);
+
 }

@@ -2,6 +2,7 @@ package com.qa.senpai.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qa.senpai.data.dtos.UserDTO;
+import com.qa.senpai.data.entities.Job;
 import com.qa.senpai.data.entities.User;
 import com.qa.senpai.data.repositories.UserRepository;
 import com.qa.senpai.data.support.Position;
@@ -79,7 +80,8 @@ class UserControllerSystemIntegrationTest {
                     user.getSurname(),
                     user.getDob(),
                     user.getEmail(),
-                    user.getPhoneNum()
+                    user.getPhoneNum(),
+                    user.getJobs()
             ));
         }
 
@@ -89,31 +91,31 @@ class UserControllerSystemIntegrationTest {
         expectedUserWithId = new User(
                 3L, Position.staff, "paris", "lorem",
                 LocalDate.of(1991,9,15),
-                "paris@youmail.com", "+4475649589", "79846545"
+                "paris@youmail.com", "+4475649589", 79846545, new ArrayList<Job>()
         );
 
         expectedUserWithIdDTO = new UserDTO(
                 3L, Position.staff, "paris", "lorem",
                 LocalDate.of(1991,7,21),
-                "paris@youmail.com", "+4475649589"
+                "paris@youmail.com", "+4475649589", new ArrayList<Job>()
         );
 
         expectedUserWithoutId = new User(
                 Position.staff, "paris", "lorem",
                 LocalDate.of(1991,9,15),
-                "paris@youmail.com", "+4475649589", "79846545"
+                "paris@youmail.com", "+4475649589", 79846545, new ArrayList<Job>()
         );
 
         userToBeSaved = new User(
                 Position.staff, "Hercules", "Son of Zeus",
                 LocalDate.of(1000,2,15),
-                "Hercules@sonofgod.com", "+1", "123456789"
+                "Hercules@sonofgod.com", "+1", 123456789, new ArrayList<Job>()
         );
 
         expectedUserSavedDTO = new UserDTO(
                 nextNewElementsId, Position.staff, "Hercules", "Son of Zeus",
                 LocalDate.of(1000,2,15),
-                "Hercules@sonofgod.com", "+1"
+                "Hercules@sonofgod.com", "+1", new ArrayList<Job>()
         );
 
         userId = 3L;
@@ -122,13 +124,13 @@ class UserControllerSystemIntegrationTest {
         userToUpdate = new User(
                 3L, Position.staff, "PARIS", "UPDATED",
                 LocalDate.of(1991,9,18),
-                "paris@youmail.com", "+4475649589", "11111"
+                "paris@youmail.com", "+4475649589", 11111, new ArrayList<Job>()
         );
 
         updatedUserDTO = new UserDTO(
                 3L, Position.staff, "PARIS", "UPDATED",
                 LocalDate.of(1991,9,18),
-                "paris@youmail.com", "+4475649589"
+                "paris@youmail.com", "+4475649589", new ArrayList<Job>()
         );
 
         userFoundListDTO = List.of(usersInDatabaseDTO.get(0), usersInDatabaseDTO.get(1));

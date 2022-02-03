@@ -1,6 +1,7 @@
 package com.qa.senpai.services;
 
 import com.qa.senpai.data.dtos.UserDTO;
+import com.qa.senpai.data.entities.Job;
 import com.qa.senpai.data.entities.User;
 import com.qa.senpai.data.repositories.UserRepository;
 import com.qa.senpai.data.support.Position;
@@ -66,21 +67,21 @@ class UserServiceUnitTest {
                 new User(
                         1L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589", "132156654"),
+                        "don@youmail.com", "+4475649589", 132156654, new ArrayList<Job>()),
                 new User(
                         2L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
-                        "harry@youmail.com", "+4475649589", "123465"),
+                        "harry@youmail.com", "+4475649589", 123465, new ArrayList<Job>()),
 
                 new User(
                         3L, Position.staff, "paris", "lorem",
                         LocalDate.of(1991,7,21),
-                        "paris@youmail.com", "+4475649589", "79846545"),
+                        "paris@youmail.com", "+4475649589", 79846545, new ArrayList<Job>()),
 
                 new User(
                         4L, Position.admin, "don", "isiko",
                         LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589", "654821658")
+                        "don@youmail.com", "+4475649589", 654821658, new ArrayList<Job>())
 
         ));
 
@@ -88,21 +89,21 @@ class UserServiceUnitTest {
                 new UserDTO(
                         1L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589"),
+                        "don@youmail.com", "+4475649589", new ArrayList<Job>()),
                 new UserDTO(
                         2L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
-                        "harry@youmail.com", "+4475649589"),
+                        "harry@youmail.com", "+4475649589", new ArrayList<Job>()),
 
                 new UserDTO(
                         3L, Position.staff, "paris", "lorem",
                         LocalDate.of(1991,7,21),
-                        "paris@youmail.com", "+4475649589"),
+                        "paris@youmail.com", "+4475649589", new ArrayList<Job>()),
 
                 new UserDTO(
                         4L, Position.admin, "don", "isiko",
                         LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589")
+                        "don@youmail.com", "+4475649589", new ArrayList<Job>())
 
         ));
 
@@ -111,7 +112,7 @@ class UserServiceUnitTest {
         expectedUserWithId = new User(
                 3L, Position.staff, "paris", "lorem",
                 LocalDate.of(1991,9,15),
-                "paris@youmail.com", "+4475649589", "79846545"
+                "paris@youmail.com", "+4475649589", 79846545, new ArrayList<Job>()
         );
 
 
@@ -119,31 +120,31 @@ class UserServiceUnitTest {
         userToUpdate = new User(
                 3L, Position.staff, "PARIS", "UPDATED",
                 LocalDate.of(1991,9,18),
-                "paris@youmail.com", "+4475649589", "11111"
+                "paris@youmail.com", "+4475649589", 11111, new ArrayList<Job>()
         );
 
         updatedUser = new User(
                 3L, Position.staff, "PARIS", "UPDATED",
                 LocalDate.of(1991,9,18),
-                "paris@youmail.com", "+4475649589", "11111"
+                "paris@youmail.com", "+4475649589", 11111, new ArrayList<Job>()
         );
 
         updatedUserDTO = new UserDTO(
                 3L, Position.staff, "PARIS", "UPDATED",
                 LocalDate.of(1991,9,18),
-                "paris@youmail.com", "+4475649589"
+                "paris@youmail.com", "+4475649589", new ArrayList<Job>()
         );
 
         expectedUserWithIdDTO = new UserDTO(
                 3L, Position.staff, "paris", "lorem",
                 LocalDate.of(1991,7,21),
-                "paris@youmail.com", "+4475649589"
+                "paris@youmail.com", "+4475649589", new ArrayList<Job>()
         );
 
         expectedUserWithoutId = new User(
                 Position.staff, "paris", "lorem",
                 LocalDate.of(1991,9,15),
-                "paris@youmail.com", "+4475649589", "79846545"
+                "paris@youmail.com", "+4475649589", 79846545, new ArrayList<Job>()
         );
 
         userFoundList = List.of(allUsers.get(0), allUsers.get(1));

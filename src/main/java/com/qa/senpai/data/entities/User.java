@@ -2,12 +2,15 @@ package com.qa.senpai.data.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.qa.senpai.data.support.Position;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -48,11 +51,41 @@ public class User {
 
     // TODO: implement entity relations with Dates and Jobs
     // TODO: create a entity/repo/service/controller suite for dates
-//    List<LocalDate> availability;
-//    List<Job> jobList;
+    // @OneToMany signifies that a User can have many Cars
+    // this object is mapped to 'user' variable in Jobs by hibernate/JPA
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Job> jobs;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Availability> availabilities;
 
     public User(){
 
+    }
+
+    public User(Long id) {
+        this.id = id;
+    }
+
+    public User(Long id,
+                Position position_,
+                String forename,
+                String surname, LocalDate dob,
+                String email,
+                String phoneNum,
+                int passcode,
+                List<Job> jobs) {
+        this.id = id;
+        this.position_ = position_;
+        this.forename = forename;
+        this.surname = surname;
+        this.dob = dob;
+        this.email = email;
+        this.phoneNum = phoneNum;
+        this.passcode = passcode;
+        this.jobs = jobs;
     }
 
     public User(Position position_,
@@ -61,37 +94,17 @@ public class User {
                 LocalDate dob,
                 String email,
                 String phoneNum,
-                String passcode) {
+                int passcode,
+                List<Job> jobs) {
         this.position_ = position_;
         this.forename = forename;
         this.surname = surname;
         this.dob = dob;
         this.email = email;
         this.phoneNum = phoneNum;
-        this.passcode = passcode.hashCode();
+        this.passcode = passcode;
+        this.jobs = jobs;
     }
-
-    public User(Long id,
-                Position position_,
-                String forename,
-                String surname,
-                LocalDate dob,
-                String email,
-                String phoneNum,
-                String passcode) {
-        this.id = id;
-        this.position_ = position_;
-        this.forename = forename;
-        this.surname = surname;
-        this.dob = dob;
-        this.email = email;
-        this.phoneNum = phoneNum;
-        // TODO: Review hash method, is there a better algorithm we can use?
-        this.passcode = passcode.hashCode();
-    }
-
-
-
 
     public Long getId() {
         return id;
@@ -157,43 +170,39 @@ public class User {
         this.passcode = passcode;
     }
 
+    public List<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(List<Job> jobs) {
+        this.jobs = jobs;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getPasscode() == user.getPasscode() &&
-                getId().equals(user.getId()) &&
-                getPosition_().equals(user.getPosition_()) &&
-                getForename().equals(user.getForename()) &&
-                getSurname().equals(user.getSurname()) &&
-                getDob().equals(user.getDob()) &&
-                getEmail().equals(user.getEmail()) &&
-                getPhoneNum().equals(user.getPhoneNum());
+        return getPasscode() == user.getPasscode() && getId().equals(user.getId()) && getPosition_() == user.getPosition_() && getForename().equals(user.getForename()) && getSurname().equals(user.getSurname()) && getDob().equals(user.getDob()) && getEmail().equals(user.getEmail()) && getPhoneNum().equals(user.getPhoneNum()) && Objects.equals(getJobs(), user.getJobs());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(),
-                getPosition_(),
-                getForename(),
-                getSurname(),
-                getDob(),
-                getEmail(),
-                getPhoneNum(),
-                getPasscode());
+        return Objects.hash(getId(), getPosition_(), getForename(), getSurname(), getDob(), getEmail(), getPhoneNum(), getPasscode(), getJobs());
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", position_='" + position_ + '\'' +
+                ", position_=" + position_ +
                 ", forename='" + forename + '\'' +
                 ", surname='" + surname + '\'' +
                 ", dob=" + dob +
                 ", email='" + email + '\'' +
                 ", phoneNum='" + phoneNum + '\'' +
+                ", passcode=" + passcode +
+                ", jobs=" + jobs +
                 '}';
     }
 }

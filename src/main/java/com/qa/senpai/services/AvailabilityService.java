@@ -51,6 +51,15 @@ public class AvailabilityService {
         }
     }
 
+    public List<AvailabilityDTO> getByUserId(Long id) {
+        return Optional.of(availabilityRepository
+                .findByUserId(id)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList()))
+                .orElseThrow(() -> new AvailabilityNotFoundException("Availabilitys with user id " + id + " not found"));
+    }
+
     public List<AvailabilityDTO> getByDates(LocalDate availabilityStartDate, LocalDate availabilityEndDate) {
         return Optional.of(availabilityRepository
                 .findByDates(availabilityStartDate, availabilityEndDate)
