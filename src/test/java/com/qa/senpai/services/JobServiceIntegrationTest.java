@@ -74,7 +74,8 @@ class JobServiceIntegrationTest {
                 "best job in the world",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 12)
+                LocalDate.of(2022, 2, 12),
+                null
         );
 
         savedJobDTO = new JobDTO(
@@ -83,7 +84,8 @@ class JobServiceIntegrationTest {
                 "best job in the world",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 12)
+                LocalDate.of(2022, 2, 12),
+                null
         );
 
         jobId = 3L;
@@ -93,7 +95,8 @@ class JobServiceIntegrationTest {
                 "best job in the world",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 6)
+                LocalDate.of(2022, 2, 6),
+                null
         );
 
         jobToUpdate = new Job(3L,
@@ -101,7 +104,8 @@ class JobServiceIntegrationTest {
                 "best job in the UNIVERSE",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 6)
+                LocalDate.of(2022, 2, 6),
+                null
         );
 
         updatedJobDTO = new JobDTO(3L,
@@ -109,7 +113,8 @@ class JobServiceIntegrationTest {
                 "best job in the UNIVERSE",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 6)
+                LocalDate.of(2022, 2, 6),
+                null
         );
 
         jobToDeleteDTO = foundJobDTO;

@@ -53,6 +53,15 @@ public class JobService {
 
     }
 
+    public List<JobDTO> getByUserId(Long id) {
+        return Optional.of(jobRepository
+                .findByUserId(id)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList()))
+                .orElseThrow(() -> new JobNotFoundException("Jobs with title " + id + " not found"));
+    }
+
     public List<JobDTO> getByTitle(String title) {
         return Optional.of(jobRepository
                 .findBytitle(title)

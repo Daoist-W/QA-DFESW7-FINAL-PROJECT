@@ -66,21 +66,21 @@ class UserServiceUnitTest {
                 new User(
                         1L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589", "132156654"),
+                        "don@youmail.com", "+4475649589", 132156654, null),
                 new User(
                         2L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
-                        "harry@youmail.com", "+4475649589", "123465"),
+                        "harry@youmail.com", "+4475649589", 123465, null),
 
                 new User(
                         3L, Position.staff, "paris", "lorem",
                         LocalDate.of(1991,7,21),
-                        "paris@youmail.com", "+4475649589", "79846545"),
+                        "paris@youmail.com", "+4475649589", 79846545, null),
 
                 new User(
                         4L, Position.admin, "don", "isiko",
                         LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589", "654821658")
+                        "don@youmail.com", "+4475649589", 654821658, null)
 
         ));
 
@@ -88,21 +88,21 @@ class UserServiceUnitTest {
                 new UserDTO(
                         1L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589"),
+                        "don@youmail.com", "+4475649589", null),
                 new UserDTO(
                         2L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
-                        "harry@youmail.com", "+4475649589"),
+                        "harry@youmail.com", "+4475649589", null),
 
                 new UserDTO(
                         3L, Position.staff, "paris", "lorem",
                         LocalDate.of(1991,7,21),
-                        "paris@youmail.com", "+4475649589"),
+                        "paris@youmail.com", "+4475649589", null),
 
                 new UserDTO(
                         4L, Position.admin, "don", "isiko",
                         LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589")
+                        "don@youmail.com", "+4475649589", null)
 
         ));
 
@@ -111,7 +111,7 @@ class UserServiceUnitTest {
         expectedUserWithId = new User(
                 3L, Position.staff, "paris", "lorem",
                 LocalDate.of(1991,9,15),
-                "paris@youmail.com", "+4475649589", "79846545"
+                "paris@youmail.com", "+4475649589", 79846545, null
         );
 
 
@@ -119,31 +119,31 @@ class UserServiceUnitTest {
         userToUpdate = new User(
                 3L, Position.staff, "PARIS", "UPDATED",
                 LocalDate.of(1991,9,18),
-                "paris@youmail.com", "+4475649589", "11111"
+                "paris@youmail.com", "+4475649589", 11111, null
         );
 
         updatedUser = new User(
                 3L, Position.staff, "PARIS", "UPDATED",
                 LocalDate.of(1991,9,18),
-                "paris@youmail.com", "+4475649589", "11111"
+                "paris@youmail.com", "+4475649589", 11111, null
         );
 
         updatedUserDTO = new UserDTO(
                 3L, Position.staff, "PARIS", "UPDATED",
                 LocalDate.of(1991,9,18),
-                "paris@youmail.com", "+4475649589"
+                "paris@youmail.com", "+4475649589", null
         );
 
         expectedUserWithIdDTO = new UserDTO(
                 3L, Position.staff, "paris", "lorem",
                 LocalDate.of(1991,7,21),
-                "paris@youmail.com", "+4475649589"
+                "paris@youmail.com", "+4475649589", null
         );
 
         expectedUserWithoutId = new User(
                 Position.staff, "paris", "lorem",
                 LocalDate.of(1991,9,15),
-                "paris@youmail.com", "+4475649589", "79846545"
+                "paris@youmail.com", "+4475649589", 79846545, null
         );
 
         userFoundList = List.of(allUsers.get(0), allUsers.get(1));

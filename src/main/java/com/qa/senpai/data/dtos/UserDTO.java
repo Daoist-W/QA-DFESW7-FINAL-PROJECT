@@ -1,8 +1,10 @@
 package com.qa.senpai.data.dtos;
 
+import com.qa.senpai.data.entities.Job;
 import com.qa.senpai.data.support.Position;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class UserDTO {
@@ -14,6 +16,7 @@ public class UserDTO {
     LocalDate dob;
     String email;
     String phoneNum;
+    List<Job> jobs;
 
     public UserDTO() {
     }
@@ -24,7 +27,8 @@ public class UserDTO {
                    String surname,
                    LocalDate dob,
                    String email,
-                   String phoneNum) {
+                   String phoneNum,
+                   List<Job> jobs) {
         this.id = id;
         this.position_ = position_;
         this.forename = forename;
@@ -32,6 +36,7 @@ public class UserDTO {
         this.dob = dob;
         this.email = email;
         this.phoneNum = phoneNum;
+        this.jobs = jobs;
     }
 
     public Long getId() {
@@ -90,17 +95,25 @@ public class UserDTO {
         this.phoneNum = phoneNum;
     }
 
+    public List<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(List<Job> jobs) {
+        this.jobs = jobs;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserDTO userDTO = (UserDTO) o;
-        return getId().equals(userDTO.getId()) && getPosition_() == userDTO.getPosition_() && getForename().equals(userDTO.getForename()) && getSurname().equals(userDTO.getSurname()) && getDob().equals(userDTO.getDob()) && getEmail().equals(userDTO.getEmail()) && getPhoneNum().equals(userDTO.getPhoneNum());
+        return getId().equals(userDTO.getId()) && getPosition_() == userDTO.getPosition_() && getForename().equals(userDTO.getForename()) && getSurname().equals(userDTO.getSurname()) && getDob().equals(userDTO.getDob()) && getEmail().equals(userDTO.getEmail()) && getPhoneNum().equals(userDTO.getPhoneNum()) && Objects.equals(getJobs(), userDTO.getJobs());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getPosition_(), getForename(), getSurname(), getDob(), getEmail(), getPhoneNum());
+        return Objects.hash(getId(), getPosition_(), getForename(), getSurname(), getDob(), getEmail(), getPhoneNum(), getJobs());
     }
 
     @Override
@@ -113,6 +126,7 @@ public class UserDTO {
                 ", dob=" + dob +
                 ", email='" + email + '\'' +
                 ", phoneNum='" + phoneNum + '\'' +
+                ", jobs=" + jobs +
                 '}';
     }
 }

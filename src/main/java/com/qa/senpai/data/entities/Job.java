@@ -1,5 +1,6 @@
 package com.qa.senpai.data.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -36,6 +37,11 @@ public class Job {
     private LocalDate endDate;
 
     // TODO: implement entity relations with User
+    // many to one
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")// this isa JPA implementation suitable for Hibernate
+    @JsonBackReference // avoids recursive output
+    private User user;
 
 
     public Job() {
@@ -47,13 +53,29 @@ public class Job {
                String description_,
                String location,
                LocalDate startDate,
-               LocalDate endDate) {
+               LocalDate endDate,
+               User user) {
         this.id = id;
         this.title = title;
         this.description_ = description_;
         this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.user = user;
+    }
+
+    public Job(String title,
+               String description_,
+               String location,
+               LocalDate startDate,
+               LocalDate endDate,
+               User user) {
+        this.title = title;
+        this.description_ = description_;
+        this.location = location;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.user = user;
     }
 
     public Job(String title,
@@ -116,27 +138,25 @@ public class Job {
         this.endDate = endDate;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Job job = (Job) o;
-        return getId().equals(job.getId()) &&
-                getTitle().equals(job.getTitle()) &&
-                getDescription_().equals(job.getDescription_()) &&
-                getLocation().equals(job.getLocation()) &&
-                getStartDate().equals(job.getStartDate()) &&
-                getEndDate().equals(job.getEndDate());
+        return getId().equals(job.getId()) && getTitle().equals(job.getTitle()) && getDescription_().equals(job.getDescription_()) && getLocation().equals(job.getLocation()) && getStartDate().equals(job.getStartDate()) && getEndDate().equals(job.getEndDate()) && Objects.equals(getUser(), job.getUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(),
-                getTitle(),
-                getDescription_(),
-                getLocation(),
-                getStartDate(),
-                getEndDate());
+        return Objects.hash(getId(), getTitle(), getDescription_(), getLocation(), getStartDate(), getEndDate(), getUser());
     }
 
     @Override
@@ -148,6 +168,7 @@ public class Job {
                 ", location='" + location + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", user=" + user +
                 '}';
     }
 }

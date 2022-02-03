@@ -66,28 +66,32 @@ class JobServiceUnitTest {
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 3, 4),
-                        LocalDate.of(2022, 3, 4)
+                        LocalDate.of(2022, 3, 4),
+                        null
                 ),
                 new Job(2L,
                         "topjob",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 3, 4),
-                        LocalDate.of(2022, 3, 4)
+                        LocalDate.of(2022, 3, 4),
+                        null
                 ),
                 new Job(3L,
                         "topjob3",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 2, 4),
-                        LocalDate.of(2022, 2, 6)
+                        LocalDate.of(2022, 2, 6),
+                        null
                 ),
                 new Job(4L,
                         "topjob4",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 2, 4),
-                        LocalDate.of(2022, 2, 12)
+                        LocalDate.of(2022, 2, 12),
+                        null
                 )
         );
 
@@ -97,28 +101,32 @@ class JobServiceUnitTest {
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 3, 4),
-                        LocalDate.of(2022, 3, 4)
+                        LocalDate.of(2022, 3, 4),
+                        null
                 ),
                 new JobDTO(2L,
                         "topjob",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 3, 4),
-                        LocalDate.of(2022, 3, 4)
+                        LocalDate.of(2022, 3, 4),
+                        null
                 ),
                 new JobDTO(3L,
                         "topjob3",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 2, 4),
-                        LocalDate.of(2022, 2, 6)
+                        LocalDate.of(2022, 2, 6),
+                        null
                 ),
                 new JobDTO(4L,
                         "topjob4",
                         "best job in the world",
                         "London",
                         LocalDate.of(2022, 2, 4),
-                        LocalDate.of(2022, 2, 12)
+                        LocalDate.of(2022, 2, 12),
+                        null
                 )
         );
 
@@ -133,14 +141,16 @@ class JobServiceUnitTest {
                 "best job in the UNIVERSE",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 6)
+                LocalDate.of(2022, 2, 6),
+                null
         );
         updatedJobDTO = new JobDTO(3L,
                 "UPDATED",
                 "best job in the UNIVERSE",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 6)
+                LocalDate.of(2022, 2, 6),
+                null
         );
         jobId = 3L;
 
@@ -151,7 +161,8 @@ class JobServiceUnitTest {
                 "best job in the UNIVERSE",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 6)
+                LocalDate.of(2022, 2, 6),
+                null
         );
 
         // CREATE
@@ -161,7 +172,8 @@ class JobServiceUnitTest {
                 "best job in the world",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 12)
+                LocalDate.of(2022, 2, 12),
+                null
         );
 
         savedJob = new Job(
@@ -170,7 +182,8 @@ class JobServiceUnitTest {
                 "best job in the world",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 12)
+                LocalDate.of(2022, 2, 12),
+                null
         );
 
         savedJobDTO = new JobDTO(
@@ -179,7 +192,8 @@ class JobServiceUnitTest {
                 "best job in the world",
                 "London",
                 LocalDate.of(2022, 2, 4),
-                LocalDate.of(2022, 2, 12)
+                LocalDate.of(2022, 2, 12),
+                null
         );
 
         // BY DATE

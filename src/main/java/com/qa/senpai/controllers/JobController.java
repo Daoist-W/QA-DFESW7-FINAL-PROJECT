@@ -51,6 +51,14 @@ public class JobController {
         return new ResponseEntity<List<JobDTO>>(jobs, headers, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/userid/{id}")
+    public ResponseEntity<List<JobDTO>> getJobsByUserId(@PathVariable Long id) {
+        List<JobDTO> jobs = jobService.getByUserId(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/jobs/userid/" + id);
+        return new ResponseEntity<List<JobDTO>>(jobs, headers, HttpStatus.OK);
+    }
+
 
     @PostMapping(path = "/dates") // using post so I can take advantage of the body
     public ResponseEntity<List<JobDTO>> getJobsByDates(@RequestBody Availability dates) {
