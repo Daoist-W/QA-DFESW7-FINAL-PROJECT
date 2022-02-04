@@ -81,6 +81,7 @@ public class AvailabilityService {
             Availability availabilityToUpdate = availabilityRepository.getById(id);
             availabilityToUpdate.setStartDate(availability.getStartDate());
             availabilityToUpdate.setEndDate(availability.getEndDate());
+            availabilityToUpdate.setUser(availability.getUser());
             Availability save = availabilityRepository.save(availabilityToUpdate);
             return mapToDTO(save); // updated availability
         } else {

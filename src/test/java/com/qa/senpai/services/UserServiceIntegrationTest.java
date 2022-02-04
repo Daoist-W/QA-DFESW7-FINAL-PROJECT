@@ -1,6 +1,7 @@
 package com.qa.senpai.services;
 
 import com.qa.senpai.data.dtos.UserDTO;
+import com.qa.senpai.data.entities.Availability;
 import com.qa.senpai.data.entities.Job;
 import com.qa.senpai.data.entities.User;
 import com.qa.senpai.data.repositories.UserRepository;
@@ -36,15 +37,20 @@ class UserServiceIntegrationTest {
 
     private List<UserDTO> usersInDatabaseDTO;
 
-    private User userToSave;
-    private UserDTO expectedUserWithIdDTO;
-    private UserDTO expectedUserSavedDTO;
-    private List<UserDTO> userFoundListDTO;
-    private UserDTO userToDeleteDTO;
-    private UserDTO updatedUserDTO;
     private Long userId;
-    private User updatedUser;
+    private UserDTO expectedUserWithIdDTO;
+
+    // specify find criteria here
+    private List<UserDTO> userFoundListDTO;
+
+    private User userToSave;
+    private UserDTO expectedUserSavedDTO;
+
     private User userToUpdate;
+    private UserDTO updatedUserDTO;
+
+    private UserDTO userToDeleteDTO;
+
 
 
     @BeforeEach
@@ -63,7 +69,8 @@ class UserServiceIntegrationTest {
                     user.getDob(),
                     user.getEmail(),
                     user.getPhoneNum(),
-                    user.getJobs()
+                    user.getJobs(),
+                    user.getAvailabilities()
             ));
         }
 
@@ -76,31 +83,41 @@ class UserServiceIntegrationTest {
         userToUpdate = new User(
                 3L, Position.staff, "PARIS", "UPDATED",
                 LocalDate.of(1991,9,18),
-                "paris@youmail.com", "+4475649589", 11111, new ArrayList<Job>()
+                "paris@youmail.com", "+4475649589", 11111,
+                new ArrayList<Job>(),
+                new ArrayList<Availability>()
         );
 
         updatedUserDTO = new UserDTO(
                 3L, Position.staff, "PARIS", "UPDATED",
                 LocalDate.of(1991,9,18),
-                "paris@youmail.com", "+4475649589", new ArrayList<Job>()
+                "paris@youmail.com", "+4475649589",
+                new ArrayList<Job>(),
+                new ArrayList<Availability>()
         );
 
         expectedUserWithIdDTO = new UserDTO(
                 3L, Position.staff, "paris", "lorem",
                 LocalDate.of(1991,7,21),
-                "paris@youmail.com", "+4475649589", new ArrayList<Job>()
+                "paris@youmail.com", "+4475649589",
+                new ArrayList<Job>(),
+                new ArrayList<Availability>()
         );
 
         userToSave = new User(
                 Position.staff, "Hercules", "Son of Zeus",
                 LocalDate.of(1000,2,15),
-                "Hercules@sonofgod.com", "+1", 123456789, new ArrayList<Job>()
+                "Hercules@sonofgod.com", "+1", 123456789,
+                new ArrayList<Job>(),
+                new ArrayList<Availability>()
         );
 
         expectedUserSavedDTO = new UserDTO(
                 nextNewElementsId, Position.staff, "Hercules", "Son of Zeus",
                 LocalDate.of(1000,2,15),
-                "Hercules@sonofgod.com", "+1", new ArrayList<Job>()
+                "Hercules@sonofgod.com", "+1",
+                new ArrayList<Job>(),
+                new ArrayList<Availability>()
         );
 
         userFoundListDTO = List.of(this.usersInDatabaseDTO.get(0), this.usersInDatabaseDTO.get(1));
@@ -126,11 +143,6 @@ class UserServiceIntegrationTest {
     void getByName() {
         assertThat(userService.getByName("don", "brand"))
                 .isEqualTo(userFoundListDTO);
-    }
-
-    @Test
-    void getByDates() {
-        // TODO: test me
     }
 
     @Test

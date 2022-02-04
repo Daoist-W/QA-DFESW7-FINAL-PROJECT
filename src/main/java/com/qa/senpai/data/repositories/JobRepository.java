@@ -15,9 +15,6 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 //    @Query("FROM Job WHERE title = ?1")
     List<Job> findBytitle(String title);
 
-//    @Query("FROM Job WHERE location = ?1")
-    List<Job> findByLocation(String location);
-
     // simplified scheduling for Job entity
     @Query("SELECT a FROM Job a WHERE a.startDate >= ?1 AND a.endDate <= ?2")
     List<Job> findByDates(
@@ -26,6 +23,6 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     );
 
     // we are looking at ta field in the class
-    public List<Job> findByUserId(Long userId);
+    List<Job> findByUserId(Long userId);
 
 }
