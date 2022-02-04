@@ -10,7 +10,8 @@
     </parent>
     <groupId>com.qa</groupId>
     <artifactId>senpai</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <!-- Semver - Major.Minor.Patch/Bugfix-SNAPSHOT/RELEASE -->
+    <version>1.0.0-RELEASE</version>
     <name>senpai</name>
     <description>Final Project for QA DFESW7 Cohort</description>
     <properties>

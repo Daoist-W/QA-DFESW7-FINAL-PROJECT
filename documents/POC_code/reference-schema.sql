@@ -40,3 +40,6 @@ CREATE TABLE availability (
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+
+

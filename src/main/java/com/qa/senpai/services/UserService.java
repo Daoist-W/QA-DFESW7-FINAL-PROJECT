@@ -77,6 +77,8 @@ public class UserService {
             userToUpdate.setPhoneNum(user.getPhoneNum());
             userToUpdate.setEmail(user.getEmail());
             userToUpdate.setDob(user.getDob());
+            userToUpdate.setJobs(user.getJobs());
+            userToUpdate.setAvailabilities(user.getAvailabilities());
             User save = userRepository.save(userToUpdate);
             return mapToDTO(save); // updated user
         } else {

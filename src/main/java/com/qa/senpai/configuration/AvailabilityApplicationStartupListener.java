@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Profile;
 import java.time.LocalDate;
 import java.util.List;
 
-@Profile("devsql")
+@Profile("production")
 @Configuration
 public class AvailabilityApplicationStartupListener implements ApplicationListener<ApplicationReadyEvent> {
 

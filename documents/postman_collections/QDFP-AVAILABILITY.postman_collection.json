@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "98d02436-b6d1-40e1-8479-0c44b4ae156a",
+		"name": "QDFP-AVAILABILITY",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get availability",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:80/availability/all",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"availability",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get availability by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:80/availability/2",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"availability",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get availability by user id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:80/availability/userid/2",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"availability",
+						"userid",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get availability by dates using post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"startDate\": \"2022-01-07\",\r\n    \"endDate\": \"2022-01-22\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:80/availability/dates",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"availability",
+						"dates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create availability",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"startDate\": \"2022-03-01\",\r\n    \"endDate\": \"2022-03-13\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:80/availability/create",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"availability",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update availability by id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"startDate\": \"2022-03-01\",\r\n    \"endDate\": \"2022-03-13\",\r\n    \"user\": {\r\n        \"id\": 1\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:80/availability/update/1",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"availability",
+						"update",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete availability by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:80/availability/admin/delete/1",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"availability",
+						"admin",
+						"delete",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

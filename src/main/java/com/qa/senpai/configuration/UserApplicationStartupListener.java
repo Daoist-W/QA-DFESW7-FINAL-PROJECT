@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 import java.time.LocalDate;
 import java.util.List;
 
-@Profile("devsql")
+@Profile("production")
 @Configuration
 public class UserApplicationStartupListener implements ApplicationListener<ApplicationReadyEvent> {
 
@@ -33,21 +33,21 @@ public class UserApplicationStartupListener implements ApplicationListener<Appli
                 new User(
                         1L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589", 132156654, null),
+                        "don@youmail.com", "+4475649589", 132156654, null, null),
                 new User(
                         2L, Position.staff, "don", "brand",
                         LocalDate.of(1991,9,15),
-                        "harry@youmail.com", "+4475649589", 123465, null),
+                        "harry@youmail.com", "+4475649589", 123465, null, null),
 
                 new User(
                         3L, Position.staff, "paris", "lorem",
                         LocalDate.of(1991,7,21),
-                        "paris@youmail.com", "+4475649589", 79846545, null),
+                        "paris@youmail.com", "+4475649589", 79846545, null, null),
 
                 new User(
                         4L, Position.admin, "don", "isiko",
                         LocalDate.of(1991,9,15),
-                        "don@youmail.com", "+4475649589", 654821658, null)
+                        "don@youmail.com", "+4475649589", 654821658, null, null)
 
         ));
     }

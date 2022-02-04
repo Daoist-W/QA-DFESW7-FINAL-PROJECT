@@ -49,8 +49,6 @@ public class User {
     @NotNull
     private int passcode;
 
-    // TODO: implement entity relations with Dates and Jobs
-    // TODO: create a entity/repo/service/controller suite for dates
     // @OneToMany signifies that a User can have many Cars
     // this object is mapped to 'user' variable in Jobs by hibernate/JPA
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -72,11 +70,13 @@ public class User {
     public User(Long id,
                 Position position_,
                 String forename,
-                String surname, LocalDate dob,
+                String surname,
+                LocalDate dob,
                 String email,
                 String phoneNum,
                 int passcode,
-                List<Job> jobs) {
+                List<Job> jobs,
+                List<Availability> availabilities) {
         this.id = id;
         this.position_ = position_;
         this.forename = forename;
@@ -86,6 +86,7 @@ public class User {
         this.phoneNum = phoneNum;
         this.passcode = passcode;
         this.jobs = jobs;
+        this.availabilities = availabilities;
     }
 
     public User(Position position_,
@@ -95,7 +96,8 @@ public class User {
                 String email,
                 String phoneNum,
                 int passcode,
-                List<Job> jobs) {
+                List<Job> jobs,
+                List<Availability> availabilities) {
         this.position_ = position_;
         this.forename = forename;
         this.surname = surname;
@@ -104,6 +106,7 @@ public class User {
         this.phoneNum = phoneNum;
         this.passcode = passcode;
         this.jobs = jobs;
+        this.availabilities = availabilities;
     }
 
     public Long getId() {
@@ -178,31 +181,38 @@ public class User {
         this.jobs = jobs;
     }
 
+    public List<Availability> getAvailabilities() {
+        return availabilities;
+    }
+
+    public void setAvailabilities(List<Availability> availabilities) {
+        this.availabilities = availabilities;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getPasscode() == user.getPasscode() && getId().equals(user.getId()) && getPosition_() == user.getPosition_() && getForename().equals(user.getForename()) && getSurname().equals(user.getSurname()) && getDob().equals(user.getDob()) && getEmail().equals(user.getEmail()) && getPhoneNum().equals(user.getPhoneNum()) && Objects.equals(getJobs(), user.getJobs());
+        return getPasscode() == user.getPasscode() &&
+                getId().equals(user.getId()) &&
+                getPosition_() == user.getPosition_() &&
+                getForename().equals(user.getForename()) &&
+                getSurname().equals(user.getSurname()) &&
+                getDob().equals(user.getDob()) &&
+                getEmail().equals(user.getEmail()) &&
+                getPhoneNum().equals(user.getPhoneNum()) &&
+                Objects.equals(getJobs(), user.getJobs()) &&
+                Objects.equals(getAvailabilities(), user.getAvailabilities());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getPosition_(), getForename(), getSurname(), getDob(), getEmail(), getPhoneNum(), getPasscode(), getJobs());
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", position_=" + position_ +
-                ", forename='" + forename + '\'' +
-                ", surname='" + surname + '\'' +
-                ", dob=" + dob +
-                ", email='" + email + '\'' +
-                ", phoneNum='" + phoneNum + '\'' +
-                ", passcode=" + passcode +
-                ", jobs=" + jobs +
-                '}';
+        return Objects.hash(getId(), getPosition_(),
+                getForename(), getSurname(), getDob(),
+                getEmail(), getPhoneNum(),
+                getPasscode(),
+                getJobs(),
+                getAvailabilities());
     }
 }
