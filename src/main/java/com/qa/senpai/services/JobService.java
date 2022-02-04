@@ -95,6 +95,7 @@ public class JobService {
             toUpdate.setLocation(job.getLocation());
             toUpdate.setStartDate(job.getStartDate());
             toUpdate.setEndDate(job.getEndDate());
+            toUpdate.setUser(job.getUser());
             Job save = jobRepository.save(toUpdate);
             return mapToDTO(save);
         } else {

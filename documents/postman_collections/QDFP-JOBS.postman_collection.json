@@ -1,0 +1,215 @@
+{
+	"info": {
+		"_postman_id": "04ba49e4-f54b-4a5f-b6f1-d6afca92c3dd",
+		"name": "QDFP-JOBS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get jobs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:80/jobs",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"jobs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get job by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:80/jobs/2",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"jobs",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get job by title",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:80/jobs/title/topjob",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"jobs",
+						"title",
+						"topjob"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get job by user id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:80/jobs/userid/1",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"jobs",
+						"userid",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get job by dates (using post to send date range)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"startDate\": \"2022-03-01\",\r\n    \"endDate\": \"2022-03-13\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:80/jobs/dates",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"jobs",
+						"dates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create job",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"title\": \"topjob3\",\r\n        \"description_\": \"best job in the world\",\r\n        \"location\": \"London\",\r\n        \"startDate\": \"2022-02-04\",\r\n        \"endDate\": \"2022-02-06\",\r\n        \"user\": {\r\n            \"id\": 2\r\n        }\r\n    }\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:80/jobs/admin/create",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"jobs",
+						"admin",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update job by id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"title\": \"testing\",\r\n        \"description_\": \"best job in the world\",\r\n        \"location\": \"London\",\r\n        \"startDate\": \"2022-02-04\",\r\n        \"endDate\": \"2022-02-06\",\r\n        \"user\": {\r\n            \"id\": 1\r\n        }\r\n    }\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:80/jobs/admin/2",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"jobs",
+						"admin",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete job by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:80/jobs/admin/delete/3",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"jobs",
+						"admin",
+						"delete",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete job by title",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:80/jobs/admin/delete/name/topjob",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"jobs",
+						"admin",
+						"delete",
+						"name",
+						"topjob"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

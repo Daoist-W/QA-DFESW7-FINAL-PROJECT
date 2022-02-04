@@ -59,7 +59,6 @@ class AvailabilityControllerWebIntegrationTest {
 
     @BeforeEach
     void setUp() { // runs before every test
-        // TODO: implement me
         availabilities = new ArrayList<>();
         availabilities.addAll(List.of(
                 new Availability(

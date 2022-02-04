@@ -31,7 +31,6 @@ import java.util.List;
 @Sql(scripts = { "classpath:schema.sql",
         "classpath:data.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class JobControllerSystemIntegrationTest {
-    // TODO: https://zetcode.com/spring/mockmvc/#:~:text=MockMvc%20is%20defined%20as%20a,between%20unit%20and%20integration%20tests.
 
     // Fields
     @Autowired
