@@ -243,11 +243,6 @@ class UserServiceUnitTest {
     }
 
     @Test
-    void getByDates() {
-        // TODO: test me
-    }
-
-    @Test
     void createUserTest() {
         when(userRepository.save(expectedUserWithoutId))
                 .thenReturn(expectedUserWithId);

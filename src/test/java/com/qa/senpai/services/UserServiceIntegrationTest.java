@@ -37,15 +37,20 @@ class UserServiceIntegrationTest {
 
     private List<UserDTO> usersInDatabaseDTO;
 
-    private User userToSave;
-    private UserDTO expectedUserWithIdDTO;
-    private UserDTO expectedUserSavedDTO;
-    private List<UserDTO> userFoundListDTO;
-    private UserDTO userToDeleteDTO;
-    private UserDTO updatedUserDTO;
     private Long userId;
-    private User updatedUser;
+    private UserDTO expectedUserWithIdDTO;
+
+    // specify find criteria here
+    private List<UserDTO> userFoundListDTO;
+
+    private User userToSave;
+    private UserDTO expectedUserSavedDTO;
+
     private User userToUpdate;
+    private UserDTO updatedUserDTO;
+
+    private UserDTO userToDeleteDTO;
+
 
 
     @BeforeEach
@@ -138,11 +143,6 @@ class UserServiceIntegrationTest {
     void getByName() {
         assertThat(userService.getByName("don", "brand"))
                 .isEqualTo(userFoundListDTO);
-    }
-
-    @Test
-    void getByDates() {
-        // TODO: test me
     }
 
     @Test

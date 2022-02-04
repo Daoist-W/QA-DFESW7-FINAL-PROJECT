@@ -222,16 +222,9 @@ class UserControllerWebIntegrationTest {
     }
 
     @Test
-    void getUsersByDatesTest() {
-        // expecting one or more objects matching dates submitted
-        // TODO: test me
-    }
-
-    @Test
     void createUserTest() {
         // expecting HTTP status 202 CREATED
         // expecting an object reflecting submitted data for confirmation
-        // TODO: test me
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/user/create/" + String.valueOf(expectedUserSavedDTO.getId()));
         ResponseEntity<UserDTO> expected = new ResponseEntity<>(expectedUserSavedDTO, headers, HttpStatus.CREATED);

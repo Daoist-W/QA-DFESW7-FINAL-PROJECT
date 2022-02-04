@@ -210,17 +210,12 @@ class UserControllerSystemIntegrationTest {
 
     }
 
-    @Test
-    void getUsersByDatesTest() {
-        // expecting one or more objects matching dates submitted
-        // TODO: test me
-    }
+
 
     @Test
     void createUserTest() throws Exception {
         // expecting HTTP status 202 CREATED
         // expecting an object reflecting submitted data for confirmation
-        // TODO: test me
 
         // configure mock request
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.POST, "/user/create");
